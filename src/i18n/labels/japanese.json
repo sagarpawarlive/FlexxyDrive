@@ -1,0 +1,15 @@
+{
+	"title": "ようこそ",
+	"appearance": "外見",
+	"default_Theme": "デフォルトテーマ",
+	"dark_Theme": "ダークテーマ",
+	"light_Theme": "ライトテーマ",
+	"language": "言語",
+	"english": "English",
+	"japanese": "日本語",
+	"espanol": "español",
+	"account": "アカウント",
+	"logout": "ログアウト",
+	"settings": "設定",
+	"change_password": "パスワードを変更する"
+}

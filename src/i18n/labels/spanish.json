@@ -1,0 +1,15 @@
+{
+	"title": "Bienvenido,",
+	"appearance": "Apariencia",
+	"default_Theme": "Tema predeterminado",
+	"dark_Theme": "Tema oscuro",
+	"light_Theme": "Tema claro",
+	"language": "Idioma",
+	"english": "English",
+	"japanese": "日本語",
+	"espanol": "español",
+	"account": "Cuenta",
+	"logout": "Cerrar sesión",
+	"settings": "ajustes",
+	"change_password": "Cambiar contraseña"
+}

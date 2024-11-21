@@ -1,0 +1,15 @@
+{
+	"title": "Welcome,",
+	"appearance": "Appearance",
+	"default_Theme": "Change Theme",
+	"dark_Theme": "Dark Theme",
+	"light_Theme": "Light Theme",
+	"language": "Language",
+	"english": "English",
+	"japanese": "日本語",
+	"espanol": "español",
+	"account": "Account",
+	"logout": "Logout",
+	"settings": "Settings",
+	"change_password": "Change password"
+}
