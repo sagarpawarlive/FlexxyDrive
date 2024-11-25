@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, View, useAppColorscheme, useColorScheme } from 'react-native';
+import { Image, StyleSheet, View, useColorScheme } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import { useDispatch, useSelector } from 'react-redux';
 import { Images } from '../../assets/images';
+import { NavigationKeys } from '../../constants/navigationKeys';
 import { AppDispatch } from '../../store';
 import { useTheme } from '../../theme/ThemeProvider';
 import { Theme } from '../../types';
-import DeviceInfo from 'react-native-device-info';
 
 interface SplashScreenProps {
 	navigation: any
@@ -26,7 +27,7 @@ const SplashScreen: React.FC<SplashScreenProps> = (props) => {
 			setTimeout(() => {
 				switch (isLogin) {
 					case true:
-						props.navigation.navigate('BottomTab');
+						props.navigation.navigate(NavigationKeys.StarterScreen);
 						break;
 					case false:
 						props.navigation.navigate('AuthNavigator');

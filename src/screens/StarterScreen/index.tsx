@@ -1,41 +1,55 @@
-import React, { useMemo, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useMemo } from 'react';
+import {
+    StyleSheet,
+    View
+} from 'react-native';
 import { useDispatch } from 'react-redux';
-import { Fonts } from '../../assets/fonts';
-import AppLoader from '../../components/AppLoader';
+import AppButton from '../../components/AppButton';
 import AppText from '../../components/AppText';
 import MainContainer from '../../components/MainContainer';
 import { AppMargin, AppPadding } from '../../constants/commonStyle';
-import { t } from '../../i18n';
 import { AppDispatch } from '../../store';
 import { useTheme } from '../../theme/ThemeProvider';
 import { Theme } from '../../types';
 
 declare function alert(message: string): void;
 
-interface DriverScreenProps {
-    navigation: any
+interface StarterScreenProps {
+    navigation: any;
 }
 
-const DriverScreen = (props: DriverScreenProps) => {
-
+const StarterScreen = (props: StarterScreenProps) => {
     const { AppColors, isDarkMode } = useTheme();
     const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 
     const dispatch: AppDispatch = useDispatch();
 
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    useEffect(() => {
+        const unsubscribe = props.navigation.addListener('focus', () => { });
+
+        return () => {
+            unsubscribe();
+        };
+    }, [dispatch, props.navigation]);
 
     return (
         <MainContainer>
-            {isLoading && <AppLoader isLoading={isLoading} />}
             <View style={{ marginHorizontal: 20, flex: 1 }}>
-                <AppText textColor={AppColors.primary} fontFamily={Fonts.BOLD} title={`${t('title')} ${'Driver'}`} />
-
                 <View style={{ flex: 1 }}>
-                    <Text>Driver</Text>
+                    <AppText title="Logo" />
+                    <AppText title="Welcome to flexxy" />
                 </View>
-
+                <View style={{ flex: 1 }}>
+                    <AppButton
+                        textColor={AppColors.primary}
+                        buttonLabel={'Book A Ride'}
+                    />
+                    <AppButton
+                        top={40}
+                        textColor={AppColors.primary}
+                        buttonLabel={'Offer A Ride'}
+                    />
+                </View>
             </View>
         </MainContainer>
     );
@@ -46,7 +60,7 @@ const createStyles = (AppColors: Theme) => {
         renderContainer: {
             padding: 20,
             borderWidth: 1,
-            borderColor: AppColors.primaryTransparent
+            borderColor: AppColors.primaryTransparent,
         },
         flatListContainer: {
             paddingBottom: AppMargin._75,
@@ -55,4 +69,4 @@ const createStyles = (AppColors: Theme) => {
     });
 };
 
-export default DriverScreen;
+export default StarterScreen;

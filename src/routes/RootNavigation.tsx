@@ -7,6 +7,7 @@ import SplashScreen from '../screens/SplashScreen';
 import { NavigationKeys } from '../constants/navigationKeys';
 import AuthNavigator from './AuthNavigator';
 import BottomTabNavigation from './BottomTabNavigator';
+import StarterScreen from '../screens/StarterScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ const RootNavigation: React.FC = (props: any) => {
 				<Stack.Screen name={NavigationKeys.SplashScreen} component={SplashScreen} />
 				<Stack.Screen options={options} name={NavigationKeys.AuthNavigator} component={AuthNavigator} />
 				<Stack.Screen options={options} name={NavigationKeys.BottomTab} component={BottomTabNavigation} />
+				<Stack.Screen options={options} name={NavigationKeys.StarterScreen} component={StarterScreen} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	);
