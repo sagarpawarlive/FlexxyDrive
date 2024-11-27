@@ -30,9 +30,8 @@
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
-	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+</dict>
+
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -53,5 +52,13 @@
 		<string>Poppins-Medium.ttf</string>
 		<string>Poppins-Regular.ttf</string>
 	</array>
+
+    <!-- Permission Keys -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to match you with nearby drivers and calculate ride distances accurately.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We need your location to ensure drivers can find you even when you're not actively using the app.</string>
+  <key>NSCameraUsageDescription</key>
+  <string>Need to use camera to capture Image for profile</string>
 </dict>
 </plist>

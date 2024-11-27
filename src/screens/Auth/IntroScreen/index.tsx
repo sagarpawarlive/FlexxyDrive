@@ -1,60 +1,80 @@
-import React, {useMemo} from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
-import {useDispatch} from 'react-redux';
+import React, { useMemo } from 'react';
+import { Image, StyleSheet, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { FontSize } from '../../../../android/app/src/main/assets/custom';
+import { Images } from '../../../assets/images';
 import AppButton from '../../../components/AppButton';
 import AppText from '../../../components/AppText';
 import MainContainer from '../../../components/MainContainer';
-import {AppContainer, AppMargin} from '../../../constants/commonStyle';
-import {NavigationKeys} from '../../../constants/navigationKeys';
-import {useTheme} from '../../../theme/ThemeProvider';
-import {Theme} from '../../../types';
+import { AppContainer, AppHeight, AppMargin, AppShadowWhite, WindowWidth } from '../../../constants/commonStyle';
+import { NavigationKeys } from '../../../constants/navigationKeys';
+import { useTheme } from '../../../theme/ThemeProvider';
+import { Theme } from '../../../types';
+import { Fonts } from '../../../assets/fonts';
 
 const IntroScreen = (props: any) => {
-  const dispatch = useDispatch();
-  const {isDarkMode, toggleTheme, AppColors} = useTheme();
-  const styles = useMemo(() => createStyles(AppColors), [AppColors]);
+	const dispatch = useDispatch();
+	const { isDarkMode, toggleTheme, AppColors } = useTheme();
+	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 
-  return (
-    <MainContainer>
-      <View style={AppContainer}>
-        <View style={{flex: 1}}>
-          <View>
-            <AppText title="Logo" />
-          </View>
+	return (
+		<MainContainer>
+			<View style={[styles.container, { backgroundColor: AppColors.background }]}>
+				<View style={styles.logoContainer}>
+					<AppText fontSize={FontSize._40} fontFamily={Fonts.BOLD} title={'LOGO'} />
+				</View>
 
-          <View>
-            <AppText title="Image" />
-          </View>
+				<View style={styles.imageContainer}>
+					<Image resizeMode="contain" source={Images.imgIntroLocation} />
+				</View>
 
-          <View style={{flex: 1, justifyContent: 'flex-end'}}>
-            <AppText title="Welcome to the ride with Flexxy" />
-          </View>
+				<View style={[styles.bottomContainer, { backgroundColor: AppColors.background }]}>
+					<View style={styles.welcomeTextContainer}>
+						<AppText fontFamily={Fonts.BOLD} fontSize={FontSize._24} title="Welcome to FlexxyDrive" />
+					</View>
 
-          <AppButton
-            position={'end'}
-            buttonLabel={'Continue'}
-            onClick={() =>
-              props.navigation.navigate(NavigationKeys.LocationPermission)
-            }
-          />
-
-          <Pressable onPress={() => alert('driver app')} style={{}}>
-            <AppText title="Or driving App" />
-          </Pressable>
-        </View>
-      </View>
-    </MainContainer>
-  );
+					<AppButton
+						width={WindowWidth / 1.5}
+						fontFamily={Fonts.MEDIUM}
+						textColor={AppColors.textDark}
+						buttonLabel={'CONTINUE'}
+						onClick={() => props.navigation.navigate(NavigationKeys.LocationPermission)}
+					/>
+				</View>
+			</View>
+		</MainContainer>
+	);
 };
 
 const createStyles = (AppColors: Theme) => {
-  return StyleSheet.create({
-    orContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      marginTop: AppMargin._20,
-    },
-  });
+	return StyleSheet.create({
+		container: {
+			flex: 1,
+		},
+		logoContainer: {
+			marginTop: AppMargin._60,
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		imageContainer: {
+			height: AppHeight._250,
+			marginTop: AppMargin._90,
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		bottomContainer: {
+			flex: 1,
+			marginTop: AppMargin._100,
+			borderTopLeftRadius: 30,
+			borderTopRightRadius: 30,
+			alignItems: 'center',
+			...AppShadowWhite,
+		},
+		welcomeTextContainer: {
+			marginTop: AppMargin._30,
+			flex: 1,
+		},
+	});
 };
 
 export default IntroScreen;

@@ -15,38 +15,45 @@ interface AppButtonProps {
 	icon?: any;
 	fontFamily?: string;
 	onClick?: () => void;
-	position?: "end";
+	position?: 'end';
 }
 
 const AppButton: React.FC<AppButtonProps> = (props: AppButtonProps) => {
-
 	const { AppColors, isDarkMode } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 
 	return (
-		<View style={{ ...props.position as any && ButtonEnd }}>
-			<TouchableOpacity onPress={props.onClick}
-				style={[styles.container, {
-					marginBottom: props.bottom,
-					marginTop: props.top,
-					flexDirection: 'row',
-					alignItems: 'center',
-					width: props.width
-				}]}>
+		<View style={{ ...((props.position as any) && ButtonEnd) }}>
+			<TouchableOpacity
+				onPress={props.onClick}
+				style={[
+					styles.container,
+					{
+						marginBottom: props.bottom,
+						marginTop: props.top,
+						flexDirection: 'row',
+						alignItems: 'center',
+						width: props.width,
+					},
+				]}>
 				<AppText
 					fontSize={FontSize._14}
 					fontFamily={props.fontFamily}
-					textColor={AppColors.white}
+					textColor={props.textColor ?? AppColors.white}
 					label={props.buttonLabel}
 				/>
-				{props.icon &&
-					<Image style={{
-						left: 20,
-						transform: [{ rotate: '180deg' }]
-					}} tintColor={AppColors.background} source={props.icon}
-					/>}
+				{props.icon && (
+					<Image
+						style={{
+							left: 20,
+							transform: [{ rotate: '180deg' }],
+						}}
+						tintColor={AppColors.background}
+						source={props.icon}
+					/>
+				)}
 			</TouchableOpacity>
-		</View >
+		</View>
 	);
 };
 
@@ -57,8 +64,8 @@ const createStyles = (AppColors: Theme) => {
 			backgroundColor: AppColors.primary,
 			justifyContent: 'center',
 			alignItems: 'center',
-			...borderRadius10
-		}
+			...borderRadius10,
+		},
 	});
 };
 

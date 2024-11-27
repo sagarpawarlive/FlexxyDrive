@@ -9,7 +9,7 @@ interface AppTextInputProps {
 	placeholder?: string;
 	maxLength?: number;
 	editable?: boolean;
-	inputMode?: KeyboardTypeOptions | undefined
+	inputMode?: KeyboardTypeOptions | undefined;
 	icon?: ImageProps;
 	secureTextEntry?: boolean;
 	onChangeText?: (text: string) => void;
@@ -50,16 +50,15 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 
 const createStyles = (AppColors: Theme) => {
 	return StyleSheet.create({
-
 		container: {
 			flexDirection: 'row',
 			borderWidth: 1,
 			borderColor: AppColors.primary,
 			backgroundColor: AppColors.background,
 			alignItems: 'center',
-			padding: 15,
+			// padding: 15,
 			paddingHorizontal: 10,
-			...borderRadius10
+			...borderRadius10,
 		},
 
 		icon: {
@@ -73,7 +72,6 @@ const createStyles = (AppColors: Theme) => {
 			flex: 1,
 			color: AppColors.primary,
 		},
-
 	});
 };
 

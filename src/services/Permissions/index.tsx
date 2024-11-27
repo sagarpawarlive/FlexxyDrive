@@ -1,41 +1,51 @@
 import { Linking, Platform } from 'react-native';
-import { check, PERMISSIONS, RESULTS, request, openSettings, checkMultiple, requestMultiple } from 'react-native-permissions';
+import {
+	check,
+	PERMISSIONS,
+	RESULTS,
+	request,
+	openSettings,
+	checkMultiple,
+	requestMultiple,
+} from 'react-native-permissions';
 import { isIOS, nativeAlertwithAction } from '../../constants/constants';
 
 const askPermission = async (permissionType: any) => {
-	const permission = isIOS
-		? PERMISSIONS.IOS[permissionType]
-		: PERMISSIONS.ANDROID[permissionType]
+	const permission = isIOS ? PERMISSIONS.IOS[permissionType] : PERMISSIONS.ANDROID[permissionType];
 
 	try {
 		const result = await check(permission);
 		const permissionTypeSmall: string = (() => {
 			switch (permissionType) {
-				case "MICROPHONE":
+				case 'MICROPHONE':
 					return 'Microphone';
-				case "PHOTO_LIBRARY":
+				case 'PHOTO_LIBRARY':
 					return 'Photos';
-				case "CAMERA":
+				case 'CAMERA':
 					return 'Camera';
-				case "READ_MEDIA_IMAGES":
+				case 'READ_MEDIA_IMAGES':
 					return 'Media Images';
-				case "READ_EXTERNAL_STORAGE":
-					return 'External Storage'
+				case 'READ_EXTERNAL_STORAGE':
+					return 'External Storage';
+				case 'LOCATION_WHEN_IN_USE':
+					return 'Location';
+				case 'ACCESS_FINE_LOCATION':
+					return 'Location';
 				default:
 					return ''; // or throw an error, depending on your logic
 			}
 		})();
 
 		switch (result) {
-
 			case RESULTS.BLOCKED:
 				console.log(`${permissionType} permission Blocked`);
 				nativeAlertwithAction(
 					`${permissionTypeSmall} Permission Error`,
 					`You need to grant "${permissionTypeSmall}"permission to use this feature. Please open settings to enable access.`,
-					async (result) => result
-						? (console.log('OK action'), Linking.openURL('app-settings://myapp'))
-						: console.log('Cancel or Custom Cancel action')
+					async result =>
+						result
+							? (console.log('OK action'), Linking.openURL('app-settings://myapp'))
+							: console.log('Cancel or Custom Cancel action'),
 				);
 				break;
 
@@ -50,9 +60,10 @@ const askPermission = async (permissionType: any) => {
 					nativeAlertwithAction(
 						`${permissionTypeSmall} Permission Error`,
 						`You need to grant "${permissionTypeSmall}"permission to use this feature. Please open settings to enable access.`,
-						async (result) => result
-							? (console.log('OK action'), Linking.openSettings())
-							: console.log('Cancel or Custom Cancel action')
+						async result =>
+							result
+								? (console.log('OK action'), Linking.openSettings())
+								: console.log('Cancel or Custom Cancel action'),
 					);
 				}
 				return permissionRequest === RESULTS.GRANTED;
@@ -65,27 +76,19 @@ const askPermission = async (permissionType: any) => {
 		console.error(`Error checking ${permissionType} permission:`, error);
 		return false;
 	}
-}
+};
 
 const _askCameraPermission = async () => await askPermission('CAMERA');
-const _askPhotoPermission = async () => isIOS ? await askPermission('PHOTO_LIBRARY') : await askPermission(Number(Platform.Version) <= 29 ? 'READ_EXTERNAL_STORAGE' : 'READ_MEDIA_IMAGES');
+const _askPhotoPermission = async () =>
+	isIOS
+		? await askPermission('PHOTO_LIBRARY')
+		: await askPermission(Number(Platform.Version) <= 29 ? 'READ_EXTERNAL_STORAGE' : 'READ_MEDIA_IMAGES');
 const _askAudioPermission = async () => await askPermission(isIOS ? 'MICROPHONE' : 'RECORD_AUDIO');
+const _askLocationPermission = async () => await askPermission(isIOS ? 'LOCATION_WHEN_IN_USE' : 'ACCESS_FINE_LOCATION');
 
 export const App_Permission = {
 	_askCameraPermission,
 	_askPhotoPermission,
 	_askAudioPermission,
-}
-
-//---------- ios pod file ------------//
-
-// permissions_path = '../node_modules/react-native-permissions/ios'
-// pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
-
-// pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone"
-// pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
-// pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
-// pod 'Permission-LocationAccuracy', :path => "#{permissions_path}/LocationAccuracy"
-// pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways"
-// pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
-// pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
+	_askLocationPermission,
+};

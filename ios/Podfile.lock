@@ -1532,6 +1532,8 @@ PODS:
     - Yoga
   - RNI18n (2.0.15):
     - React
+  - RNPermissions (5.2.0):
+    - React-Core
   - RNReanimated (3.15.2):
     - DoubleConversion
     - glog
@@ -1694,6 +1696,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNI18n (from `../node_modules/react-native-i18n`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -1842,6 +1845,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNI18n:
     :path: "../node_modules/react-native-i18n"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -1919,11 +1924,12 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 55264dd7cc939dad6e9c231a7621311f5277f1dc
   RNGestureHandler: 3b6fa2bfa341c413d3d08444b838515b58e48ee7
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
+  RNPermissions: 0de808f8724f3a52af18eefb5c40a6241fcfe9cb
   RNReanimated: ece067b779e0d6c7887c6bb80d381d0a0efd43c9
   RNScreens: 19719a9c326e925498ac3b2d35c4e50fe87afc06
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: a1d7895431387402a674fd0d1c04ec85e87909b8
 
-PODFILE CHECKSUM: ebf853416e1dbe50e68c0c19169ffb70ae487912
+PODFILE CHECKSUM: 70b5c4e9fc276de9e2bb77e2c21888877d04bebb
 
 COCOAPODS: 1.15.2
