@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { ButtonEnd, borderRadius10 } from '../constants/commonStyle';
+import { AppHeight, ButtonEnd, borderRadius10 } from '../constants/commonStyle';
 import { useTheme } from '../theme/ThemeProvider';
 import AppText from './AppText';
 import { FontSize } from '../../android/app/src/main/assets/custom';
@@ -16,6 +16,7 @@ interface AppButtonProps {
 	fontFamily?: string;
 	onClick?: () => void;
 	position?: 'end';
+	fontSize?: number;
 }
 
 const AppButton: React.FC<AppButtonProps> = (props: AppButtonProps) => {
@@ -37,7 +38,7 @@ const AppButton: React.FC<AppButtonProps> = (props: AppButtonProps) => {
 					},
 				]}>
 				<AppText
-					fontSize={FontSize._14}
+					fontSize={props.fontSize ?? FontSize._14}
 					fontFamily={props.fontFamily}
 					textColor={props.textColor ?? AppColors.white}
 					label={props.buttonLabel}
@@ -60,7 +61,7 @@ const AppButton: React.FC<AppButtonProps> = (props: AppButtonProps) => {
 const createStyles = (AppColors: Theme) => {
 	return StyleSheet.create({
 		container: {
-			padding: 20,
+			height: AppHeight._60,
 			backgroundColor: AppColors.primary,
 			justifyContent: 'center',
 			alignItems: 'center',

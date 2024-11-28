@@ -9,4 +9,11 @@ export const Icons = {
 	icnSearch: require('./search.png'),
 	icnLightTheme: require('./lighttheme.png'),
 	icnDarkTheme: require('./darktheme.png'),
+
+	icnHidePass: require('./hidepassword.png'),
+	icnShowPass: require('./showpassword.png'),
+
+	icnApple: require('./apple.png'),
+	icnGoogle: require('./google.png'),
+	icnFacebook: require('./facebook.png'),
 };

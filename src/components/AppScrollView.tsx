@@ -7,16 +7,25 @@ interface AppScrollViewProps {
 	enabled?: boolean;
 	horizontal?: boolean;
 	children?: ReactNode;
+	extraHeight?: number;
+	bounces?: boolean;
 }
 
 const AppScrollView: React.FC<AppScrollViewProps> = ({
 	enabled = true,
 	horizontal,
 	children,
+	extraHeight,
+	bounces,
 }) => {
 	return (
-		<KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={styles.container} extraHeight={100}>
+		<KeyboardAwareScrollView
+			bounces={bounces ?? true}
+			showsVerticalScrollIndicator={false}
+			style={styles.container}
+			extraHeight={extraHeight ?? 100}>
 			<ScrollView
+				bounces={bounces ?? true}
 				horizontal={horizontal}
 				showsVerticalScrollIndicator={false}
 				scrollEnabled={enabled}>

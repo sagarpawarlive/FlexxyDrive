@@ -1,138 +1,247 @@
-import React, {useMemo, useState} from 'react';
-import {Keyboard, Pressable, StyleSheet, Text, View} from 'react-native';
-import {useDispatch} from 'react-redux';
-import {FontSize, Fonts} from '../../../assets/fonts';
+import { Formik } from 'formik';
+import React, { useMemo, useState } from 'react';
+import { FlatList, Image, Keyboard, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import * as Yup from 'yup';
+import { FontSize, Fonts } from '../../../assets/fonts';
+import { Icons } from '../../../assets/Icons';
 import AppButton from '../../../components/AppButton';
+import AppScrollView from '../../../components/AppScrollView';
 import AppText from '../../../components/AppText';
 import AppTextInput from '../../../components/AppTextInput';
 import MainContainer from '../../../components/MainContainer';
-import {AppContainer, AppMargin} from '../../../constants/commonStyle';
-import {NavigationKeys} from '../../../constants/navigationKeys';
-import {_showToast} from '../../../services/UIs/ToastConfig';
-import {useTheme} from '../../../theme/ThemeProvider';
-import {Theme} from '../../../types';
-import {
-  isValidEmail,
-  isValidPasswordCharacter,
-  isValidPasswordLength,
-  isValidPasswordSpecial,
-} from '../../../utils/validators';
+import { AppContainer, AppHeight, AppMargin } from '../../../constants/commonStyle';
+import { _showToast } from '../../../services/UIs/ToastConfig';
+import { useTheme } from '../../../theme/ThemeProvider';
+import { Theme } from '../../../types';
 
 const SigninScreen = (props: any) => {
-  const dispatch = useDispatch();
-  const {isDarkMode, toggleTheme, AppColors} = useTheme();
-  const styles = useMemo(() => createStyles(AppColors), [AppColors]);
+	const dispatch = useDispatch();
+	const { AppColors } = useTheme();
+	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [emailAddress, setEmailAddress] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+	const [emailAddress, setEmailAddress] = useState<string>('');
+	const [password, setPassword] = useState<string>('');
+	const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const clearLoginData = () => {
-    setEmailAddress('');
-    setPassword('');
-  };
+	const imagesData = [
+		{ id: 1, src: Icons.icnApple, label: 'Apple' },
+		{ id: 2, src: Icons.icnGoogle, label: 'Google' },
+		{ id: 3, src: Icons.icnFacebook, label: 'Facebook' },
+	];
 
-  const validateCredentials = () => {
-    Keyboard.dismiss();
-    const email = emailAddress ? emailAddress.trim() : '';
-    const pass = password ? password.trim() : '';
+	// Handle press event for each icon
+	const handlePress = (id: number) => {
+		switch (id) {
+			case 1:
+				alert('Apple Icon Pressed');
+				break;
+			case 2:
+				alert('Google Icon Pressed');
+				break;
+			case 3:
+				alert('Facebook Icon Pressed');
+				break;
+			default:
+				break;
+		}
+	};
 
-    switch (true) {
-      case !email:
-        _showToast('Enter email address');
-        break;
-      case !isValidEmail(email):
-        _showToast('Enter valid Email address');
-        break;
-      case !pass:
-        _showToast('Enter password');
-        break;
-      case !isValidPasswordLength(pass):
-        _showToast('The password must be at least 8 characters long');
-        break;
-      case !isValidPasswordCharacter(pass):
-        _showToast('The password must contain one uppercase, one lowercase');
-        break;
-      case !isValidPasswordSpecial(pass):
-        _showToast('The password must contain one special character');
-        break;
-      default:
-        props.navigation.navigate(NavigationKeys.StarterScreen);
-        _showToast('Login Success', 'success');
-        // dispatch(setIsLogin(true));
-        clearLoginData();
-        break;
-    }
-  };
+	// Formik validation schema with Yup
+	const validationSchema = Yup.object().shape({
+		email: Yup.string().email('Enter valid Email address').required('Email is required'),
+		password: Yup.string()
+			.min(8, 'Password must be at least 8 characters long')
+			.matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+			.matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+			.matches(/[^a-zA-Z0-9]/, 'Password must contain at least one special character')
+			.required('Password is required'),
+	});
 
-  return (
-    <MainContainer>
-      <View style={AppContainer}>
-        <View>
-          <AppText
-            fontFamily={Fonts.BOLD}
-            fontSize={FontSize._32}
-            label={`Logo`}
-          />
-          <AppText
-            fontFamily={Fonts.BOLD}
-            fontSize={FontSize._32}
-            label={`Login`}
-          />
-        </View>
+	// Formik submission handler
+	const onSubmit = (values: any) => {
+		// Log the submitted values
 
-        <View style={{flex: 1}}>
-          <AppTextInput
-            placeholder={'Email Address'}
-            value={emailAddress}
-            onChangeText={(text: React.SetStateAction<string>) =>
-              setEmailAddress(text)
-            }
-          />
+		console.log('[ index.tsx / Form submitted with values: ] ----------------------->> ', values);
 
-          <AppTextInput
-            placeholder={'Password'}
-            value={password}
-            onChangeText={(text: React.SetStateAction<string>) =>
-              setPassword(text)
-            }
-            secureTextEntry={!showPassword}
-          />
+		Keyboard.dismiss();
+		_showToast('Login Success', 'success');
 
-          <Pressable
-            style={{marginTop: 10, alignItems: 'flex-end'}}
-            onPress={() =>
-              props.navigation.navigate(NavigationKeys.ForgotPasswordScreen)
-            }>
-            <Text style={{color: AppColors.primary}}>Forgot Password?</Text>
-          </Pressable>
-        </View>
+		// props.navigation.navigate(NavigationKeys.DrawerScreen);
+		// dispatch(setIsLogin(true));
+	};
 
-        <AppButton buttonLabel={'Login'} onClick={validateCredentials} />
+	return (
+		<MainContainer>
+			<View style={{ flex: 1, backgroundColor: AppColors.background }}>
+				<AppScrollView bounces={false} extraHeight={AppHeight._350}>
+					<Formik
+						bounces={false}
+						initialValues={{
+							email: emailAddress,
+							password: password,
+						}}
+						validationSchema={validationSchema}
+						onSubmit={onSubmit}>
+						{({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+							<View style={[AppContainer]}>
+								<View style={styles.logoContainer}>
+									<AppText fontSize={FontSize._40} fontFamily={Fonts.BOLD} title={'LOGO'} />
+								</View>
 
-        <View style={{marginVertical: 20, flexDirection: 'row'}}>
-          <Text>Dont have an account?</Text>
-          <Pressable
-            style={{marginLeft: 5}}
-            onPress={() =>
-              props.navigation.navigate(NavigationKeys.SignupScreen)
-            }>
-            <Text style={{color: AppColors.primary}}>Sign Up</Text>
-          </Pressable>
-        </View>
-      </View>
-    </MainContainer>
-  );
+								<View style={styles.logoContainer}>
+									<AppText fontSize={FontSize._36} fontFamily={Fonts.REGULAR} title={'Login'} />
+								</View>
+
+								{/* Email Field */}
+								<View style={{ marginTop: AppMargin._50 }}>
+									<AppTextInput
+										marginTop={5}
+										placeholder={'Email Id / Phone number'}
+										value={emailAddress} // Controlled input with useState
+										onChangeText={text => {
+											setEmailAddress(text); // Update emailAddress state
+											handleChange('email')(text); // Update Formik value
+										}}
+										onBlur={() => handleBlur('email')}
+									/>
+									{/* Display error message for email */}
+									{touched.email && errors.email && (
+										<AppText
+											top={AppMargin._5}
+											left={AppMargin._20}
+											textColor={AppColors.error}
+											fontFamily={Fonts.REGULAR}
+											fontSize={FontSize._14}
+											label={errors.email}
+										/>
+									)}
+								</View>
+
+								{/* Password Field */}
+								<View style={{ marginTop: AppMargin._30 }}>
+									<AppTextInput
+										marginTop={AppMargin._5}
+										iconRight={showPassword ? Icons.icnShowPass : Icons.icnHidePass}
+										iconRightClick={() => setShowPassword(!showPassword)}
+										placeholder={'Password'}
+										value={password} // Controlled input with useState
+										onChangeText={text => {
+											setPassword(text); // Update password state
+											handleChange('password')(text); // Update Formik value
+										}}
+										onBlur={() => handleBlur('password')}
+										secureTextEntry={!showPassword}
+									/>
+									{/* Display error message for password */}
+									{touched.password && errors.password && (
+										<AppText
+											top={AppMargin._5}
+											left={AppMargin._20}
+											textColor={AppColors.error}
+											fontFamily={Fonts.REGULAR}
+											fontSize={FontSize._14}
+											label={errors.password}
+										/>
+									)}
+								</View>
+
+								{/* Forgot password */}
+								<View
+									style={{
+										marginVertical: AppMargin._10,
+										alignItems: 'flex-end',
+									}}>
+									<Pressable onPress={() => alert('Forgot Password')}>
+										<AppText
+											textColor={AppColors.primary}
+											fontSize={FontSize._14}
+											fontFamily={Fonts.MEDIUM}
+											label="Forgot password ?"
+										/>
+									</Pressable>
+								</View>
+								<View style={styles.socialLoginContainer}>
+									<FlatList
+										bounces={false}
+										scrollEnabled={false}
+										data={imagesData}
+										horizontal
+										keyExtractor={item => item.id.toString()}
+										renderItem={({ item }) => (
+											<TouchableOpacity
+												style={styles.iconContainer}
+												onPress={() => handlePress(item.id)}>
+												<Image source={item.src} />
+											</TouchableOpacity>
+										)}
+									/>
+								</View>
+								<View style={{ flex: 1, justifyContent: 'flex-end' }}>
+									<AppButton
+										top={AppMargin._40}
+										fontSize={FontSize._16}
+										textColor={AppColors.textDark}
+										fontFamily={Fonts.MEDIUM}
+										buttonLabel={'Confirm'}
+										onClick={handleSubmit}
+									/>
+								</View>
+								<View
+									style={{
+										justifyContent: 'center',
+										marginTop: 20,
+										flexDirection: 'row',
+									}}>
+									<AppText
+										fontSize={FontSize._16}
+										fontFamily={Fonts.MEDIUM}
+										label={`Don't have an account?`}
+									/>
+									<Pressable onPress={() => alert('Signup')}>
+										<AppText
+											left={5}
+											textColor={AppColors.primary}
+											fontSize={FontSize._16}
+											fontFamily={Fonts.MEDIUM}
+											label={`Sign up`}
+										/>
+									</Pressable>
+								</View>
+							</View>
+						)}
+					</Formik>
+				</AppScrollView>
+			</View>
+		</MainContainer>
+	);
 };
 
 const createStyles = (AppColors: Theme) => {
-  return StyleSheet.create({
-    orContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      marginTop: AppMargin._20,
-    },
-  });
+	return StyleSheet.create({
+		logoContainer: {
+			marginTop: AppMargin._60,
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		iconContainer: {
+			alignItems: 'center',
+			marginHorizontal: 10,
+		},
+		socialLoginContainer: {
+			marginTop: AppMargin._100,
+			justifyContent: 'center',
+			alignItems: 'center',
+			shadowColor: '#FFFFFF',
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			shadowRadius: 10.84,
+			elevation: 5,
+		},
+	});
 };
 
 export default SigninScreen;

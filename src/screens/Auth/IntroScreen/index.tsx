@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { FontSize } from '../../../../android/app/src/main/assets/custom';
 import { Images } from '../../../assets/images';
 import AppButton from '../../../components/AppButton';
 import AppText from '../../../components/AppText';
@@ -10,7 +9,7 @@ import { AppContainer, AppHeight, AppMargin, AppShadowWhite, WindowWidth } from 
 import { NavigationKeys } from '../../../constants/navigationKeys';
 import { useTheme } from '../../../theme/ThemeProvider';
 import { Theme } from '../../../types';
-import { Fonts } from '../../../assets/fonts';
+import { Fonts, FontSize } from '../../../assets/fonts';
 
 const IntroScreen = (props: any) => {
 	const dispatch = useDispatch();
