@@ -14,6 +14,7 @@ import { _showToast } from '../../../services/UIs/ToastConfig';
 import { useTheme } from '../../../theme/ThemeProvider';
 import { Theme } from '../../../types';
 import { useFormik } from 'formik';
+import { NavigationKeys } from '../../../constants/navigationKeys';
 
 const SigninScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -184,7 +185,7 @@ const SigninScreen = (props: any) => {
 								fontFamily={Fonts.MEDIUM}
 								label={`Don't have an account?`}
 							/>
-							<Pressable onPress={() => alert('Signup')}>
+							<Pressable onPress={() => props.navigation.navigate(NavigationKeys.SignupScreen)}>
 								<AppText
 									left={5}
 									textColor={AppColors.primary}
@@ -210,10 +211,10 @@ const createStyles = (AppColors: Theme) => {
 		},
 		iconContainer: {
 			alignItems: 'center',
-			marginHorizontal: 10,
+			marginHorizontal: 20,
 		},
 		socialLoginContainer: {
-			marginTop: AppMargin._100,
+			// marginTop: AppMargin._100,
 			justifyContent: 'center',
 			alignItems: 'center',
 			shadowColor: '#FFFFFF',

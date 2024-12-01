@@ -16,7 +16,7 @@ export const lightTheme = {
 	backButton: 'rgba(30, 30, 30, 1)',
 
 	// Status Colors
-	error: 'rgba(229, 115, 115, 1)',
+	error: 'rgba(250, 0, 0, 1)',
 	success: 'rgba(92, 184, 92, 1)',
 	warning: 'rgba(249, 200, 50, 1)',
 };
