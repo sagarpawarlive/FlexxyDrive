@@ -23,14 +23,9 @@ const AppScrollView: React.FC<AppScrollViewProps> = ({
 			bounces={bounces ?? true}
 			showsVerticalScrollIndicator={false}
 			style={styles.container}
+			contentContainerStyle={{ flexGrow: 1 }}
 			extraHeight={extraHeight ?? 100}>
-			<ScrollView
-				bounces={bounces ?? true}
-				horizontal={horizontal}
-				showsVerticalScrollIndicator={false}
-				scrollEnabled={enabled}>
-				{children}
-			</ScrollView>
+			{children}
 		</KeyboardAwareScrollView>
 	);
 };

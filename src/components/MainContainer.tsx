@@ -28,7 +28,7 @@ const MainContainer: React.FC<MainContainerProps> = ({
 	return (
 		<View style={{ flex: 1 }}>
 			{!hideTop && <SafeAreaView style={[{ backgroundColor: topColor ?? AppColors.background }]} />}
-			<View style={{ flex: 1 }}>{children}</View>
+			{children}
 			{!hideBottom && <SafeAreaView style={[{ backgroundColor: bottomColor ?? AppColors.background }]} />}
 		</View>
 	);
