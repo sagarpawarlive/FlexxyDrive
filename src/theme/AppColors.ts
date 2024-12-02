@@ -13,7 +13,7 @@ export const lightTheme = {
 
 	// UI Element Colors
 	placeholder: 'rgba(165, 165, 165, 1)',
-	backButton: 'rgba(30, 30, 30, 1)',
+	backButton: 'rgba(217, 217, 217, 1)',
 
 	// Status Colors
 	error: 'rgba(250, 0, 0, 1)',

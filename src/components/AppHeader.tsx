@@ -10,28 +10,35 @@ interface AppHeaderProps {
 	onBack?: () => void;
 	tintColor?: string;
 	rightIcon?: ImageSourcePropType;
+	top?: number;
 }
 
 const AppHeader = (props: AppHeaderProps) => {
-
 	const { AppColors, isDarkMode } = useTheme();
 	const styles = React.useMemo(() => createStyles(AppColors), [AppColors]);
 
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, { marginTop: props.top ?? 0 }]}>
 			<TouchableOpacity onPress={props.onBack} style={styles.container}>
-				<Image style={{ tintColor: props.tintColor ?? AppColors.backButton }} resizeMode='contain' source={Icons.icnBack} />
+				<Image
+					style={{ tintColor: props.tintColor ?? AppColors.backButton }}
+					resizeMode="contain"
+					source={Icons.icnBack}
+				/>
 				<Text style={styles.buttonTitle}>{props.buttonTitle}</Text>
 			</TouchableOpacity>
 			<View style={{ flexGrow: 1 }} />
-			{props.rightIcon &&
+			{props.rightIcon && (
 				<TouchableOpacity onPress={props.onBack} style={styles.container}>
-					<Image style={{ tintColor: props.tintColor ? props.tintColor : AppColors.backButton }} resizeMode='contain'
-						source={props.rightIcon} />
-				</TouchableOpacity>}
+					<Image
+						style={{ tintColor: props.tintColor ? props.tintColor : AppColors.backButton }}
+						resizeMode="contain"
+						source={props.rightIcon}
+					/>
+				</TouchableOpacity>
+			)}
 		</View>
 	);
-
 };
 
 const createStyles = (AppColors: Theme) => {
@@ -45,8 +52,8 @@ const createStyles = (AppColors: Theme) => {
 			color: AppColors.backButton,
 			marginLeft: 20,
 			fontSize: 16,
-			fontFamily: Fonts.REGULAR
-		}
+			fontFamily: Fonts.REGULAR,
+		},
 	});
 };
 

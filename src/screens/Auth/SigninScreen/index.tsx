@@ -69,9 +69,9 @@ const SigninScreen = (props: any) => {
 			console.log('[ index.tsx / Form submitted with values: ] ----------------------->> ', values);
 
 			Keyboard.dismiss();
-			_showToast('Login Success', 'success');
+			_showToast('OTP sent!', 'success');
 
-			// props.navigation.navigate(NavigationKeys.DrawerScreen);
+			props.navigation.navigate(NavigationKeys.OtpScreen);
 			// dispatch(setIsLogin(true));
 		},
 	});

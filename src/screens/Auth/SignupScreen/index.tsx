@@ -66,13 +66,15 @@ const SignupScreen = (props: any) => {
 		validationSchema,
 		onSubmit: (values: any) => {
 			Keyboard.dismiss();
-			_showToast('Signup Success', 'success');
+			_showToast('You have received an OTP', 'success');
+			props.navigation.navigate(NavigationKeys.OtpScreen);
 		},
 	});
 
 	const renderFormField = (placeholder: string, fieldName: string, isPassword: boolean = false) => (
 		<View style={{ marginTop: AppMargin._20 }}>
 			<AppTextInput
+				maxLength={fieldName === 'phone' ? 10 : undefined}
 				marginTop={5}
 				placeholder={placeholder}
 				value={values[fieldName]}
@@ -154,7 +156,7 @@ const SignupScreen = (props: any) => {
 								fontFamily={Fonts.MEDIUM}
 								label={`Already have an account?`}
 							/>
-							<Pressable onPress={() => props.navigation.navigate(NavigationKeys.SignupScreen)}>
+							<Pressable onPress={() => props.navigation.navigate(NavigationKeys.SigninScreen)}>
 								<AppText
 									left={5}
 									textColor={AppColors.primary}
