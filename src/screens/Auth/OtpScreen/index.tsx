@@ -36,7 +36,11 @@ const OtpScreen = (props: any) => {
 						<AppText fontFamily={Fonts.BOLD} label={`Email Id /Phone Number.`} />
 					</View>
 
-					<AppOtpView defaultValue={otpValue} handleTextChange={val => setOtpValue(val)} />
+					<AppOtpView
+						onSubmitPress={() => alert('Entered OTP : ' + JSON.stringify(otpValue))}
+						defaultValue={otpValue}
+						handleTextChange={val => setOtpValue(val)}
+					/>
 
 					<View
 						style={{
@@ -62,7 +66,7 @@ const OtpScreen = (props: any) => {
 					fontSize={FontSize._16}
 					fontFamily={Fonts.MEDIUM}
 					position="end"
-					buttonLabel={'Continue'}
+					buttonLabel={'Verify Now'}
 					onClick={() => alert('Entered OTP : ' + JSON.stringify(otpValue))}
 				/>
 			</View>

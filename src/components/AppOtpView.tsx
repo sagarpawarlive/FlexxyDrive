@@ -14,10 +14,12 @@ interface AppOtpViewProps {
 	textInputStyle?: any;
 	handleTextChange?: (text: string) => void;
 	keyboardType?: KeyboardTypeOptions | undefined;
+	onSubmitPress?: () => void;
 }
 
 const AppOtpView: FC<AppOtpViewProps> = ({
 	defaultValue = '',
+	onSubmitPress,
 	inputCount = 4,
 	inputCellLength = 1,
 	containerStyle = {},
@@ -83,6 +85,9 @@ const AppOtpView: FC<AppOtpViewProps> = ({
 						autoCorrect={false}
 						keyboardType={'numeric'}
 						autoFocus={i === 0}
+						returnKeyLabel="Done"
+						returnKeyType="done"
+						onSubmitEditing={onSubmitPress}
 						value={otpText[i]}
 						style={[styles.textInput, textInputStyle, otpText[i] || focusedInput === i ? {} : null]}
 						maxLength={inputCellLength}

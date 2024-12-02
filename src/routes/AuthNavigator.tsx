@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator();
 
 const AuthNavigator: React.FC = () => {
 	return (
-		<Stack.Navigator initialRouteName={NavigationKeys.IntroScreen} screenOptions={{ headerShown: false }}>
+		<Stack.Navigator initialRouteName={NavigationKeys.OtpScreen} screenOptions={{ headerShown: false }}>
 			<Stack.Screen name={NavigationKeys.IntroScreen} component={IntroScreen} />
 			<Stack.Screen name={NavigationKeys.LocationPermission} component={LocationPermission} />
 			<Stack.Screen name={NavigationKeys.SigninScreen} component={SigninScreen} />
