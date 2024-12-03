@@ -16,7 +16,7 @@ import { Theme } from '../../../types';
 import { useFormik } from 'formik';
 import { NavigationKeys } from '../../../constants/navigationKeys';
 
-const SigninScreen = (props: any) => {
+const FinalUser = (props: any) => {
 	const dispatch = useDispatch();
 	const { AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
@@ -85,90 +85,30 @@ const SigninScreen = (props: any) => {
 							<AppText fontSize={FontSize._40} fontFamily={Fonts.BOLD} title={'LOGO'} />
 						</View>
 
-						<View style={styles.logoContainer}>
-							<AppText fontSize={FontSize._36} fontFamily={Fonts.REGULAR} title={'Login'} />
+						<View style={[styles.logoContainer, { marginTop: AppMargin._100 }]}>
+							<AppText fontSize={FontSize._24} fontFamily={Fonts.BOLD} title={'Welcome to FlexxyDrive'} />
 						</View>
-
-						{/* Email Field */}
-						<View style={{ marginTop: AppMargin._40 }}>
-							<AppTextInput
-								marginTop={5}
-								placeholder={'Username'}
-								value={values.username} // Use Formik's value
-								onChangeText={text => handleChange('username')(text)}
-								onBlur={() => handleBlur('username')}
-								showError={errors.username}
-							/>
-						</View>
-
-						{/* Password Field */}
-						<View style={{ marginTop: AppMargin._20 }}>
-							<AppTextInput
-								marginTop={AppMargin._5}
-								iconRight={showPassword ? Icons.icnShowPass : Icons.icnHidePass}
-								iconRightClick={() => setShowPassword(!showPassword)}
-								placeholder={'Password'}
-								value={values.password} // Use Formik's value
-								onChangeText={text => handleChange('password')(text)}
-								onBlur={() => handleBlur('password')}
-								secureTextEntry={!showPassword}
-								showError={errors.password}
-							/>
-						</View>
-
-						{/* Forgot password */}
-						<View style={styles.forgotPasswordContainer}>
-							<Pressable onPress={() => props.navigation.navigate(NavigationKeys.ForgotPasswordScreen)}>
-								<AppText
-									textColor={AppColors.primary}
-									fontSize={FontSize._14}
-									fontFamily={Fonts.MEDIUM}
-									label="Forgot password ?"
-								/>
-							</Pressable>
-						</View>
-
-						<View style={{ flex: 1, justifyContent: 'flex-end' }}>
-							<View style={styles.socialLoginContainer}>
-								<FlatList
-									bounces={false}
-									scrollEnabled={false}
-									data={imagesData}
-									horizontal
-									keyExtractor={item => item.id.toString()}
-									renderItem={({ item }) => (
-										<TouchableOpacity
-											style={styles.iconContainer}
-											onPress={() => handlePress(item.id)}>
-											<Image source={item.src} />
-										</TouchableOpacity>
-									)}
-								/>
-							</View>
+						<View style={{ marginTop: AppMargin._100 }}>
 							<AppButton
 								top={AppMargin._40}
 								fontSize={FontSize._16}
-								textColor={AppColors.textDark}
+								textColor={AppColors.primary}
 								fontFamily={Fonts.MEDIUM}
-								buttonLabel={'Confirm'}
-								onClick={handleSubmit} // Use Formik's handleSubmit
+								buttonLabel={'Book A Ride'}
+								bgColor={AppColors.background}
+								borderWidth={1}
+								onClick={() => alert('book a ride')} // Use Formik's handleSubmit
 							/>
-						</View>
-						<View style={styles.bottomContainer}>
-							<AppText
+							<AppButton
+								top={AppMargin._40}
 								fontSize={FontSize._16}
+								textColor={AppColors.primary}
 								fontFamily={Fonts.MEDIUM}
-								label={`Don't have an account?`}
+								buttonLabel={'Offer A Ride'}
+								bgColor={AppColors.background}
+								borderWidth={1}
+								onClick={() => alert('book a ride')} // Use Formik's handleSubmit
 							/>
-							<Pressable onPress={() => props.navigation.navigate(NavigationKeys.SignupScreen)}>
-								<AppText
-									left={5}
-									textColor={AppColors.primary}
-									fontSize={FontSize._16}
-									fontFamily={Fonts.MEDIUM}
-									label={`Sign up`}
-								/>
-							</Pressable>
 						</View>
 					</View>
 				</AppScrollView>
@@ -214,4 +154,4 @@ const createStyles = (AppColors: Theme) => {
 	});
 };
 
-export default SigninScreen;
+export default FinalUser;

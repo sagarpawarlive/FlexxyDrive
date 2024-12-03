@@ -37,6 +37,7 @@ const SignupScreen = (props: any) => {
 	};
 
 	const validationSchema = Yup.object().shape({
+		username: Yup.string().required('Username  is required'),
 		firstName: Yup.string().required('First name is required'),
 		lastName: Yup.string().required('Last name is required'),
 		phone: Yup.string()
@@ -56,6 +57,7 @@ const SignupScreen = (props: any) => {
 
 	const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
 		initialValues: {
+			username: '',
 			firstName: '',
 			lastName: '',
 			phone: '',
@@ -75,7 +77,7 @@ const SignupScreen = (props: any) => {
 		<View style={{ marginTop: AppMargin._20 }}>
 			<AppTextInput
 				maxLength={fieldName === 'phone' ? 10 : undefined}
-				marginTop={5}
+				marginTop={AppMargin._5}
 				placeholder={placeholder}
 				value={values[fieldName]}
 				onChangeText={handleChange(fieldName)}
@@ -83,17 +85,8 @@ const SignupScreen = (props: any) => {
 				secureTextEntry={isPassword && !showPassword}
 				iconRight={isPassword ? (showPassword ? Icons.icnShowPass : Icons.icnHidePass) : undefined}
 				iconRightClick={() => setShowPassword(!showPassword)}
+				showError={touched[fieldName] && errors[fieldName]}
 			/>
-			{touched[fieldName] && errors[fieldName] && (
-				<AppText
-					top={AppMargin._5}
-					left={AppMargin._20}
-					textColor={AppColors.error}
-					fontFamily={Fonts.REGULAR}
-					fontSize={FontSize._14}
-					label={errors[fieldName]}
-				/>
-			)}
 		</View>
 	);
 
@@ -111,6 +104,7 @@ const SignupScreen = (props: any) => {
 						</View>
 
 						{/* Render Form Fields */}
+						{renderFormField('Username', 'username')}
 						{renderFormField('First Name', 'firstName')}
 						{renderFormField('Last Name', 'lastName')}
 						{renderFormField('Phone Number', 'phone')}
@@ -145,12 +139,7 @@ const SignupScreen = (props: any) => {
 							/>
 						</View>
 
-						<View
-							style={{
-								justifyContent: 'center',
-								marginTop: 20,
-								flexDirection: 'row',
-							}}>
+						<View style={styles.bottomContainer}>
 							<AppText
 								fontSize={FontSize._16}
 								fontFamily={Fonts.MEDIUM}
@@ -176,7 +165,7 @@ const SignupScreen = (props: any) => {
 const createStyles = (AppColors: Theme) => {
 	return StyleSheet.create({
 		logoContainer: {
-			marginTop: AppMargin._60,
+			marginTop: AppMargin._50,
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
@@ -198,6 +187,11 @@ const createStyles = (AppColors: Theme) => {
 		},
 		primaryContainer: { flex: 1, backgroundColor: AppColors.background },
 		signupLinkContainer: {
+			justifyContent: 'center',
+			marginTop: 20,
+			flexDirection: 'row',
+		},
+		bottomContainer: {
 			justifyContent: 'center',
 			marginTop: 20,
 			flexDirection: 'row',

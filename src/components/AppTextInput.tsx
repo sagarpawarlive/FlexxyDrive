@@ -1,9 +1,11 @@
 import React from 'react';
 import { Image, ImageProps, KeyboardTypeOptions, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { useTheme } from '../theme/ThemeProvider';
-import { AppHeight, borderRadius10 } from '../constants/commonStyle';
+import { AppHeight, AppMargin, borderRadius10 } from '../constants/commonStyle';
 import { Theme } from '../types';
-import { Fonts } from '../assets/fonts';
+import { Fonts, FontSize } from '../assets/fonts';
+import AppText from './AppText';
+import { Icons } from '../assets/Icons';
 
 interface AppTextInputProps {
 	value?: string;
@@ -20,6 +22,7 @@ interface AppTextInputProps {
 	marginTop?: number; // Allow customizing marginTop
 	onBlur?: () => void;
 	borderColor?: string;
+	showError?: any;
 }
 
 const AppTextInput: React.FC<AppTextInputProps> = ({
@@ -37,35 +40,51 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 	onChangeText,
 	marginTop = 20, // Default marginTop
 	onBlur,
+	showError,
 }) => {
 	const { AppColors, isDarkMode } = useTheme();
 	const styles = createStyles(AppColors);
 
 	return (
-		<View style={[styles.container, { marginTop, borderColor: borderColor ?? AppColors.white }]}>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					flex: 1,
-				}}>
-				{icon && <Image style={styles.icon} source={icon} />}
-				<TextInput
-					secureTextEntry={secureTextEntry}
-					placeholderTextColor={AppColors.placeholder}
-					value={value}
-					placeholder={placeholder}
-					maxLength={maxLength}
-					editable={editable}
-					keyboardType={inputMode}
-					style={[styles.input]}
-					onChangeText={onChangeText}
-				/>
+		<View>
+			<View style={[styles.container, { marginTop, borderColor: borderColor ?? AppColors.white }]}>
+				<View
+					style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+						flex: 1,
+					}}>
+					{icon && <Image style={styles.icon} source={icon} />}
+					<TextInput
+						secureTextEntry={secureTextEntry}
+						placeholderTextColor={AppColors.placeholder}
+						value={value}
+						placeholder={placeholder}
+						maxLength={maxLength}
+						editable={editable}
+						keyboardType={inputMode}
+						style={[styles.input]}
+						onChangeText={onChangeText}
+					/>
+				</View>
+				{iconRight && (
+					<Pressable style={{ flex: 0.15 }} onPress={iconRightClick}>
+						<Image style={[styles.icon, { tintColor: tint ?? AppColors.secondary }]} source={iconRight} />
+					</Pressable>
+				)}
 			</View>
-			{iconRight && (
-				<Pressable style={{ flex: 0.15 }} onPress={iconRightClick}>
-					<Image style={[styles.icon, { tintColor: tint ?? AppColors.secondary }]} source={iconRight} />
-				</Pressable>
+			{showError && (
+				<View style={styles.errorContainer}>
+					<Image style={[styles.icon, { tintColor: AppColors.error }]} source={Icons.icnError} />
+					<AppText
+						width={'90%'}
+						left={AppMargin._10}
+						textColor={AppColors.error}
+						fontFamily={Fonts.REGULAR}
+						fontSize={FontSize._14}
+						label={showError}
+					/>
+				</View>
 			)}
 		</View>
 	);
@@ -97,6 +116,13 @@ const createStyles = (AppColors: Theme) => {
 			paddingHorizontal: 10,
 			color: AppColors.text,
 			fontFamily: Fonts.REGULAR,
+			fontSize: FontSize._14,
+		},
+
+		errorContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			marginTop: 10,
 		},
 	});
 };

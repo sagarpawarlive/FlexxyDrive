@@ -42,12 +42,7 @@ const OtpScreen = (props: any) => {
 						handleTextChange={val => setOtpValue(val)}
 					/>
 
-					<View
-						style={{
-							justifyContent: 'center',
-							marginTop: 20,
-							flexDirection: 'row',
-						}}>
+					<View style={styles.bottomContainer}>
 						<AppText fontSize={FontSize._16} fontFamily={Fonts.REGULAR} label={`Don't receive a code?`} />
 						<Pressable onPress={() => alert('resent!!')}>
 							<AppText
@@ -67,7 +62,7 @@ const OtpScreen = (props: any) => {
 					fontFamily={Fonts.MEDIUM}
 					position="end"
 					buttonLabel={'Verify Now'}
-					onClick={() => alert('Entered OTP : ' + JSON.stringify(otpValue))}
+					onClick={() => props.navigation.navigate(NavigationKeys.FinalUser)}
 				/>
 			</View>
 		</MainContainer>
@@ -85,6 +80,11 @@ const createStyles = (AppColors: Theme) => {
 			flex: 1,
 			backgroundColor: AppColors.background,
 			paddingHorizontal: 20,
+		},
+		bottomContainer: {
+			justifyContent: 'center',
+			marginTop: 20,
+			flexDirection: 'row',
 		},
 	});
 };

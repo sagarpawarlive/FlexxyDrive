@@ -17,6 +17,9 @@ interface AppButtonProps {
 	onClick?: () => void;
 	position?: 'end';
 	fontSize?: number;
+	bgColor?: string;
+	borderWidth?: number;
+	borderColor?: string;
 }
 
 const AppButton: React.FC<AppButtonProps> = (props: AppButtonProps) => {
@@ -35,6 +38,9 @@ const AppButton: React.FC<AppButtonProps> = (props: AppButtonProps) => {
 						flexDirection: 'row',
 						alignItems: 'center',
 						width: props.width,
+						backgroundColor: props.bgColor ?? AppColors.primary,
+						borderWidth: props.borderWidth,
+						borderColor: props.borderColor ?? AppColors.white,
 					},
 				]}>
 				<AppText
@@ -62,7 +68,6 @@ const createStyles = (AppColors: Theme) => {
 	return StyleSheet.create({
 		container: {
 			height: AppHeight._60,
-			backgroundColor: AppColors.primary,
 			justifyContent: 'center',
 			alignItems: 'center',
 			...borderRadius10,

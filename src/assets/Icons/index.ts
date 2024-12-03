@@ -5,6 +5,9 @@ export const Icons = {
 	icnRadioOn: require('./RadioButtonOn.png'),
 	icnCheckbox: require('./checkbox.png'),
 	icnCheckboxEmpty: require('./checkboxEmpty.png'),
+
+	icnError: require('./error.png'),
+
 	icnBack: require('./back.png'),
 	icnSearch: require('./search.png'),
 	icnLightTheme: require('./lighttheme.png'),

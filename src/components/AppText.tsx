@@ -5,7 +5,7 @@ import { Theme } from '../types';
 
 interface AppTextProps {
 	title?: string;
-	label?: string;
+	label?: any;
 	textColor?: string;
 	left?: number;
 	top?: number;
@@ -15,24 +15,20 @@ interface AppTextProps {
 	fontSize?: number;
 	numberOfLines?: number;
 	align?: 'auto' | 'flex-start' | 'flex-end' | 'center';
+	textAlign?: 'auto' | 'left' | 'right' | 'center' | 'justify';
+	width?: any;
 }
 
-const AppText: React.FC<AppTextProps> = (props) => {
-
+const AppText: React.FC<AppTextProps> = props => {
 	const { AppColors, isDarkMode } = useTheme();
 	const styles = createStyles(AppColors, props);
 
 	return (
 		<Fragment>
-			{props.title && (
-				<Text style={styles.titleText}>
-					{props.title}
-				</Text>
-			)}
+			{props.title && <Text style={styles.titleText}>{props.title}</Text>}
 
 			{props.label && (
-				<Text numberOfLines={props.numberOfLines}
-					style={styles.labelText}>
+				<Text numberOfLines={props.numberOfLines} style={styles.labelText}>
 					{props.label}
 				</Text>
 			)}
@@ -41,8 +37,7 @@ const AppText: React.FC<AppTextProps> = (props) => {
 };
 
 const createStyles = (AppColors: Theme, props: AppTextProps) => {
-
-	const { textColor, bottom, fontFamily, fontSize, left, top, align, spacing } = props;
+	const { textColor, bottom, fontFamily, fontSize, left, top, align, spacing, width } = props;
 
 	return StyleSheet.create({
 		titleText: {
@@ -55,16 +50,18 @@ const createStyles = (AppColors: Theme, props: AppTextProps) => {
 		},
 
 		labelText: {
+			width: width ?? null,
 			includeFontPadding: false,
 			marginLeft: left ? left : null,
 			marginTop: top ? top : null,
 			color: textColor || AppColors.text,
 			alignSelf: align,
+			textAlign: props.textAlign,
 			fontSize: fontSize ?? 12,
 			fontFamily: fontFamily ?? '',
 			letterSpacing: spacing,
 		},
-	})
-}
+	});
+};
 
 export default AppText;
