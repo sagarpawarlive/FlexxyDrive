@@ -43,12 +43,14 @@ const AppButton: React.FC<AppButtonProps> = (props: AppButtonProps) => {
 						borderColor: props.borderColor ?? AppColors.white,
 					},
 				]}>
-				<AppText
-					fontSize={props.fontSize ?? FontSize._14}
-					fontFamily={props.fontFamily}
-					textColor={props.textColor ?? AppColors.white}
-					label={props.buttonLabel}
-				/>
+				<View style={{ justifyContent: 'center', alignItems: 'center' }}>
+					<AppText
+						fontSize={props.fontSize ?? FontSize._14}
+						fontFamily={props.fontFamily}
+						textColor={props.textColor ?? AppColors.white}
+						label={props.buttonLabel}
+					/>
+				</View>
 				{props.icon && (
 					<Image
 						style={{

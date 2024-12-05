@@ -12,4 +12,5 @@ export interface Theme {
 	error: string;
 	success: string;
 	warning: string;
+	modalBackground: string;
 }

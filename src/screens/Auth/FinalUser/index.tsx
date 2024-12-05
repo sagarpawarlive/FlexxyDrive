@@ -107,7 +107,7 @@ const FinalUser = (props: any) => {
 								buttonLabel={'Offer A Ride'}
 								bgColor={AppColors.background}
 								borderWidth={1}
-								onClick={() => alert('book a ride')} // Use Formik's handleSubmit
+								onClick={() => props.navigation.navigate(NavigationKeys.DriverInformation)} // Use Formik's handleSubmit
 							/>
 						</View>
 					</View>

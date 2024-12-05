@@ -15,6 +15,7 @@ import { NavigationKeys } from '../../../constants/navigationKeys';
 import { _showToast } from '../../../services/UIs/ToastConfig';
 import { useTheme } from '../../../theme/ThemeProvider';
 import { Theme } from '../../../types';
+import CountryPicker from 'react-native-country-picker-modal';
 
 const SignupScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -22,6 +23,10 @@ const SignupScreen = (props: any) => {
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 
 	const [showPassword, setShowPassword] = useState<boolean>(false);
+
+	const [countryCallingCode, setCountryCallingCode] = useState('91'); // Default to USA country code
+	const [selectedCountry, setSelectedCountry]: any = useState('IN'); // To store selected country
+	const [showCountryPicker, setShowCountryPicker] = useState(false);
 
 	const imagesData = useMemo(
 		() => [
@@ -31,6 +36,13 @@ const SignupScreen = (props: any) => {
 		],
 		[],
 	);
+
+	const onSelectCountry = (country: any) => {
+		setShowCountryPicker(false);
+		setSelectedCountry(country.cca2);
+		setCountryCallingCode(country.callingCode[0]);
+		console.log('[  country ] ----------------------->> ', country);
+	};
 
 	const handlePress = (id: number) => {
 		alert(`${imagesData.find(item => item.id == id)?.label} Icon Pressed`);
@@ -67,22 +79,37 @@ const SignupScreen = (props: any) => {
 		},
 		validationSchema,
 		onSubmit: (values: any) => {
+			const New_phone = `+${countryCallingCode}${values.phone}`;
+			console.log('Form submitted with values:', { ...values, phone: New_phone });
 			Keyboard.dismiss();
 			_showToast('You have received an OTP', 'success');
 			props.navigation.navigate(NavigationKeys.OtpScreen);
 		},
 	});
 
-	const renderFormField = (placeholder: string, fieldName: string, isPassword: boolean = false) => (
+	const renderFormField = (
+		placeholder: string,
+		fieldName: string,
+		isPassword: boolean = false,
+		isCountry = false,
+	) => (
 		<View style={{ marginTop: AppMargin._20 }}>
 			<AppTextInput
 				maxLength={fieldName === 'phone' ? 10 : undefined}
 				marginTop={AppMargin._5}
 				placeholder={placeholder}
 				value={values[fieldName]}
+				inputMode={isCountry ? 'phone-pad' : 'default'}
 				onChangeText={handleChange(fieldName)}
 				onBlur={handleBlur(fieldName)}
 				secureTextEntry={isPassword && !showPassword}
+				leftNode={
+					isCountry && (
+						<Pressable onPress={() => setShowCountryPicker(true)}>
+							<AppText fontSize={FontSize._16} title={`+${countryCallingCode}`} />
+						</Pressable>
+					)
+				}
 				iconRight={isPassword ? (showPassword ? Icons.icnShowPass : Icons.icnHidePass) : undefined}
 				iconRightClick={() => setShowPassword(!showPassword)}
 				showError={touched[fieldName] && errors[fieldName]}
@@ -107,7 +134,7 @@ const SignupScreen = (props: any) => {
 						{renderFormField('Username', 'username')}
 						{renderFormField('First Name', 'firstName')}
 						{renderFormField('Last Name', 'lastName')}
-						{renderFormField('Phone Number', 'phone')}
+						{renderFormField('Phone Number', 'phone', false, true)}
 						{renderFormField('Email Id (Optional)', 'email')}
 						{renderFormField('Password', 'password', true)}
 						{renderFormField('Confirm Password', 'confirmPassword', true)}
@@ -158,6 +185,21 @@ const SignupScreen = (props: any) => {
 					</View>
 				</AppScrollView>
 			</View>
+
+			<CountryPicker
+				visible={showCountryPicker}
+				countryCode={selectedCountry}
+				withFlag={true}
+				withCallingCodeButton={false}
+				withFlagButton={false}
+				countryCodes={[]}
+				withCallingCode={true}
+				withAlphaFilter={true}
+				withFilter={true}
+				withCountryNameButton={false}
+				onSelect={onSelectCountry}
+				containerButtonStyle={{}}
+			/>
 		</MainContainer>
 	);
 };

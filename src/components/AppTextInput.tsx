@@ -23,6 +23,11 @@ interface AppTextInputProps {
 	onBlur?: () => void;
 	borderColor?: string;
 	showError?: any;
+	borderWidth?: number;
+	borderBottomWidth?: number;
+	height?: number;
+	backgroundColor?: string;
+	leftNode?: React.ReactNode;
 }
 
 const AppTextInput: React.FC<AppTextInputProps> = ({
@@ -41,13 +46,30 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 	marginTop = 20, // Default marginTop
 	onBlur,
 	showError,
+	borderWidth,
+	borderBottomWidth,
+	height,
+	backgroundColor,
+	leftNode,
 }) => {
 	const { AppColors, isDarkMode } = useTheme();
 	const styles = createStyles(AppColors);
 
 	return (
 		<View>
-			<View style={[styles.container, { marginTop, borderColor: borderColor ?? AppColors.white }]}>
+			<View
+				style={[
+					styles.container,
+					{
+						height: height ?? AppHeight._70,
+						marginTop,
+						borderColor: borderColor ?? AppColors.white,
+						borderWidth: borderBottomWidth ? 0 : 1,
+						borderBottomWidth: borderWidth ? 0 : 1,
+						paddingHorizontal: borderBottomWidth ? 0 : 10,
+						backgroundColor: backgroundColor ?? AppColors.background,
+					},
+				]}>
 				<View
 					style={{
 						flexDirection: 'row',
@@ -55,6 +77,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 						flex: 1,
 					}}>
 					{icon && <Image style={styles.icon} source={icon} />}
+					{leftNode}
 					<TextInput
 						secureTextEntry={secureTextEntry}
 						placeholderTextColor={AppColors.placeholder}
@@ -94,13 +117,9 @@ const createStyles = (AppColors: Theme) => {
 	return StyleSheet.create({
 		container: {
 			flexDirection: 'row',
-			borderWidth: 1,
-			backgroundColor: AppColors.background,
 			borderColor: AppColors.white,
 			alignItems: 'center',
 			justifyContent: 'space-between',
-			height: AppHeight._70,
-			paddingHorizontal: 10,
 			...borderRadius10,
 		},
 

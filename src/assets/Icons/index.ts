@@ -19,4 +19,19 @@ export const Icons = {
 	icnApple: require('./apple.png'),
 	icnGoogle: require('./google.png'),
 	icnFacebook: require('./facebook.png'),
+
+	icnProfilePicker: require('./profilePicker.png'),
+	icnCalender: require('./calender.png'),
+	icnUpload: require('./upload.png'),
+	icnClose: require('./close.png'),
+
+	icnSmoking: require('./smoking.png'),
+	icnPets: require('./pets.png'),
+	icnMusic: require('./music.png'),
+
+	icnCamera: require('./camera.png'),
+	icnGallery: require('./gallery.png'),
+	icnLargePicker: require('./largePicker.png'),
+
+	icnUserPlaceholder: require('./userplaceholder.png'),
 };

@@ -14,4 +14,10 @@ export const NavigationKeys = {
 	FinalUser: 'FinalUser',
 	DetailScreen: 'DetailScreen',
 	StarterScreen: 'StarterScreen',
+
+	DriverInformation: 'DriverInformation',
+	AddCarDetails: 'AddCarDetails',
+	AddPayments: 'AddPayments',
+
+	AddEmergencyContacts: 'AddEmergencyContacts',
 };

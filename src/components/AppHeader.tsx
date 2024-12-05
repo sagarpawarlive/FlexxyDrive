@@ -25,7 +25,9 @@ const AppHeader = (props: AppHeaderProps) => {
 					resizeMode="contain"
 					source={Icons.icnBack}
 				/>
-				<Text style={styles.buttonTitle}>{props.buttonTitle}</Text>
+				<Text style={[styles.buttonTitle, { color: props.tintColor ?? AppColors.backButton }]}>
+					{props.buttonTitle}
+				</Text>
 			</TouchableOpacity>
 			<View style={{ flexGrow: 1 }} />
 			{props.rightIcon && (

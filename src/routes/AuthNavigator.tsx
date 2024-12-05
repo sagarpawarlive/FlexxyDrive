@@ -9,6 +9,10 @@ import ForgotPasswordScreen from '../screens/Auth/ForgotPasswordScreen';
 import OtpScreen from '../screens/Auth/OtpScreen';
 import ResetPasswordScreen from '../screens/Auth/ResetPasswordScreen';
 import FinalUser from '../screens/Auth/FinalUser';
+import DriverInformation from '../screens/Auth/DriverSignup/DriverInformation';
+import AddCarDetails from '../screens/Auth/DriverSignup/AddCarDetails';
+import AddPayments from '../screens/Auth/DriverSignup/AddPayments';
+import AddEmergencyContacts from '../screens/Auth/DriverSignup/AddEmergencyContacts';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +27,12 @@ const AuthNavigator: React.FC = () => {
 			<Stack.Screen name={NavigationKeys.SignupScreen} component={SignupScreen} />
 			<Stack.Screen name={NavigationKeys.FinalUser} component={FinalUser} />
 			<Stack.Screen name={NavigationKeys.OtpScreen} component={OtpScreen} />
+
+			{/* Driver Information  Stack */}
+			<Stack.Screen name={NavigationKeys.DriverInformation} component={DriverInformation} />
+			<Stack.Screen name={NavigationKeys.AddCarDetails} component={AddCarDetails} />
+			<Stack.Screen name={NavigationKeys.AddPayments} component={AddPayments} />
+			<Stack.Screen name={NavigationKeys.AddEmergencyContacts} component={AddEmergencyContacts} />
 		</Stack.Navigator>
 	);
 };

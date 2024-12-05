@@ -15,6 +15,8 @@ export const lightTheme = {
 	placeholder: 'rgba(165, 165, 165, 1)',
 	backButton: 'rgba(217, 217, 217, 1)',
 
+	modalBackground: '#546A80',
+
 	// Status Colors
 	error: 'rgba(250, 0, 0, 1)',
 	success: 'rgba(92, 184, 92, 1)',
@@ -42,4 +44,5 @@ export const darkTheme = {
 	error: 'rgba(229, 115, 115, 1)',
 	success: 'rgba(92, 184, 92, 1)',
 	warning: 'rgba(249, 200, 50, 1)',
+	modalBackground: '#546A80',
 };
