@@ -54,8 +54,20 @@ const AddCarDetails = (props: any) => {
 							options={car_options}
 						/>
 						<AppTextInput placeholder="Color" />
-						<AppTextInput placeholder="Mileage" />
-						<AppTextInput placeholder="Number of Seats" />
+						<AppTextInput
+							placeholder="Mileage"
+							texInputProps={{
+								keyboardType: 'number-pad', //changes
+								returnKeyType: 'done',
+							}}
+						/>
+						<AppTextInput
+							placeholder="Number of Seats"
+							texInputProps={{
+								keyboardType: 'number-pad', //changes
+								returnKeyType: 'done',
+							}}
+						/>
 						<AppCustomPicker
 							marginTop={AppMargin._20}
 							selectedItem={selectedCarType}
@@ -91,6 +103,7 @@ const AddCarDetails = (props: any) => {
 					</View>
 
 					<AppButton
+						onClick={() => props.navigation.goBack()}
 						top={AppMargin._20}
 						textColor={AppColors.textDark}
 						fontSize={FontSize._16}

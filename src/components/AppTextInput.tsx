@@ -1,5 +1,14 @@
 import React from 'react';
-import { Image, ImageProps, KeyboardTypeOptions, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import {
+	Image,
+	ImageProps,
+	KeyboardTypeOptions,
+	Pressable,
+	StyleSheet,
+	TextInput,
+	TextInputProps,
+	View,
+} from 'react-native';
 import { useTheme } from '../theme/ThemeProvider';
 import { AppHeight, AppMargin, borderRadius10 } from '../constants/commonStyle';
 import { Theme } from '../types';
@@ -28,6 +37,8 @@ interface AppTextInputProps {
 	height?: number;
 	backgroundColor?: string;
 	leftNode?: React.ReactNode;
+	onBlue?: () => void;
+	texInputProps?: TextInputProps;
 }
 
 const AppTextInput: React.FC<AppTextInputProps> = ({
@@ -51,6 +62,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 	height,
 	backgroundColor,
 	leftNode,
+	texInputProps,
 }) => {
 	const { AppColors, isDarkMode } = useTheme();
 	const styles = createStyles(AppColors);
@@ -88,6 +100,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 						keyboardType={inputMode}
 						style={[styles.input]}
 						onChangeText={onChangeText}
+						{...texInputProps}
 					/>
 				</View>
 				{iconRight && (

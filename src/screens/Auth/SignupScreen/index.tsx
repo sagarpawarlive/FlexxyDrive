@@ -187,6 +187,9 @@ const SignupScreen = (props: any) => {
 			</View>
 
 			<CountryPicker
+				theme={{
+					onBackgroundTextColor: AppColors.text,
+				}}
 				visible={showCountryPicker}
 				countryCode={selectedCountry}
 				withFlag={true}
