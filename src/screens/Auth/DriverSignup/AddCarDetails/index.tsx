@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Fonts, FontSize } from '../../../../assets/fonts';
 import AppButton from '../../../../components/AppButton';
@@ -82,7 +82,7 @@ const AddCarDetails = (props: any) => {
 
 						<Pressable
 							onPress={() => {
-								alert('picker');
+								Alert.alert('Upload Car Image');
 							}}
 							style={[
 								{
@@ -114,6 +114,7 @@ const AddCarDetails = (props: any) => {
 						fontFamily={Fonts.MEDIUM}
 						position="end"
 						buttonLabel={'Save'}
+						onClick={onBackPress}
 					/>
 				</AppScrollView>
 			</View>

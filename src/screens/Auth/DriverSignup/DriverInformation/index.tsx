@@ -121,6 +121,9 @@ const DriverInformation = (props: any) => {
 							buttonLabel={countryName}
 							iconNode={
 								<CountryPicker
+									theme={{
+										onBackgroundTextColor: AppColors.text,
+									}}
 									visible={showCountryPicker}
 									countryCode={selectedCountry}
 									withFlag={true}
@@ -194,7 +197,7 @@ const DriverInformation = (props: any) => {
 						fontFamily={Fonts.MEDIUM}
 						position="end"
 						buttonLabel={'Verify'}
-						onClick={() => alert('under development')}
+						onClick={() => {}}
 					/>
 				</AppScrollView>
 			</View>
