@@ -30,11 +30,11 @@ const get = async (endpoint: any, params: any = '', customHeaders: any = {}) => 
 			const response = await axios.get(getFullApiUrl(endpoint) as any, {
 				headers: rootHeaders,
 				params: params,
-				timeout: TIME_OUT
+				timeout: TIME_OUT,
 			});
 			return response?.data;
-		} catch (error) {
-			return error;
+		} catch (error: any) {
+			return error.response?.data;
 		}
 	}
 	return { error: 'Endpoint not provided' };
@@ -58,11 +58,13 @@ const post = async (endpoint: any, data: any, customHeaders = []) => {
 		try {
 			const response = await axios.post(getFullApiUrl(endpoint) as any, data, {
 				headers: rootHeaders,
-				timeout: TIME_OUT
+				timeout: TIME_OUT,
 			});
+			console.log(response?.data, '<---- method res');
 			return response?.data;
-		} catch (error) {
-			return error;
+		} catch (error: any) {
+			console.log(error, '<---- method err');
+			return error.response?.data;
 		}
 	}
 	return { error: 'Endpoint not provided' };
@@ -89,11 +91,11 @@ const postFormData = async (endpoint: any, data: any, customHeaders = []) => {
 					...rootHeaders,
 					'Content-Type': 'multipart/form-data',
 				},
-				timeout: TIME_OUT
+				timeout: TIME_OUT,
 			});
 			return response?.data;
 		} catch (error) {
-			return error;
+			return error.response?.data;
 		}
 	}
 	return { error: 'Endpoint not provided' };
@@ -102,5 +104,5 @@ const postFormData = async (endpoint: any, data: any, customHeaders = []) => {
 export const APIMethods = {
 	get,
 	post,
-	postFormData
+	postFormData,
 };

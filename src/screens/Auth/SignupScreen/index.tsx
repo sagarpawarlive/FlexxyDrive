@@ -16,6 +16,9 @@ import { _showToast } from '../../../services/UIs/ToastConfig';
 import { useTheme } from '../../../theme/ThemeProvider';
 import { Theme } from '../../../types';
 import CountryPicker from 'react-native-country-picker-modal';
+import AppLoader from '../../../components/AppLoader';
+import { APIMethods } from '../../../services/API/methods';
+import { ENDPOINT } from '../../../services/API/endpoints';
 
 const SignupScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -27,6 +30,7 @@ const SignupScreen = (props: any) => {
 	const [countryCallingCode, setCountryCallingCode] = useState('91'); // Default to USA country code
 	const [selectedCountry, setSelectedCountry]: any = useState('IN'); // To store selected country
 	const [showCountryPicker, setShowCountryPicker] = useState(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const imagesData = useMemo(
 		() => [
@@ -58,9 +62,9 @@ const SignupScreen = (props: any) => {
 		email: Yup.string().email('Enter valid Email address').required('Email is required'),
 		password: Yup.string()
 			.min(8, 'Password must be at least 8 characters long')
-			.matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-			.matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-			.matches(/[^a-zA-Z0-9]/, 'Password must contain at least one special character')
+			// .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+			// .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+			// .matches(/[^a-zA-Z0-9]/, 'Password must contain at least one special character')
 			.required('Password is required'),
 		confirmPassword: Yup.string()
 			.oneOf([Yup.ref('password'), null], 'Passwords must match')
@@ -80,12 +84,30 @@ const SignupScreen = (props: any) => {
 		validationSchema,
 		onSubmit: (values: any) => {
 			const New_phone = `+${countryCallingCode}${values.phone}`;
-			console.log('Form submitted with values:', { ...values, phone: New_phone });
+
+			//signup params
+			let params = {
+				firstName: values.firstName,
+				lastName: values.lastName,
+				username: values.username,
+				phoneNumber: New_phone,
+				email: values.email,
+				password: values.password,
+			};
 			Keyboard.dismiss();
 			_showToast('You have received an OTP', 'success');
-			props.navigation.navigate(NavigationKeys.OtpScreen);
+			let res = apiSignup(params);
+			// props.navigation.navigate(NavigationKeys.OtpScreen);
 		},
 	});
+
+	const apiSignup = async (values: any) => {
+		setIsLoading(true);
+		const response: any = await APIMethods.post(ENDPOINT.SIGNUP, values, []);
+		_showToast(response?.message, response?.user ? 'success' : 'error');
+		if (response?.user) props.navigation.navigate(NavigationKeys.OtpScreen);
+		setIsLoading(false);
+	};
 
 	const renderFormField = (
 		placeholder: string,
@@ -99,6 +121,7 @@ const SignupScreen = (props: any) => {
 				marginTop={AppMargin._5}
 				placeholder={placeholder}
 				value={values[fieldName]}
+				autoCaps="none"
 				inputMode={isCountry ? 'phone-pad' : 'default'}
 				onChangeText={handleChange(fieldName)}
 				onBlur={handleBlur(fieldName)}
@@ -203,6 +226,8 @@ const SignupScreen = (props: any) => {
 				onSelect={onSelectCountry}
 				containerButtonStyle={{}}
 			/>
+
+			<AppLoader isLoading={isLoading} />
 		</MainContainer>
 	);
 };

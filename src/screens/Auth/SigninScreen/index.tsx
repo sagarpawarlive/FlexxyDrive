@@ -15,13 +15,17 @@ import { useTheme } from '../../../theme/ThemeProvider';
 import { Theme } from '../../../types';
 import { useFormik } from 'formik';
 import { NavigationKeys } from '../../../constants/navigationKeys';
+import AppLoader from '../../../components/AppLoader';
+import { apiPost } from '../../../services/API/apiServices';
+import { ENDPOINT } from '../../../services/API/endpoints';
+import { APIMethods } from '../../../services/API/methods';
 
 const SigninScreen = (props: any) => {
 	const dispatch = useDispatch();
 	const { AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
-
 	const [showPassword, setShowPassword] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const imagesData = [
 		{ id: 1, src: Icons.icnGoogle, label: 'Google' },
@@ -51,9 +55,9 @@ const SigninScreen = (props: any) => {
 		username: Yup.string().required('Username is required'),
 		password: Yup.string()
 			.min(8, 'Password must be at least 8 characters long')
-			.matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-			.matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-			.matches(/[^a-zA-Z0-9]/, 'Password must contain at least one special character')
+			// .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+			// .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+			// .matches(/[^a-zA-Z0-9]/, 'Password must contain at least one special character')
 			.required('Password is required'),
 	});
 
@@ -64,17 +68,23 @@ const SigninScreen = (props: any) => {
 			password: '',
 		},
 		validationSchema,
+
 		onSubmit: (values: any) => {
 			// Log the submitted values
-			console.log('[ index.tsx / Form submitted with values: ] ----------------------->> ', values);
-
 			Keyboard.dismiss();
-			_showToast('OTP sent!', 'success');
-
-			props.navigation.navigate(NavigationKeys.OtpScreen);
+			let res = api_signin(values);
+			// props.navigation.navigate(NavigationKeys.OtpScreen);
 			// dispatch(setIsLogin(true));
 		},
 	});
+
+	const api_signin = async (values: any) => {
+		setIsLoading(true);
+		const response: any = await APIMethods.post(ENDPOINT.LOGIN, values, []);
+		_showToast(response?.message, response?.user ? 'success' : 'error');
+		if (response?.user) props.navigation.navigate(NavigationKeys.FinalUser);
+		setIsLoading(false);
+	};
 
 	return (
 		<MainContainer>
@@ -98,6 +108,7 @@ const SigninScreen = (props: any) => {
 								onChangeText={text => handleChange('username')(text)}
 								onBlur={() => handleBlur('username')}
 								showError={errors.username}
+								autoCaps="none"
 							/>
 						</View>
 
@@ -173,6 +184,8 @@ const SigninScreen = (props: any) => {
 					</View>
 				</AppScrollView>
 			</View>
+
+			<AppLoader isLoading={isLoading} />
 		</MainContainer>
 	);
 };

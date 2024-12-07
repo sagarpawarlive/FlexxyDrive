@@ -38,6 +38,8 @@ interface AppTextInputProps {
 	backgroundColor?: string;
 	leftNode?: React.ReactNode;
 	onBlue?: () => void;
+	autoCaps?: 'none' | 'sentences' | 'words' | 'characters';
+
 	texInputProps?: TextInputProps;
 }
 
@@ -63,6 +65,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 	backgroundColor,
 	leftNode,
 	texInputProps,
+	autoCaps,
 }) => {
 	const { AppColors, isDarkMode } = useTheme();
 	const styles = createStyles(AppColors);
@@ -100,6 +103,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 						keyboardType={inputMode}
 						style={[styles.input]}
 						onChangeText={onChangeText}
+						autoCapitalize={autoCaps}
 						{...texInputProps}
 					/>
 				</View>
