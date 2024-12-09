@@ -20,4 +20,5 @@ export const NavigationKeys = {
 	AddPayments: 'AddPayments',
 
 	AddEmergencyContacts: 'AddEmergencyContacts',
+	NextOfKin: 'NextOfKin',
 };

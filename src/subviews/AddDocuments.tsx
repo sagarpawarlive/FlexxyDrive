@@ -14,6 +14,7 @@ const AddDocumentsOptions = [
 	{ id: 1, icon: Icons.icnLargePicker, name: 'Driving License', description: 'An official document' },
 	{ id: 2, icon: Icons.icnUpload, name: 'National ID Card', description: 'A voter ID card is an official document' },
 	{ id: 3, icon: Icons.icnLargePicker, name: 'Passport', description: 'A passport is a travel document' },
+	{ id: 4, icon: Icons.icnCamera, name: 'Upload Photo', description: 'Capture a selfie' },
 ];
 
 const AddDocuments = ({ isVisible, onClose, title }) => {

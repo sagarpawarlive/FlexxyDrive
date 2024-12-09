@@ -1,23 +1,29 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface commonDataState {
+interface userDataSliceState {
+	userData: any;
 	isLogin?: boolean;
 	localize?: string;
 	isDarkMode?: boolean;
 	themeSystemSetting?: boolean;
 }
 
-const initialState: commonDataState = {
+const initialState: userDataSliceState = {
+	userData: [],
 	isLogin: false,
 	localize: 'en',
 	isDarkMode: false,
-	themeSystemSetting: true
+	themeSystemSetting: true,
 };
 
-const commonDataSlice = createSlice({
-	name: 'commonData',
+const userDataSlice = createSlice({
+	name: 'userDataSlice',
 	initialState,
 	reducers: {
+		setUserData: (state, action: PayloadAction<any>) => {
+			state.userData = action.payload;
+		},
+
 		setIsLogin: (state, action: PayloadAction<boolean>) => {
 			state.isLogin = action.payload;
 		},
@@ -32,10 +38,10 @@ const commonDataSlice = createSlice({
 
 		setIsThemeSystemSetting: (state, action: PayloadAction<boolean>) => {
 			state.themeSystemSetting = action.payload;
-		}
+		},
 	},
 });
 
-export const { setLocalize, setIsLogin, setIsDarkMode, setIsThemeSystemSetting } = commonDataSlice.actions;
+export const { setUserData, setLocalize, setIsLogin, setIsDarkMode, setIsThemeSystemSetting } = userDataSlice.actions;
 
-export default commonDataSlice.reducer;
+export default userDataSlice.reducer;

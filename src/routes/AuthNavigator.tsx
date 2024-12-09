@@ -13,6 +13,7 @@ import DriverInformation from '../screens/Auth/DriverSignup/DriverInformation';
 import AddCarDetails from '../screens/Auth/DriverSignup/AddCarDetails';
 import AddPayments from '../screens/Auth/DriverSignup/AddPayments';
 import AddEmergencyContacts from '../screens/Auth/DriverSignup/AddEmergencyContacts';
+import NextOfKin from '../screens/Auth/DriverSignup/NextOfKin';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,7 @@ const AuthNavigator: React.FC = () => {
 			<Stack.Screen name={NavigationKeys.DriverInformation} component={DriverInformation} />
 			<Stack.Screen name={NavigationKeys.AddCarDetails} component={AddCarDetails} />
 			<Stack.Screen name={NavigationKeys.AddPayments} component={AddPayments} />
+			<Stack.Screen name={NavigationKeys.NextOfKin} component={NextOfKin} />
 			<Stack.Screen name={NavigationKeys.AddEmergencyContacts} component={AddEmergencyContacts} />
 		</Stack.Navigator>
 	);

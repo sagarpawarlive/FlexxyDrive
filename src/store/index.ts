@@ -1,20 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { configureStore } from '@reduxjs/toolkit';
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from 'redux-persist';
-import commonDataSlice from './reducers/commonData.slice';
-import homeScreenSlice from './reducers/homeScreen.slice';
+import userDataSlice from './reducers/userdataSlice';
 
 const storage = AsyncStorage;
 
 const persistConfig = {
 	key: 'persistStorage',
 	storage: storage,
-	blacklist: ['userName',],
-	whitelist: ['localize', 'isDarkMode', 'themeSystemSetting', 'isLogin',]
+	blacklist: [''],
+	whitelist: ['userData', 'localize', 'isDarkMode', 'themeSystemSetting', 'isLogin'],
 };
 
-const common_DataSlice = persistReducer(persistConfig, commonDataSlice)
-const home_Screen = persistReducer(persistConfig, homeScreenSlice)
+const userData_Slice = persistReducer(persistConfig, userDataSlice);
 
 // Define your additional middleware here
 
@@ -26,11 +24,10 @@ const additionalMiddleware = (store: any) => (next: any) => (action: any) => {
 const store = configureStore({
 	reducer: {
 		//multiple reducers
-		commonData: common_DataSlice,
-		homeScreen: home_Screen,
+		userDataSlice: userData_Slice,
 	},
 
-	middleware: (getDefaultMiddleware) =>
+	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware({
 			serializableCheck: {
 				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],

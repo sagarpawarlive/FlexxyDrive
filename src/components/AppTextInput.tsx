@@ -37,10 +37,12 @@ interface AppTextInputProps {
 	height?: number;
 	backgroundColor?: string;
 	leftNode?: React.ReactNode;
+	rightNode?: React.ReactNode;
 	onBlue?: () => void;
 	autoCaps?: 'none' | 'sentences' | 'words' | 'characters';
-
 	texInputProps?: TextInputProps;
+	returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send';
+	returnKeyLabel?: string;
 }
 
 const AppTextInput: React.FC<AppTextInputProps> = ({
@@ -64,8 +66,11 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 	height,
 	backgroundColor,
 	leftNode,
+	rightNode,
 	texInputProps,
 	autoCaps,
+	returnKeyType,
+	returnKeyLabel,
 }) => {
 	const { AppColors, isDarkMode } = useTheme();
 	const styles = createStyles(AppColors);
@@ -104,8 +109,11 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 						style={[styles.input]}
 						onChangeText={onChangeText}
 						autoCapitalize={autoCaps}
+						returnKeyLabel={returnKeyLabel}
+						returnKeyType={returnKeyType}
 						{...texInputProps}
 					/>
+					{rightNode}
 				</View>
 				{iconRight && (
 					<Pressable style={{ flex: 0.15 }} onPress={iconRightClick}>

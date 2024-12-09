@@ -19,6 +19,7 @@ import AppLoader from '../../../components/AppLoader';
 import { apiPost } from '../../../services/API/apiServices';
 import { ENDPOINT } from '../../../services/API/endpoints';
 import { APIMethods } from '../../../services/API/methods';
+import { setUserData } from '../../../store/reducers/userdataSlice';
 
 const SigninScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -83,6 +84,7 @@ const SigninScreen = (props: any) => {
 		const response: any = await APIMethods.post(ENDPOINT.LOGIN, values, []);
 		_showToast(response?.message, response?.user ? 'success' : 'error');
 		if (response?.user) props.navigation.navigate(NavigationKeys.FinalUser);
+		dispatch(setUserData(response));
 		setIsLoading(false);
 	};
 

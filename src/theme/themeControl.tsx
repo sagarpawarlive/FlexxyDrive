@@ -1,8 +1,7 @@
-import { useDispatch, useSelector } from "react-redux";
-import { setIsDarkMode, setIsThemeSystemSetting } from "../store/reducers/commonData.slice";
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsDarkMode, setIsThemeSystemSetting } from '../store/reducers/userdataSlice';
 
 export const useThemeControl = () => {
-
 	const commonData = useSelector((state: any) => state.commonData);
 	const dispatch = useDispatch();
 
@@ -21,14 +20,13 @@ export const useThemeControl = () => {
 	};
 
 	const setToggleTheme = () => {
-		commonData.isDarkMode == true ?
-			setLightMode() : setDarkMode()
-	}
+		commonData.isDarkMode == true ? setLightMode() : setDarkMode();
+	};
 
 	return {
 		setDarkMode,
 		setLightMode,
 		setDefaultTheme,
-		setToggleTheme
+		setToggleTheme,
 	};
 };

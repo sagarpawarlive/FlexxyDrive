@@ -34,6 +34,7 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }) => {
 			onBackdropPress={onClose}
 			onBackButtonPress={onClose}
 			style={styles.modal}
+			avoidKeyboard
 			animationIn="slideInUp"
 			animationOut="slideOutDown">
 			<View style={[styles.modalContent, { backgroundColor: AppColors.modalBackground }]}>

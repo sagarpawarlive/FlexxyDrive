@@ -17,7 +17,7 @@ const switchData = [
 	{ id: 3, icon: Icons.icnMusic, label: 'Music', initialValue: false },
 ];
 
-const DriverPrefs = ({ isVisible, onClose, title, data }) => {
+const DriverPrefs = ({ isVisible, onClose, title, data }: any) => {
 	const { AppColors } = useTheme();
 
 	const [switchesState, setSwitchesState] = useState(

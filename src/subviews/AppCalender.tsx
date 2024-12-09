@@ -17,17 +17,20 @@ const MyModalComponent: React.FC<MyModalComponentProps> = ({ isVisible, onClose,
 		onClose(); // Optionally close the modal after selecting a date
 	};
 
+	const today = new Date();
+	const minDate = new Date(today.setFullYear(today.getFullYear() - 16)).toISOString().split('T')[0];
+
 	return (
 		<Modal isVisible={isVisible} onBackdropPress={onClose} style={styles.modal}>
 			<View style={styles.modalContent}>
 				<Text style={styles.modalTitle}>Select a Date</Text>
 				<Calendar
 					// Initially selected day
-					current={'2024-12-06'}
-					minDate={'1995-01-01'}
-					maxDate={'2024-12-31'}
+					current={minDate}
+					// minDate={minDate}
+					maxDate={minDate}
 					onDayPress={onDayPress}
-					monthFormat={'yyyy MM'}
+					monthFormat={'MM / yyyy'}
 					hideArrows={false}
 					renderArrow={direction => <Text>{direction === 'left' ? '<' : '>'}</Text>}
 				/>

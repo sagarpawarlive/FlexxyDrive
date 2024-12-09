@@ -12,25 +12,28 @@ import 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
 const App: React.FC = () => {
-
 	useEffect(() => {
 		// console.log = () => { }; // comment this like to enable console log in entire app
-		const backHandler = BackHandler.addEventListener('hardwareBackPress', () => { return true });
-		return () => { backHandler.remove() }
+		const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+			return true;
+		});
+		return () => {
+			backHandler.remove();
+		};
 	}, []);
 
 	const state = store.getState(); // to change app language without restarting the app
 
 	useEffect(() => {
-		console.log(state.commonData.localize, ' - Current Language');
-	}, [state.commonData.localize])
+		console.log(state.userDataSlice.localize, ' - Current Language');
+	}, [state.userDataSlice.localize]);
 
 	return (
 		<Provider store={store}>
-			<PersistGate persistor={persistor} loading={null} >
+			<PersistGate persistor={persistor} loading={null}>
 				<ThemeProvider isDisabled={true}>
 					<StackNavigator />
-					<Toast config={toastConfig} topOffset={has_Notch ? 0 : 20} position='top' />
+					<Toast config={toastConfig} topOffset={has_Notch ? 0 : 20} position="top" />
 				</ThemeProvider>
 			</PersistGate>
 		</Provider>

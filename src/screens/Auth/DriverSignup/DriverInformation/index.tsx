@@ -45,7 +45,6 @@ const DriverInformation = (props: any) => {
 		setShowCountryPicker(false);
 		setSelectedCountry(country.cca2);
 		setCountryName(country.name);
-		console.log('[  country ] ----------------------->> ', country);
 	};
 
 	const toggleImageModal = () => {
@@ -134,6 +133,10 @@ const DriverInformation = (props: any) => {
 									withCountryNameButton={false}
 									onSelect={onSelectCountry}
 									containerButtonStyle={{}}
+									theme={{
+										backgroundColor: AppColors.background,
+										onBackgroundTextColor: AppColors.white,
+									}}
 								/>
 							}
 						/>
@@ -151,10 +154,16 @@ const DriverInformation = (props: any) => {
 							icon={Icons.icnUpload}
 						/>
 
-						<AppDriverButtons buttonLabel="Next of Kin" iconTint={AppColors.white} icon={Icons.icnBack} />
+						<AppDriverButtons
+							buttonLabel="Next of Kin"
+							iconTint={AppColors.white}
+							icon={Icons.icnBack}
+							onClick={() => props.navigation.navigate(NavigationKeys.NextOfKin)}
+						/>
+
 						<AppDriverButtons
 							onClick={() => setIsPrefModalVisible(true)}
-							buttonLabel="preferences"
+							buttonLabel="Preferences"
 							iconTint={AppColors.white}
 							icon={Icons.icnBack}
 						/>

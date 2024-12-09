@@ -97,8 +97,9 @@ const FinalUser = (props: any) => {
 								buttonLabel={'Book A Ride'}
 								bgColor={AppColors.background}
 								borderWidth={1}
-								onClick={() => alert('book a ride')} // Use Formik's handleSubmit
+								onClick={() => alert('book a ride')}
 							/>
+
 							<AppButton
 								top={AppMargin._40}
 								fontSize={FontSize._16}
@@ -107,7 +108,12 @@ const FinalUser = (props: any) => {
 								buttonLabel={'Offer A Ride'}
 								bgColor={AppColors.background}
 								borderWidth={1}
-								onClick={() => props.navigation.navigate(NavigationKeys.DriverInformation)} // Use Formik's handleSubmit
+								onClick={() => {
+									// props.navigation.navigate(NavigationKeys.DriverInformation);
+									props.navigation.navigate(NavigationKeys.AuthNavigator, {
+										screen: NavigationKeys.DriverInformation,
+									});
+								}}
 							/>
 						</View>
 					</View>

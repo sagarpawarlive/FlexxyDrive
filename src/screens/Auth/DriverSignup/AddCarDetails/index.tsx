@@ -53,6 +53,8 @@ const AddCarDetails = (props: any) => {
 							unselectedText={'Select Make/Model'}
 							options={car_options}
 						/>
+						<AppTextInput placeholder="First registration" />
+						<AppTextInput placeholder="Fuel" />
 						<AppTextInput placeholder="Color" />
 						<AppTextInput
 							placeholder="Mileage"
@@ -75,6 +77,8 @@ const AddCarDetails = (props: any) => {
 							unselectedText={'Vehicle Type'}
 							options={car_type_options}
 						/>
+
+						<AppTextInput placeholder="License Plate Number" />
 
 						<Pressable
 							onPress={() => {

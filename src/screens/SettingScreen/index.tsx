@@ -7,7 +7,7 @@ import { AppMargin, AppPadding, borderRadius10 } from '../../constants/commonSty
 import { settings } from '../../constants/string';
 import { t } from '../../i18n';
 import { AppDispatch } from '../../store';
-import { setIsLogin, setLocalize } from '../../store/reducers/commonData.slice';
+import { setIsLogin, setLocalize } from '../../store/reducers/userdataSlice';
 import { useTheme } from '../../theme/ThemeProvider';
 import { useThemeControl } from '../../theme/themeControl';
 import { NavigationKeys } from '../../constants/navigationKeys';
@@ -22,7 +22,6 @@ interface SettingScreenProps {
 }
 
 const SettingScreen = (props: SettingScreenProps) => {
-
 	const { AppColors, isDarkMode } = useTheme();
 	const { setDarkMode, setLightMode, setDefaultTheme, setToggleTheme } = useThemeControl();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
@@ -31,17 +30,17 @@ const SettingScreen = (props: SettingScreenProps) => {
 	const commonData = useSelector((state: any) => state.commonData);
 
 	const handleLogout = () => {
-		nativeAlertwithAction('Logout', 'are you sure you want to logout?', (status) => {
+		nativeAlertwithAction('Logout', 'are you sure you want to logout?', status => {
 			if (status) {
 				props.navigation.reset({
 					index: 0,
-					routes: [{ name: NavigationKeys.AuthNavigator }]
-				})
-				dispatch(setIsLogin(false))
+					routes: [{ name: NavigationKeys.AuthNavigator }],
+				});
+				dispatch(setIsLogin(false));
 				_showToast('Logout Successful', 'success');
 			}
-		})
-	}
+		});
+	};
 
 	const handleSettings = (itemTitle: string) => {
 		// Define types for themeActions and localizeActions || Any Other
@@ -51,13 +50,13 @@ const SettingScreen = (props: SettingScreenProps) => {
 		type AccountAction = { [key: string]: () => void };
 
 		const themeActions: ThemeActions = {
-			'default_Theme': setToggleTheme,
+			default_Theme: setToggleTheme,
 		};
 
 		const localizeActions: LocalizeActions = {
-			'english': () => setLocalizeAndShow('en'),
-			'japanese': () => setLocalizeAndShow('jp'),
-			'espanol': () => setLocalizeAndShow('sp'),
+			english: () => setLocalizeAndShow('en'),
+			japanese: () => setLocalizeAndShow('jp'),
+			espanol: () => setLocalizeAndShow('sp'),
 		};
 
 		function setLocalizeAndShow(locale: string) {
@@ -66,7 +65,7 @@ const SettingScreen = (props: SettingScreenProps) => {
 		}
 
 		const AccountActions: AccountAction = {
-			'logout': () => handleLogout(),
+			logout: () => handleLogout(),
 		};
 
 		themeActions[itemTitle]?.();
@@ -87,26 +86,61 @@ const SettingScreen = (props: SettingScreenProps) => {
 					ItemSeparatorComponent={() => <View style={{ marginVertical: AppMargin._10 }} />}
 					renderItem={({ item, index }) => {
 						return (
-							<View style={{ padding: AppPadding._20, flex: 1, backgroundColor: AppColors.primaryTransparent, ...borderRadius10 }}>
-								<AppText fontFamily={Fonts.REGULAR} textColor={AppColors.primary} label={t(item.title)} />
-								<View style={{ marginVertical: AppMargin._20, height: 1, backgroundColor: AppColors.primary }} />
+							<View
+								style={{
+									padding: AppPadding._20,
+									flex: 1,
+									backgroundColor: AppColors.primaryTransparent,
+									...borderRadius10,
+								}}>
+								<AppText
+									fontFamily={Fonts.REGULAR}
+									textColor={AppColors.primary}
+									label={t(item.title)}
+								/>
+								<View
+									style={{
+										marginVertical: AppMargin._20,
+										height: 1,
+										backgroundColor: AppColors.primary,
+									}}
+								/>
 								<FlatList
 									data={item.value}
 									key={`2`}
 									extraData={item.value}
-									keyExtractor={(subItem) => subItem.id.toString()}
+									keyExtractor={subItem => subItem.id.toString()}
 									ItemSeparatorComponent={() => <View style={{ marginVertical: AppMargin._5 }} />}
 									renderItem={({ item: subItem }) => (
 										<TouchableOpacity
 											onPress={() => handleSettings(subItem.title)}
-											style={{ flexDirection: 'row', paddingVertical: 5, alignItems: 'center', justifyContent: 'space-between' }}>
-											<AppText fontFamily={Fonts.REGULAR} textColor={subItem.title === 'logout' ? AppColors.error : AppColors.text} label={t(subItem.title)} />
-											{item.id == 0 && <Image tintColor={AppColors.text} style={{ height: 18, width: 18 }} source={commonData.isDarkMode ? Icons.icnLightTheme : Icons.icnDarkTheme} />}
+											style={{
+												flexDirection: 'row',
+												paddingVertical: 5,
+												alignItems: 'center',
+												justifyContent: 'space-between',
+											}}>
+											<AppText
+												fontFamily={Fonts.REGULAR}
+												textColor={
+													subItem.title === 'logout' ? AppColors.error : AppColors.text
+												}
+												label={t(subItem.title)}
+											/>
+											{item.id == 0 && (
+												<Image
+													tintColor={AppColors.text}
+													style={{ height: 18, width: 18 }}
+													source={
+														commonData.isDarkMode ? Icons.icnLightTheme : Icons.icnDarkTheme
+													}
+												/>
+											)}
 										</TouchableOpacity>
 									)}
 								/>
 							</View>
-						)
+						);
 					}}
 				/>
 			</View>
