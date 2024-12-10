@@ -121,9 +121,6 @@ const DriverInformation = (props: any) => {
 							buttonLabel={countryName}
 							iconNode={
 								<CountryPicker
-									theme={{
-										onBackgroundTextColor: AppColors.text,
-									}}
 									visible={showCountryPicker}
 									countryCode={selectedCountry}
 									withFlag={true}

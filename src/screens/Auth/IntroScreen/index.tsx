@@ -10,11 +10,25 @@ import { NavigationKeys } from '../../../constants/navigationKeys';
 import { useTheme } from '../../../theme/ThemeProvider';
 import { Theme } from '../../../types';
 import { Fonts, FontSize } from '../../../assets/fonts';
+import { App_Permission } from '../../../services/Permissions';
 
 const IntroScreen = (props: any) => {
 	const dispatch = useDispatch();
 	const { isDarkMode, toggleTheme, AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
+
+	const checkPermission = async () => {
+		try {
+			const locationPermission = await App_Permission._askLocationPermission();
+			if (locationPermission == true) {
+				props.navigation.navigate(NavigationKeys.SigninScreen);
+			} else {
+				props.navigation.navigate(NavigationKeys.LocationPermission);
+			}
+		} catch (error) {
+			console.error('Permission request failed:', error);
+		}
+	};
 
 	return (
 		<MainContainer>
@@ -37,7 +51,7 @@ const IntroScreen = (props: any) => {
 						fontFamily={Fonts.MEDIUM}
 						textColor={AppColors.textDark}
 						buttonLabel={'CONTINUE'}
-						onClick={() => props.navigation.navigate(NavigationKeys.LocationPermission)}
+						onClick={checkPermission}
 					/>
 				</View>
 			</View>

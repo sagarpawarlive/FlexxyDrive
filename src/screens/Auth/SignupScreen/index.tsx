@@ -59,7 +59,7 @@ const SignupScreen = (props: any) => {
 		phone: Yup.string()
 			.matches(/^[0-9]{10}$/, 'Phone number must be 10 digits')
 			.required('Phone number is required'),
-		email: Yup.string().email('Enter valid Email address').required('Email is required'),
+		email: Yup.string().email('Enter valid Email address'),
 		password: Yup.string()
 			.min(8, 'Password must be at least 8 characters long')
 			// .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
@@ -211,7 +211,8 @@ const SignupScreen = (props: any) => {
 
 			<CountryPicker
 				theme={{
-					onBackgroundTextColor: AppColors.text,
+					backgroundColor: AppColors.background,
+					onBackgroundTextColor: AppColors.white,
 				}}
 				visible={showCountryPicker}
 				countryCode={selectedCountry}
@@ -224,6 +225,7 @@ const SignupScreen = (props: any) => {
 				withFilter={true}
 				withCountryNameButton={false}
 				onSelect={onSelectCountry}
+				onClose={() => setShowCountryPicker(false)}
 				containerButtonStyle={{}}
 			/>
 

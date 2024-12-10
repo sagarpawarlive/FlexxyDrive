@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, Image, Keyboard, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -20,6 +20,8 @@ import { apiPost } from '../../../services/API/apiServices';
 import { ENDPOINT } from '../../../services/API/endpoints';
 import { APIMethods } from '../../../services/API/methods';
 import { setUserData } from '../../../store/reducers/userdataSlice';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { FIREBASE_WEB_CLIENT_ID } from '../../../config';
 
 const SigninScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -34,14 +36,37 @@ const SigninScreen = (props: any) => {
 		{ id: 3, src: Icons.icnFacebook, label: 'Facebook' },
 	];
 
+	useEffect(() => {
+		GoogleSignin.configure({
+			webClientId: FIREBASE_WEB_CLIENT_ID,
+		});
+	}, []);
+
+	const googleLogin = async () => {
+		try {
+			await GoogleSignin.hasPlayServices();
+			const userInfo = await GoogleSignin.signIn();
+			console.log('userinfo ------>>>> ', userInfo);
+		} catch (error: any) {
+			if (error.code == statusCodes.SIGN_IN_CANCELLED) {
+				console.log(error);
+			} else if (error.code == statusCodes.IN_PROGRESS) {
+				console.log(error);
+			} else if (error.code == statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+				console.log(error);
+			} else {
+			}
+		}
+	};
+
 	// Handle press event for each icon
 	const handlePress = (id: number) => {
 		switch (id) {
 			case 1:
-				alert('Apple Icon Pressed');
+				googleLogin();
 				break;
 			case 2:
-				alert('Google Icon Pressed');
+				alert('Apple Icon Pressed');
 				break;
 			case 3:
 				alert('Facebook Icon Pressed');

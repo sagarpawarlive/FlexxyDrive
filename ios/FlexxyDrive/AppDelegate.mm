@@ -1,26 +1,28 @@
 #import "AppDelegate.h"
-
 #import <React/RCTBundleURLProvider.h>
+#import <Firebase/Firebase.h>
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-  self.moduleName = @"FlexxyDrive";
-  // You can add your custom initial props in the dictionary below.
-  // They will be passed down to the ViewController used by React Native.
-  self.initialProps = @{};
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+  // Firebase initialization
+  [FIRApp configure];
+  
+  // Set up React Native bridge properties
+  self.moduleName = @"FlexxyDrive"; // Your React Native module name
+  self.initialProps = @{}; // Custom initial props if needed
 
+  // Call the superclass method to ensure proper setup
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
-- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
-{
+// Override the method to provide the correct URL for the JS bundle
+- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge {
   return [self bundleURL];
 }
 
-- (NSURL *)bundleURL
-{
+// Method to return the correct bundle URL depending on debug or release mode
+- (NSURL *)bundleURL {
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
 #else

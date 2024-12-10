@@ -15,3 +15,5 @@ const getFullApiUrl = (endpoint: string | undefined): string | undefined => {
 };
 
 export { Config, getFullApiUrl };
+
+export const FIREBASE_WEB_CLIENT_ID = `593736862384-6gt0eu9enlvk5i38kf0m9l10ar4t0phk.apps.googleusercontent.com`;

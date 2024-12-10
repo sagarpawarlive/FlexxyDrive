@@ -23,10 +23,7 @@ const IntroScreen = (props: any) => {
 			const locationPermission = await App_Permission._askLocationPermission();
 			if (locationPermission == true) {
 				props.navigation.navigate(NavigationKeys.SigninScreen);
-			} else {
-				alert('Permission Denied', 'Location permission has not been granted.');
 			}
-
 			// Navigate to the next screen or perform additional logic
 			// props.navigation.navigate(NavigationKeys.LocationPermission);
 		} catch (error) {
