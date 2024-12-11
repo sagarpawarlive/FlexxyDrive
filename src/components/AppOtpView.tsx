@@ -20,7 +20,7 @@ interface AppOtpViewProps {
 const AppOtpView: FC<AppOtpViewProps> = ({
 	defaultValue = '',
 	onSubmitPress,
-	inputCount = 4,
+	inputCount = 6,
 	inputCellLength = 1,
 	containerStyle = {},
 	textInputStyle = {},

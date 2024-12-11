@@ -11,16 +11,41 @@ import { AppMargin } from '../../../constants/commonStyle';
 import { NavigationKeys } from '../../../constants/navigationKeys';
 import { useTheme } from '../../../theme/ThemeProvider';
 import { Theme } from '../../../types';
+import AppLoader from '../../../components/AppLoader';
+import { APIMethods } from '../../../services/API/methods';
+import { ENDPOINT } from '../../../services/API/endpoints';
+import { _showToast } from '../../../services/UIs/ToastConfig';
+import { setUserData } from '../../../store/reducers/userdataSlice';
 
 const OtpScreen = (props: any) => {
 	const dispatch = useDispatch();
 	const { isDarkMode, toggleTheme, AppColors } = useTheme();
+	const otpNumber = props?.route?.params?.phone;
+	const newUser = props?.route?.params?.newUser;
+	console.log('[ / { newUser }] ------->', newUser);
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 	const [otpValue, setOtpValue] = useState('');
-	console.log(otpValue, 'otpValue');
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const onBackPress = () => {
 		props.navigation.goBack();
+	};
+
+	const api_verifyOtp = async () => {
+		let params = {
+			identifier: otpNumber,
+			otp: otpValue,
+		};
+
+		setIsLoading(true);
+		const response: any = await APIMethods.post(ENDPOINT.VERIFY_OTP, params);
+		if (response.statusCode == 200) {
+			props.navigation.navigate(NavigationKeys.FinalUser);
+			dispatch(setUserData(newUser));
+		} else {
+			_showToast(response?.message, 'error');
+		}
+		setIsLoading(false);
 	};
 
 	return (
@@ -37,7 +62,7 @@ const OtpScreen = (props: any) => {
 					</View>
 
 					<AppOtpView
-						onSubmitPress={() => alert('Entered OTP : ' + JSON.stringify(otpValue))}
+						onSubmitPress={api_verifyOtp}
 						defaultValue={otpValue}
 						handleTextChange={val => setOtpValue(val)}
 					/>
@@ -62,9 +87,11 @@ const OtpScreen = (props: any) => {
 					fontFamily={Fonts.MEDIUM}
 					position="end"
 					buttonLabel={'Verify Now'}
-					onClick={() => props.navigation.navigate(NavigationKeys.FinalUser)}
+					onClick={api_verifyOtp}
 				/>
 			</View>
+
+			<AppLoader isLoading={isLoading} />
 		</MainContainer>
 	);
 };

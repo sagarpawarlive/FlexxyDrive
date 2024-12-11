@@ -11,6 +11,7 @@ export const NavigationKeys = {
 	ForgotPasswordScreen: 'ForgotPasswordScreen',
 	ResetPasswordScreen: 'ResetPasswordScreen',
 	OtpScreen: 'OtpScreen',
+	AddMobileNumber: 'AddMobileNumber',
 	FinalUser: 'FinalUser',
 	DetailScreen: 'DetailScreen',
 	StarterScreen: 'StarterScreen',

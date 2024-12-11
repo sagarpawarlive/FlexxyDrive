@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Fonts, FontSize } from '../../../../assets/fonts';
 import AppButton from '../../../../components/AppButton';
 import AppHeader from '../../../../components/AppHeader';
@@ -23,13 +23,16 @@ import DriverPrefs from '../../../../subviews/DriverPrefs';
 import ImagePicker from '../../../../subviews/imagePicker';
 import AddDocuments from '../../../../subviews/AddDocuments';
 import CountryPicker, { Flag } from 'react-native-country-picker-modal';
+import AppLoader from '../../../../components/AppLoader';
+import { apiPost } from '../../../../services/API/apiServices';
+import { ENDPOINT } from '../../../../services/API/endpoints';
 
 const DriverInformation = (props: any) => {
 	const dispatch = useDispatch();
 	const { isDarkMode, toggleTheme, AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
-	const [date, setDate] = useState('');
 
+	const [date, setDate] = useState('');
 	const [isCalenderVisible, setIsCalenderVisible] = useState(false);
 	const [isPrefModalVisible, setIsPrefModalVisible] = useState(false);
 	const [isImagePickerVisible, setIsImagePickerVisible] = useState(false);
@@ -40,6 +43,53 @@ const DriverInformation = (props: any) => {
 	const [showCountryPicker, setShowCountryPicker] = useState(false);
 	const [countryName, setCountryName] = useState('India');
 
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const { userData } = useSelector((state: any) => state.userDataSlice);
+
+	// Form states using Formik
+	const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
+		initialValues: {
+			firstName: '',
+			lastName: '',
+			city: '',
+			postCode: '',
+			street: '',
+			streetNumber: '',
+		},
+		validationSchema: Yup.object({
+			firstName: Yup.string().required('First name is required'),
+			lastName: Yup.string().required('Last name is required'),
+			city: Yup.string().required('City is required'),
+			postCode: Yup.string().required('Post code is required'),
+			street: Yup.string().required('Street is required'),
+			streetNumber: Yup.string().required('Street number is required'),
+		}),
+		onSubmit: values => {
+			console.log('Form submitted with:', values);
+			// Handle form submission (e.g., API call)
+
+			api_AddDriverInfo(values);
+		},
+	});
+
+	const api_AddDriverInfo = async (values: any) => {
+		const params = {
+			firstName: values.firstName,
+			lastName: values.lastName,
+			dob: date,
+			country: selectedCountry,
+			city: values.city,
+			postCode: values.postCode,
+			street: values.street,
+			streetNumber: values.streetNumber,
+		};
+
+		setIsLoading(true);
+		let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params, { token: userData.token });
+		setIsLoading(false);
+		// props.navigation.navigate(NavigationKeys.OtpScreen);
+		// dispatch(setIsLogin(true));
+	};
 	// Country picker change handler
 	const onSelectCountry = (country: any) => {
 		setShowCountryPicker(false);
@@ -105,10 +155,27 @@ const DriverInformation = (props: any) => {
 
 				<AppScrollView bounces={false} extraHeight={AppHeight._350}>
 					<View style={{ marginTop: AppMargin._50 }}>
-						<AppTextInput height={AppHeight._50} borderBottomWidth={1} placeholder="First name" />
-						<AppTextInput height={AppHeight._50} borderBottomWidth={1} placeholder="Last name" />
+						<AppTextInput
+							height={AppHeight._50}
+							borderBottomWidth={1}
+							placeholder="First name"
+							value={values.firstName}
+							onChangeText={handleChange('firstName')}
+							onBlur={handleBlur('firstName')}
+							showError={touched.firstName && errors.firstName}
+						/>
+						<AppTextInput
+							height={AppHeight._50}
+							borderBottomWidth={1}
+							placeholder="Last name"
+							value={values.lastName}
+							onChangeText={handleChange('lastName')}
+							onBlur={handleBlur('lastName')}
+							showError={touched.lastName && errors.lastName}
+						/>
 
 						<AppTextInput
+							editable={false}
 							height={AppHeight._50}
 							borderBottomWidth={1}
 							placeholder="DOB"
@@ -116,6 +183,7 @@ const DriverInformation = (props: any) => {
 							iconRight={Icons.icnCalender}
 							iconRightClick={toggleModal}
 						/>
+
 						<AppDriverButtons
 							onClick={() => setShowCountryPicker(true)}
 							buttonLabel={countryName}
@@ -141,10 +209,42 @@ const DriverInformation = (props: any) => {
 							}
 						/>
 
-						<AppTextInput height={AppHeight._50} borderBottomWidth={1} placeholder="City" />
-						<AppTextInput height={AppHeight._50} borderBottomWidth={1} placeholder="Post code" />
-						<AppTextInput height={AppHeight._50} borderBottomWidth={1} placeholder="Street" />
-						<AppTextInput height={AppHeight._50} borderBottomWidth={1} placeholder="Street name" />
+						<AppTextInput
+							height={AppHeight._50}
+							borderBottomWidth={1}
+							placeholder="City"
+							value={values.city}
+							onChangeText={handleChange('city')}
+							onBlur={handleBlur('city')}
+							showError={touched.city && errors.city}
+						/>
+						<AppTextInput
+							height={AppHeight._50}
+							borderBottomWidth={1}
+							placeholder="Post code"
+							value={values.postCode}
+							onChangeText={handleChange('postCode')}
+							onBlur={handleBlur('postCode')}
+							showError={touched.postCode && errors.postCode}
+						/>
+						<AppTextInput
+							height={AppHeight._50}
+							borderBottomWidth={1}
+							placeholder="Street"
+							value={values.street}
+							onChangeText={handleChange('street')}
+							onBlur={handleBlur('street')}
+							showError={touched.street && errors.street}
+						/>
+						<AppTextInput
+							height={AppHeight._50}
+							borderBottomWidth={1}
+							placeholder="Street Number"
+							value={values.streetNumber}
+							onChangeText={handleChange('streetNumber')}
+							onBlur={handleBlur('streetNumber')}
+							showError={touched.streetNumber && errors.streetNumber}
+						/>
 
 						<AppDriverButtons
 							onClick={toggleDocumentModal}
@@ -194,10 +294,11 @@ const DriverInformation = (props: any) => {
 						fontFamily={Fonts.MEDIUM}
 						position="end"
 						buttonLabel={'Verify'}
-						onClick={() => {}}
+						onClick={handleSubmit}
 					/>
 				</AppScrollView>
 			</View>
+
 			<AppCalender isVisible={isCalenderVisible} onClose={toggleModal} onDateSelect={handleDateSelect} />
 			<DriverPrefs
 				onClose={() => setIsPrefModalVisible(false)}
@@ -205,8 +306,9 @@ const DriverInformation = (props: any) => {
 				title={'Select Preferences'}
 			/>
 			<ImagePicker isVisible={isImagePickerVisible} onClose={toggleImageModal} title={'Select upload option'} />
-
 			<AddDocuments isVisible={isDocumentModalVisible} title={'Add Document'} onClose={toggleDocumentModal} />
+
+			<AppLoader isLoading={isLoading} />
 		</MainContainer>
 	);
 };
@@ -232,7 +334,6 @@ const createStyles = (AppColors: Theme) => {
 			borderRadius: 100,
 			height: AppHeight._175,
 			width: AppHeight._175,
-			// backgroundColor: 'red',
 		},
 	});
 };

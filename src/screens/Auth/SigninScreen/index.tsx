@@ -45,8 +45,19 @@ const SigninScreen = (props: any) => {
 	const googleLogin = async () => {
 		try {
 			await GoogleSignin.hasPlayServices();
-			const userInfo = await GoogleSignin.signIn();
-			console.log('userinfo ------>>>> ', userInfo);
+			const userInfo: any = await GoogleSignin.signIn();
+			let googleParams = {
+				token: userInfo.data.idToken,
+			};
+			const response: any = await apiPost(ENDPOINT.GOOGLE_LOGIN, googleParams, []);
+			console.log('[ / {google signin Resss }] ------->', response);
+
+			if (response?.requirePhoneNumber == true) {
+				props.navigation.navigate(NavigationKeys.AddMobileNumber, {
+					userId: response?.user?.id,
+				});
+			} else {
+			}
 		} catch (error: any) {
 			if (error.code == statusCodes.SIGN_IN_CANCELLED) {
 				console.log(error);
@@ -110,6 +121,15 @@ const SigninScreen = (props: any) => {
 		_showToast(response?.message, response?.user ? 'success' : 'error');
 		if (response?.user) props.navigation.navigate(NavigationKeys.FinalUser);
 		dispatch(setUserData(response));
+		setIsLoading(false);
+	};
+
+	const api_googleSignin = async (values: any) => {
+		setIsLoading(true);
+		const response: any = await APIMethods.post(ENDPOINT.GOOGLE_LOGIN, values, []);
+		_showToast(response?.message, response?.user ? 'success' : 'error');
+		// if (response?.user) props.navigation.navigate(NavigationKeys.FinalUser);
+		// dispatch(setUserData(response));
 		setIsLoading(false);
 	};
 

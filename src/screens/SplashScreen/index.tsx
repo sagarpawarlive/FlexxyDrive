@@ -23,6 +23,7 @@ const SplashScreen: React.FC<SplashScreenProps> = props => {
 
 	const userData = useSelector((state: any) => state.userDataSlice);
 
+	console.log('[ / userData ] ------->', userData);
 	useEffect(() => {
 		const unsubscribe = props.navigation.addListener('focus', () => {
 			setTimeout(() => {

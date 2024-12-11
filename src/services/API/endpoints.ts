@@ -9,6 +9,8 @@ export const ENDPOINT = {
 	SEND_SMS_OTP: '/auth/send-sms-otp', //post
 	SEND_EMAIL_OTP: '/auth/send-email-otp', //post
 
+	VERIFY_OTP: '/auth/verify-otp', //post
+
 	//Drivers
 	SET_DRIVER_INFO: '/api/driver/info', //post
 	GET_DRIVER_INFO: '/api/driver/info', //get

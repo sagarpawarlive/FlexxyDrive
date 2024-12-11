@@ -38,7 +38,6 @@ interface AppTextInputProps {
 	backgroundColor?: string;
 	leftNode?: React.ReactNode;
 	rightNode?: React.ReactNode;
-	onBlue?: () => void;
 	autoCaps?: 'none' | 'sentences' | 'words' | 'characters';
 	texInputProps?: TextInputProps;
 	returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send';
@@ -112,6 +111,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 						returnKeyLabel={returnKeyLabel}
 						returnKeyType={returnKeyType}
 						{...texInputProps}
+						onBlur={onBlur}
 					/>
 					{rightNode}
 				</View>

@@ -31,6 +31,7 @@ const SignupScreen = (props: any) => {
 	const [selectedCountry, setSelectedCountry]: any = useState('IN'); // To store selected country
 	const [showCountryPicker, setShowCountryPicker] = useState(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [newUser, setNewUser] = useState<any>();
 
 	const imagesData = useMemo(
 		() => [
@@ -59,7 +60,7 @@ const SignupScreen = (props: any) => {
 		phone: Yup.string()
 			.matches(/^[0-9]{10}$/, 'Phone number must be 10 digits')
 			.required('Phone number is required'),
-		email: Yup.string().email('Enter valid Email address'),
+		email: Yup.string().email('Enter valid Email address').required('Email is required'),
 		password: Yup.string()
 			.min(8, 'Password must be at least 8 characters long')
 			// .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
@@ -73,13 +74,13 @@ const SignupScreen = (props: any) => {
 
 	const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
 		initialValues: {
-			username: '',
-			firstName: '',
-			lastName: '',
-			phone: '',
-			email: '',
-			password: '',
-			confirmPassword: '',
+			username: 'sagarpawar',
+			firstName: 'sagarppp',
+			lastName: 'pawar',
+			phone: '9510750708',
+			email: 'sagarpawar199628@gmail.com',
+			password: 'asdfg123',
+			confirmPassword: 'asdfg123',
 		},
 		validationSchema,
 		onSubmit: (values: any) => {
@@ -94,19 +95,35 @@ const SignupScreen = (props: any) => {
 				email: values.email,
 				password: values.password,
 			};
+
+			let smsParams = {
+				phoneNumber: New_phone,
+			};
 			Keyboard.dismiss();
-			_showToast('You have received an OTP', 'success');
+
+			setIsLoading(true);
 			let res = apiSignup(params);
-			// props.navigation.navigate(NavigationKeys.OtpScreen);
+
+			// _showToast('You have received an OTP', 'success');
+			setIsLoading(false);
 		},
 	});
 
 	const apiSignup = async (values: any) => {
-		setIsLoading(true);
 		const response: any = await APIMethods.post(ENDPOINT.SIGNUP, values, []);
-		_showToast(response?.message, response?.user ? 'success' : 'error');
-		if (response?.user) props.navigation.navigate(NavigationKeys.OtpScreen);
-		setIsLoading(false);
+		if (response?.token?.length > 0) {
+			const responseOtp: any = await APIMethods.post(ENDPOINT.SEND_SMS_OTP, values, []);
+			if (responseOtp?.statusCode == 200) {
+				props.navigation.navigate(NavigationKeys.OtpScreen, {
+					phone: values.phoneNumber,
+					newUser: response,
+				});
+				console.log('[ / {newUser}] ------->', newUser);
+				_showToast('You have received an OTP', 'success');
+			}
+		} else {
+			_showToast(response?.message, 'error');
+		}
 	};
 
 	const renderFormField = (
@@ -158,7 +175,7 @@ const SignupScreen = (props: any) => {
 						{renderFormField('First Name', 'firstName')}
 						{renderFormField('Last Name', 'lastName')}
 						{renderFormField('Phone Number', 'phone', false, true)}
-						{renderFormField('Email Id (Optional)', 'email')}
+						{renderFormField('Email Id', 'email')}
 						{renderFormField('Password', 'password', true)}
 						{renderFormField('Confirm Password', 'confirmPassword', true)}
 

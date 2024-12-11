@@ -2,8 +2,10 @@ import NetInfo from '@react-native-community/netinfo';
 import axios from 'axios';
 import { getFullApiUrl } from '../../config';
 import { _showToast } from '../UIs/ToastConfig';
+import store from '../../store';
 
 const TIME_OUT = 5000; // 5 seconds
+const TOKEN = store.getState().userDataSlice.userData.token;
 
 const _checkInternetConnectivity = async (): Promise<any> => {
 	const netInfoState = await NetInfo.fetch();
@@ -18,7 +20,9 @@ const get = async (endpoint: any, params: any = '', customHeaders: any = {}) => 
 		return { error: 'No Internet Connection' };
 	}
 
-	let rootHeaders = {};
+	let rootHeaders = {
+		Authorization: `Bearer ${TOKEN}`,
+	};
 	console.log(customHeaders);
 
 	if (customHeaders && Object.keys(customHeaders).length > 0) {
@@ -48,7 +52,10 @@ const post = async (endpoint: any, data: any, customHeaders = []) => {
 		return { error: 'No Internet Connection' };
 	}
 
-	let rootHeaders = {};
+	let rootHeaders = {
+		Authorization: `Bearer ${TOKEN}`,
+	};
+	console.log(customHeaders);
 
 	if (customHeaders && Object.keys(customHeaders).length > 0) {
 		rootHeaders = { ...rootHeaders, ...customHeaders };
