@@ -55,6 +55,7 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }) => {
 					onChangeText={setName}
 				/>
 				<AppTextInput
+					maxLength={10}
 					backgroundColor={AppColors.modalBackground}
 					placeholder="Phone number"
 					value={phone}

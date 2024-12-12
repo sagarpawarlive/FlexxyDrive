@@ -11,6 +11,8 @@ import { AppMargin, borderRadius10 } from '../../../../constants/commonStyle';
 import AddNewContact from '../../../../subviews/AddNewContact';
 import { useTheme } from '../../../../theme/ThemeProvider';
 import { Theme } from '../../../../types';
+import { apiPost } from '../../../../services/API/apiServices';
+import { ENDPOINT } from '../../../../services/API/endpoints';
 
 const AddEmergencyContacts = (props: any) => {
 	const dispatch = useDispatch();
@@ -19,7 +21,7 @@ const AddEmergencyContacts = (props: any) => {
 	const [contactList, setContactList] = useState([
 		{
 			name: 'John Doe',
-			phone: '123-456-7890',
+			phoneNumber: '123-456-7890',
 			email: 'KtZQG@example.com',
 		},
 	]);
@@ -33,8 +35,12 @@ const AddEmergencyContacts = (props: any) => {
 		setNewContact(!newContact);
 	};
 
-	const handleSaveContact = newContact => {
+	const handleSaveContact = async newContact => {
 		setContactList(prevContacts => [...prevContacts, newContact]);
+		const params = { emergencyContacts: contactList }; //check this
+		let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
+		// props.navigation.navigate(NavigationKeys.OtpScreen);
+		// dispatch(setIsLogin(true));
 	};
 
 	const renderContactItem = ({ item }) => (
@@ -51,7 +57,12 @@ const AddEmergencyContacts = (props: any) => {
 				<Image source={Icons.icnUserPlaceholder} />
 				<View style={{ marginLeft: AppMargin._20 }}>
 					<AppText fontFamily={Fonts.MEDIUM} fontSize={FontSize._16} title={item.name} />
-					<AppText top={AppMargin._5} fontFamily={Fonts.REGULAR} fontSize={FontSize._12} title={item.phone} />
+					<AppText
+						top={AppMargin._5}
+						fontFamily={Fonts.REGULAR}
+						fontSize={FontSize._12}
+						title={item.phoneNumber}
+					/>
 					<AppText top={AppMargin._5} fontFamily={Fonts.REGULAR} fontSize={FontSize._12} title={item.email} />
 				</View>
 			</View>

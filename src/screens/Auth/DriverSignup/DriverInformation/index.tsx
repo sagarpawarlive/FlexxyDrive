@@ -77,7 +77,7 @@ const DriverInformation = (props: any) => {
 			firstName: values.firstName,
 			lastName: values.lastName,
 			dob: date,
-			country: selectedCountry,
+			country: countryName,
 			city: values.city,
 			postCode: values.postCode,
 			street: values.street,
@@ -86,7 +86,9 @@ const DriverInformation = (props: any) => {
 
 		setIsLoading(true);
 		let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params, { token: userData.token });
-		setIsLoading(false);
+		setTimeout(() => {
+			setIsLoading(false);
+		}, 1000);
 		// props.navigation.navigate(NavigationKeys.OtpScreen);
 		// dispatch(setIsLogin(true));
 	};

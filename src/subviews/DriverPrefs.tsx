@@ -8,6 +8,8 @@ import AppText from '../components/AppText';
 import { Switch } from 'react-native-switch';
 import { AllCenter, AppMargin, borderRadius10 } from '../constants/commonStyle';
 import AppButton from '../components/AppButton';
+import { apiPost } from '../services/API/apiServices';
+import { ENDPOINT } from '../services/API/endpoints';
 
 const { height } = Dimensions.get('window');
 
@@ -19,7 +21,7 @@ const switchData = [
 
 const DriverPrefs = ({ isVisible, onClose, title, data }: any) => {
 	const { AppColors } = useTheme();
-
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [switchesState, setSwitchesState] = useState(
 		switchData.reduce((acc, item) => {
 			acc[item.id] = item.initialValue;
@@ -32,6 +34,23 @@ const DriverPrefs = ({ isVisible, onClose, title, data }: any) => {
 			...prevState,
 			[id]: !prevState[id],
 		}));
+	};
+
+	const api_AddDriverInfo = async (values: any) => {
+		const params = {
+			preferences: {
+				smoking: switchesState[1],
+				pets: switchesState[2],
+				music: switchesState[3],
+			},
+		};
+
+		setIsLoading(true);
+		let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
+		setIsLoading(false);
+		onClose();
+		// props.navigation.navigate(NavigationKeys.OtpScreen);
+		// dispatch(setIsLogin(true));
 	};
 
 	const renderItem = ({ item }) => (
@@ -91,7 +110,7 @@ const DriverPrefs = ({ isVisible, onClose, title, data }: any) => {
 					fontSize={FontSize._16}
 					fontFamily={Fonts.MEDIUM}
 					buttonLabel={'Save'}
-					onClick={() => onClose()}
+					onClick={api_AddDriverInfo}
 				/>
 			</View>
 		</Modal>
