@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
@@ -143,6 +143,27 @@ const AddCarDetails = (props: any) => {
 		validationSchema,
 		onSubmit: api_AddDriverInfo,
 	});
+
+	// Pre-fill form values if `driverInfoRes?.carDetails` is available
+	useEffect(() => {
+		const carDetails = props.route?.params?.AllCarDetails;
+
+		if (carDetails) {
+			setSelectedCarOption(carDetails.carModel);
+			setSelectedCarType(carDetails.vehicleType);
+			formik.setValues({
+				firstRegistration: carDetails.firstRegistrationYear?.toString() || '',
+				fuel: carDetails.fuel || '',
+				color: carDetails.color || '',
+				mileage: carDetails.mileage?.toString() || '',
+				numberOfSeats: carDetails.numberOfSeats?.toString() || '',
+				licensePlate: carDetails.licensePlateNumber || '',
+				otherCarModel: carDetails.carModel === 'Others' ? carDetails.carModel : '',
+				otherVehicleType: carDetails.vehicleType === 'Others' ? carDetails.vehicleType : '',
+			});
+			setImageUri(carDetails.imageUrl || null);
+		}
+	}, [props.driverInfoRes]);
 
 	return (
 		<MainContainer>

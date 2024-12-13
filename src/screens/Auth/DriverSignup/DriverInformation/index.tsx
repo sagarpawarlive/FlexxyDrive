@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Fonts, FontSize } from '../../../../assets/fonts';
@@ -26,6 +26,7 @@ import CountryPicker, { Flag } from 'react-native-country-picker-modal';
 import AppLoader from '../../../../components/AppLoader';
 import { apiPost } from '../../../../services/API/apiServices';
 import { ENDPOINT } from '../../../../services/API/endpoints';
+import RadioGroup from 'react-native-radio-buttons-group';
 
 const DriverInformation = (props: any) => {
 	const dispatch = useDispatch();
@@ -46,8 +47,65 @@ const DriverInformation = (props: any) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { userData } = useSelector((state: any) => state.userDataSlice);
 
+	const [driverInfoRes, setDriverInfoRes] = useState<any>(null);
+	// console.log('[ / driverInfoRes ] ------->', driverInfoRes);
+
+	const radioButtons = useMemo(
+		() => [
+			{
+				id: '1', // acts as primary key, should be unique and non-empty string
+				label: 'Male',
+				value: 'male',
+			},
+			{
+				id: '2',
+				label: 'Female',
+				value: 'female',
+			},
+		],
+		[],
+	);
+
+	const [selectedId, setSelectedId] = useState<any>();
+
+	useEffect(() => {
+		const unsubscribe = props.navigation.addListener('focus', () => {
+			api_getDriverInfo();
+		});
+		return () => {
+			unsubscribe();
+		};
+	}, [props.navigation]);
+
+	const api_getDriverInfo = async () => {
+		const params = {
+			token: userData?.token,
+		};
+		setIsLoading(true);
+		const response = await apiPost(ENDPOINT.GET_DRIVER_INFO, params);
+		setDriverInfoRes(response.data);
+		setIsLoading(false);
+	};
+
+	useEffect(() => {
+		if (driverInfoRes) {
+			setValues({
+				firstName: driverInfoRes.firstName,
+				lastName: driverInfoRes.lastName,
+				city: driverInfoRes.city,
+				postCode: driverInfoRes.postCode,
+				street: driverInfoRes.street,
+				streetNumber: driverInfoRes.streetNumber,
+			});
+
+			setDate(driverInfoRes?.dob ?? '');
+			setCountryName(driverInfoRes?.country ?? '');
+			setSelectedId(driverInfoRes?.gender == 'Male' ? '1' : driverInfoRes?.gender == 'Female' ? '2' : '');
+		}
+	}, [driverInfoRes]);
+
 	// Form states using Formik
-	const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
+	const { values, errors, touched, handleChange, handleBlur, handleSubmit, setValues } = useFormik({
 		initialValues: {
 			firstName: '',
 			lastName: '',
@@ -66,8 +124,6 @@ const DriverInformation = (props: any) => {
 		}),
 		onSubmit: values => {
 			console.log('Form submitted with:', values);
-			// Handle form submission (e.g., API call)
-
 			api_AddDriverInfo(values);
 		},
 	});
@@ -77,6 +133,7 @@ const DriverInformation = (props: any) => {
 			firstName: values.firstName,
 			lastName: values.lastName,
 			dob: date,
+			gender: selectedId == '1' ? 'Male' : selectedId == '2' ? 'Female' : '',
 			country: countryName,
 			city: values.city,
 			postCode: values.postCode,
@@ -160,7 +217,7 @@ const DriverInformation = (props: any) => {
 						<AppTextInput
 							height={AppHeight._50}
 							borderBottomWidth={1}
-							placeholder="First name"
+							placeholder={driverInfoRes?.firstName ?? 'First name'}
 							value={values.firstName}
 							onChangeText={handleChange('firstName')}
 							onBlur={handleBlur('firstName')}
@@ -186,6 +243,17 @@ const DriverInformation = (props: any) => {
 							iconRightClick={toggleModal}
 						/>
 
+						<View style={styles.radioButtonsContainer}>
+							<AppText fontSize={FontSize._16} title="Gender" />
+							<RadioGroup
+								radioButtons={radioButtons}
+								onPress={setSelectedId}
+								selectedId={selectedId}
+								containerStyle={{ flexDirection: 'row' }} // Horizontal layout
+								borderColor={AppColors.white}
+							/>
+						</View>
+
 						<AppDriverButtons
 							onClick={() => setShowCountryPicker(true)}
 							buttonLabel={countryName}
@@ -194,7 +262,7 @@ const DriverInformation = (props: any) => {
 									visible={showCountryPicker}
 									countryCode={selectedCountry}
 									withFlag={true}
-									withCallingCodeButton={true}
+									withCallingCodeButton={false}
 									withFlagButton={true}
 									countryCodes={[]}
 									withCallingCode={true}
@@ -249,7 +317,7 @@ const DriverInformation = (props: any) => {
 						/>
 
 						<AppDriverButtons
-							onClick={toggleDocumentModal}
+							onClick={() => props.navigation.navigate(NavigationKeys.AddDocuments)}
 							rotate={'0deg'}
 							buttonLabel="Add Document"
 							iconTint={AppColors.primary}
@@ -260,7 +328,11 @@ const DriverInformation = (props: any) => {
 							buttonLabel="Next of Kin"
 							iconTint={AppColors.white}
 							icon={Icons.icnBack}
-							onClick={() => props.navigation.navigate(NavigationKeys.NextOfKin)}
+							onClick={() => {
+								props.navigation.navigate(NavigationKeys.NextOfKin, {
+									driverInfoRes: driverInfoRes?.guarantor,
+								});
+							}}
 						/>
 
 						<AppDriverButtons
@@ -270,7 +342,11 @@ const DriverInformation = (props: any) => {
 							icon={Icons.icnBack}
 						/>
 						<AppDriverButtons
-							onClick={() => props.navigation.navigate(NavigationKeys.AddCarDetails)}
+							onClick={() =>
+								props.navigation.navigate(NavigationKeys.AddCarDetails, {
+									AllCarDetails: driverInfoRes?.carDetails,
+								})
+							}
 							buttonLabel="Add Car"
 							iconTint={AppColors.white}
 							icon={Icons.icnBack}
@@ -303,7 +379,11 @@ const DriverInformation = (props: any) => {
 
 			<AppCalender isVisible={isCalenderVisible} onClose={toggleModal} onDateSelect={handleDateSelect} />
 			<DriverPrefs
-				onClose={() => setIsPrefModalVisible(false)}
+				data={driverInfoRes?.preferences}
+				onClose={() => {
+					setIsPrefModalVisible(false);
+					api_getDriverInfo();
+				}}
 				isVisible={isPrefModalVisible}
 				title={'Select Preferences'}
 			/>
@@ -336,6 +416,15 @@ const createStyles = (AppColors: Theme) => {
 			borderRadius: 100,
 			height: AppHeight._175,
 			width: AppHeight._175,
+		},
+		radioButtonsContainer: {
+			borderColor: AppColors.white,
+			borderBottomWidth: 1,
+			paddingVertical: AppMargin._20,
+			marginHorizontal: AppMargin._10,
+			flexDirection: 'row',
+			justifyContent: 'space-between', // Ensure equal spacing between buttons
+			alignItems: 'center',
 		},
 	});
 };

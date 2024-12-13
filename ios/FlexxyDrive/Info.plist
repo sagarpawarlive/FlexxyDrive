@@ -68,6 +68,9 @@
     </array>
 
     <!-- Permission Keys -->
+<key>NSPhotoLibraryUsageDescription</key>
+    <string>Your app needs access to the photo library to select images.</string>
+
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>We need your location to match you with nearby drivers and calculate ride distances accurately.</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

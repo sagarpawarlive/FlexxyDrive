@@ -1,4 +1,7 @@
 export const ENDPOINT = {
+	//aws s3 base url
+	AWS_BASEURL_S3: `https://flexxydriveweb5bdce-dev.s3.eu-central-1.amazonaws.com/`,
+
 	//Auth
 	LOGIN: '/auth/login', //post
 	SIGNUP: '/auth/signup', //post

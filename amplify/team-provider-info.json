@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-flexxydrive-dev-5bdce-authRole",
+      "UnauthRoleArn": "arn:aws:iam::863518416406:role/amplify-flexxydrive-dev-5bdce-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::863518416406:role/amplify-flexxydrive-dev-5bdce-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-flexxydrive-dev-5bdce-deployment",
+      "UnauthRoleName": "amplify-flexxydrive-dev-5bdce-unauthRole",
+      "StackName": "amplify-flexxydrive-dev-5bdce",
+      "StackId": "arn:aws:cloudformation:eu-central-1:863518416406:stack/amplify-flexxydrive-dev-5bdce/75126410-b887-11ef-9fc6-02599e7a8d31",
+      "AmplifyAppId": "d384o5rx3gzmaw"
+    },
+    "categories": {
+      "auth": {
+        "flexxydrivebbf5f79e": {}
+      },
+      "storage": {
+        "s3flexxydrive": {}
+      }
+    }
+  }
+}

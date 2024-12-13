@@ -36,11 +36,26 @@ const AddEmergencyContacts = (props: any) => {
 	};
 
 	const handleSaveContact = async newContact => {
-		setContactList(prevContacts => [...prevContacts, newContact]);
-		const params = { emergencyContacts: contactList }; //check this
-		let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
-		// props.navigation.navigate(NavigationKeys.OtpScreen);
-		// dispatch(setIsLogin(true));
+		setContactList(prevContacts => {
+			const updatedList = [...prevContacts, newContact];
+
+			const params = { emergencyContacts: updatedList };
+
+			apiPost(ENDPOINT.SET_DRIVER_INFO, params)
+				.then(res => {
+					// Handle success or failure
+					if (res.success) {
+						console.log('Contact saved successfully!');
+					} else {
+						console.error('Failed to save contact');
+					}
+				})
+				.catch(error => {
+					console.error('Error occurred:', error);
+				});
+
+			return updatedList; // Return the updated contact list
+		});
 	};
 
 	const renderContactItem = ({ item }) => (
@@ -92,7 +107,7 @@ const AddEmergencyContacts = (props: any) => {
 					fontFamily={Fonts.MEDIUM}
 					position="end"
 					buttonLabel={'Add New'}
-					onClick={toggleContactAdd} // Trigger Formik form submission
+					onClick={toggleContactAdd} // Trigger Add New Contact form
 				/>
 
 				<AddNewContact

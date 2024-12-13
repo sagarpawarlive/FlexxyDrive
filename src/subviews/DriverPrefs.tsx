@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Image, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
 import { useTheme } from '../theme/ThemeProvider';
@@ -13,67 +13,87 @@ import { ENDPOINT } from '../services/API/endpoints';
 
 const { height } = Dimensions.get('window');
 
-const switchData = [
-	{ id: 1, icon: Icons.icnSmoking, label: 'Smoking', initialValue: false },
-	{ id: 2, icon: Icons.icnPets, label: 'Pets', initialValue: false },
-	{ id: 3, icon: Icons.icnMusic, label: 'Music', initialValue: false },
-];
-
 const DriverPrefs = ({ isVisible, onClose, title, data }: any) => {
 	const { AppColors } = useTheme();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [switchesState, setSwitchesState] = useState(
-		switchData.reduce((acc, item) => {
-			acc[item.id] = item.initialValue;
-			return acc;
-		}, {}),
-	);
 
-	const handleToggleSwitch = id => {
-		setSwitchesState(prevState => ({
-			...prevState,
-			[id]: !prevState[id],
-		}));
+	// Preferences structure with initial values
+	const initialSwitchData = {
+		smoking: false,
+		pets: false,
+		music: false,
 	};
 
-	const api_AddDriverInfo = async (values: any) => {
+	const [switchesState, setSwitchesState] = useState(initialSwitchData);
+
+	// Update state when `data` prop changes (e.g., when modal is opened or data is updated)
+	useEffect(() => {
+		if (data) {
+			setSwitchesState({
+				smoking: data?.smoking || false,
+				pets: data?.pets || false,
+				music: data?.music || false,
+			});
+		}
+	}, [data, isVisible]); // Re-run this effect when `data` or `isVisible` changes
+
+	// Toggle switch handler, now using the preference key directly
+	const handleToggleSwitch = useCallback((key: string) => {
+		setSwitchesState(prevState => ({
+			...prevState,
+			[key]: !prevState[key],
+		}));
+	}, []);
+
+	// API call for saving driver preferences
+	const api_AddDriverInfo = async () => {
 		const params = {
-			preferences: {
-				smoking: switchesState[1],
-				pets: switchesState[2],
-				music: switchesState[3],
-			},
+			preferences: switchesState,
 		};
 
 		setIsLoading(true);
-		let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
-		setIsLoading(false);
-		onClose();
-		// props.navigation.navigate(NavigationKeys.OtpScreen);
-		// dispatch(setIsLogin(true));
+		try {
+			await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
+		} catch (error) {
+			console.error('Failed to update driver info:', error);
+		} finally {
+			setIsLoading(false);
+			onClose();
+		}
 	};
 
-	const renderItem = ({ item }) => (
-		<View style={[styles.listItem, { borderColor: AppColors.white }]}>
-			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-				<Image style={{ marginHorizontal: AppMargin._30 }} source={item.icon} />
-				<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._16} title={item.label} />
+	// Render switch item
+	const renderItem = ({ item }) => {
+		const { label, key, icon } = item;
+		return (
+			<View style={[styles.listItem, { borderColor: AppColors.white }]}>
+				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					<Image style={{ marginHorizontal: AppMargin._30 }} source={icon} />
+					<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._16} title={label} />
+				</View>
+				<Switch
+					value={switchesState[key]}
+					onValueChange={() => handleToggleSwitch(key)}
+					circleSize={20}
+					activeText={''}
+					inActiveText={''}
+					switchLeftPx={2}
+					switchRightPx={2}
+					backgroundActive={AppColors.primary}
+					backgroundInactive={'gray'}
+					circleActiveColor={AppColors.secondary}
+					circleInActiveColor={AppColors.secondary}
+				/>
 			</View>
-			<Switch
-				value={switchesState[item.id]}
-				onValueChange={() => handleToggleSwitch(item.id)}
-				circleSize={20}
-				activeText={''}
-				inActiveText={''}
-				switchLeftPx={2}
-				switchRightPx={2}
-				backgroundActive={AppColors.primary}
-				backgroundInactive={'gray'}
-				circleActiveColor={AppColors.secondary}
-				circleInActiveColor={AppColors.secondary}
-			/>
-		</View>
-	);
+		);
+	};
+
+	// Switch data with key for easy state management
+	const switchData = [
+		{ label: 'Smoking', key: 'smoking', icon: Icons.icnSmoking },
+		{ label: 'Pets', key: 'pets', icon: Icons.icnPets },
+		{ label: 'Music', key: 'music', icon: Icons.icnMusic },
+	];
 
 	return (
 		<Modal
@@ -99,7 +119,7 @@ const DriverPrefs = ({ isVisible, onClose, title, data }: any) => {
 					style={{ marginTop: 20 }}
 					scrollEnabled={false}
 					data={switchData}
-					keyExtractor={item => item.id.toString()}
+					keyExtractor={item => item.key}
 					renderItem={renderItem}
 					ItemSeparatorComponent={() => <View style={{ marginTop: 10 }} />}
 				/>
@@ -111,6 +131,7 @@ const DriverPrefs = ({ isVisible, onClose, title, data }: any) => {
 					fontFamily={Fonts.MEDIUM}
 					buttonLabel={'Save'}
 					onClick={api_AddDriverInfo}
+					loading={isLoading} // Optionally add loading state to the button
 				/>
 			</View>
 		</Modal>

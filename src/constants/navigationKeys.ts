@@ -22,4 +22,5 @@ export const NavigationKeys = {
 
 	AddEmergencyContacts: 'AddEmergencyContacts',
 	NextOfKin: 'NextOfKin',
+	AddDocuments: 'AddDocuments',
 };

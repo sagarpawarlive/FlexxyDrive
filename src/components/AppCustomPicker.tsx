@@ -5,7 +5,15 @@ import { Fonts, FontSize } from '../assets/fonts';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icons } from '../assets/Icons';
 
-const AppCustomPicker = ({ options, unselectedText, setSelectedItem, selectedItem, marginTop }: any) => {
+const AppCustomPicker = ({
+	options,
+	unselectedText,
+	setSelectedItem,
+	selectedItem,
+	marginTop,
+	borderWidth,
+	borderBottomWidth,
+}: any) => {
 	// const [selectedItem, setSelectedItem] = useState('');
 	const [isPickerOpen, setIsPickerOpen] = useState(false);
 	const { AppColors } = useTheme();
@@ -21,7 +29,16 @@ const AppCustomPicker = ({ options, unselectedText, setSelectedItem, selectedIte
 	};
 
 	return (
-		<View style={[styles.container, { borderColor: AppColors.white, marginTop: marginTop }]}>
+		<View
+			style={[
+				styles.container,
+				{
+					borderColor: AppColors.white,
+					marginTop: marginTop,
+					borderWidth: borderWidth ?? 1,
+					borderBottomWidth: borderBottomWidth ?? 1,
+				},
+			]}>
 			{/* Touchable to open or close the picker */}
 			<TouchableOpacity style={styles.pickerButton} onPress={togglePicker}>
 				<Text style={[styles.pickerText, { color: AppColors.white }]}>{selectedItem || unselectedText}</Text>
@@ -49,7 +66,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: 'center',
-		borderWidth: 1,
+
 		...borderRadius10,
 	},
 	label: {

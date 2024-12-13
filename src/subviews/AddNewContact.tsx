@@ -15,11 +15,11 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }) => {
 	const { AppColors } = useTheme();
 
 	const [name, setName] = useState('');
-	const [phone, setPhone] = useState('');
+	const [phoneNumber, setPhone] = useState('');
 	const [email, setEmail] = useState('');
 
 	const handleSave = () => {
-		const newContact = { name, phone, email };
+		const newContact = { name, phoneNumber, email };
 		onSaveContact(newContact);
 		onClose();
 		setName('');
@@ -58,7 +58,7 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }) => {
 					maxLength={10}
 					backgroundColor={AppColors.modalBackground}
 					placeholder="Phone number"
-					value={phone}
+					value={phoneNumber}
 					onChangeText={setPhone}
 				/>
 				<AppTextInput

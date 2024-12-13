@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FlatList, Image, Keyboard, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Keyboard, Platform, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { FontSize, Fonts } from '../../../assets/fonts';
@@ -21,7 +21,8 @@ import { ENDPOINT } from '../../../services/API/endpoints';
 import { APIMethods } from '../../../services/API/methods';
 import { setUserData } from '../../../store/reducers/userdataSlice';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import { FIREBASE_WEB_CLIENT_ID } from '../../../config';
+import { ANDROID_CLIENT_ID, FIREBASE_WEB_CLIENT_ID } from '../../../config';
+import { isIOS } from '../../../constants/constants';
 
 const SigninScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const SigninScreen = (props: any) => {
 
 	useEffect(() => {
 		GoogleSignin.configure({
-			webClientId: FIREBASE_WEB_CLIENT_ID,
+			webClientId: isIOS ? FIREBASE_WEB_CLIENT_ID : ANDROID_CLIENT_ID,
 		});
 	}, []);
 
@@ -46,6 +47,7 @@ const SigninScreen = (props: any) => {
 		try {
 			await GoogleSignin.hasPlayServices();
 			const userInfo: any = await GoogleSignin.signIn();
+			console.log('[ / userInfo google login ] ------->', userInfo);
 			let googleParams = {
 				token: userInfo.data.idToken,
 			};
@@ -57,6 +59,8 @@ const SigninScreen = (props: any) => {
 					userId: response?.user?.id,
 				});
 			} else {
+				props.navigation.navigate(NavigationKeys.FinalUser);
+				dispatch(setUserData(response));
 			}
 		} catch (error: any) {
 			if (error.code == statusCodes.SIGN_IN_CANCELLED) {
