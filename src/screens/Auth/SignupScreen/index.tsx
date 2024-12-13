@@ -209,7 +209,7 @@ const SignupScreen = (props: any) => {
 				<AppScrollView bounces={false} extraHeight={AppHeight._350}>
 					<View style={[AppContainer]}>
 						<View style={styles.logoContainer}>
-							<AppText fontSize={FontSize._40} fontFamily={Fonts.BOLD} title={'LOGO'} />
+							{/* <AppText fontSize={FontSize._40} fontFamily={Fonts.BOLD} title={'LOGO'} /> */}
 						</View>
 
 						<View style={styles.logoContainer}>

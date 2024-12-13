@@ -33,12 +33,10 @@ const IntroScreen = (props: any) => {
 	return (
 		<MainContainer>
 			<View style={[styles.container, { backgroundColor: AppColors.background }]}>
-				<View style={styles.logoContainer}>
-					<AppText fontSize={FontSize._40} fontFamily={Fonts.BOLD} title={'LOGO'} />
-				</View>
+				<View style={styles.logoContainer} />
 
 				<View style={styles.imageContainer}>
-					<Image resizeMode="contain" source={Images.imgIntroLocation} />
+					<Image resizeMode="contain" source={Images.imgSplash} />
 				</View>
 
 				<View style={[styles.bottomContainer, { backgroundColor: AppColors.background }]}>
