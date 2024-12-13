@@ -39,9 +39,14 @@ const userDataSlice = createSlice({
 		setIsThemeSystemSetting: (state, action: PayloadAction<boolean>) => {
 			state.themeSystemSetting = action.payload;
 		},
+
+		logout: state => {
+			state.userData = {};
+		},
 	},
 });
 
-export const { setUserData, setLocalize, setIsLogin, setIsDarkMode, setIsThemeSystemSetting } = userDataSlice.actions;
+export const { setUserData, setLocalize, setIsLogin, setIsDarkMode, setIsThemeSystemSetting, logout } =
+	userDataSlice.actions;
 
 export default userDataSlice.reducer;

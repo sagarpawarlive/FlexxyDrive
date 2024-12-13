@@ -17,6 +17,7 @@ import { ENDPOINT } from '../../../services/API/endpoints';
 import { _showToast } from '../../../services/UIs/ToastConfig';
 import { useTheme } from '../../../theme/ThemeProvider';
 import { Theme } from '../../../types';
+import { logout } from '../../../store/reducers/userdataSlice';
 
 const FinalUser = (props: any) => {
 	const dispatch = useDispatch();
@@ -59,6 +60,20 @@ const FinalUser = (props: any) => {
 									props.navigation.navigate(NavigationKeys.AuthNavigator, {
 										screen: NavigationKeys.DriverInformation,
 									});
+								}}
+							/>
+
+							<AppButton
+								top={AppMargin._40}
+								fontSize={FontSize._16}
+								textColor={AppColors.primary}
+								fontFamily={Fonts.MEDIUM}
+								buttonLabel={'Logout'}
+								bgColor={AppColors.background}
+								borderWidth={1}
+								onClick={() => {
+									dispatch(logout());
+									props.navigation.navigate(NavigationKeys.IntroScreen);
 								}}
 							/>
 						</View>

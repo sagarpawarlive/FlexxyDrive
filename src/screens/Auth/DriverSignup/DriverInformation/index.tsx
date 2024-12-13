@@ -27,6 +27,7 @@ import AppLoader from '../../../../components/AppLoader';
 import { apiPost } from '../../../../services/API/apiServices';
 import { ENDPOINT } from '../../../../services/API/endpoints';
 import RadioGroup from 'react-native-radio-buttons-group';
+import moment from 'moment';
 
 const DriverInformation = (props: any) => {
 	const dispatch = useDispatch();
@@ -56,11 +57,15 @@ const DriverInformation = (props: any) => {
 				id: '1', // acts as primary key, should be unique and non-empty string
 				label: 'Male',
 				value: 'male',
+				borderColor: AppColors.white,
+				labelStyle: { color: AppColors.white },
 			},
 			{
 				id: '2',
 				label: 'Female',
 				value: 'female',
+				borderColor: AppColors.white,
+				labelStyle: { color: AppColors.white },
 			},
 		],
 		[],
@@ -238,9 +243,11 @@ const DriverInformation = (props: any) => {
 							height={AppHeight._50}
 							borderBottomWidth={1}
 							placeholder="DOB"
-							value={date}
+							value={date ? moment(date).format('DD-MM-YYYY') : ''}
 							iconRight={Icons.icnCalender}
-							iconRightClick={toggleModal}
+							texInputProps={{
+								onPress: toggleModal,
+							}}
 						/>
 
 						<View style={styles.radioButtonsContainer}>
@@ -250,15 +257,16 @@ const DriverInformation = (props: any) => {
 								onPress={setSelectedId}
 								selectedId={selectedId}
 								containerStyle={{ flexDirection: 'row' }} // Horizontal layout
-								borderColor={AppColors.white}
 							/>
 						</View>
 
 						<AppDriverButtons
 							onClick={() => setShowCountryPicker(true)}
 							buttonLabel={countryName}
+							textColor={AppColors.white}
 							iconNode={
 								<CountryPicker
+									onClose={() => setShowCountryPicker(false)}
 									visible={showCountryPicker}
 									countryCode={selectedCountry}
 									withFlag={true}
@@ -317,7 +325,11 @@ const DriverInformation = (props: any) => {
 						/>
 
 						<AppDriverButtons
-							onClick={() => props.navigation.navigate(NavigationKeys.AddDocuments)}
+							onClick={() =>
+								props.navigation.navigate(NavigationKeys.AddDocuments, {
+									driverDocuments: driverInfoRes?.documents,
+								})
+							}
 							rotate={'0deg'}
 							buttonLabel="Add Document"
 							iconTint={AppColors.primary}

@@ -19,6 +19,9 @@ import CountryPicker from 'react-native-country-picker-modal';
 import AppLoader from '../../../components/AppLoader';
 import { APIMethods } from '../../../services/API/methods';
 import { ENDPOINT } from '../../../services/API/endpoints';
+import { apiPost } from '../../../services/API/apiServices';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { setUserData } from '../../../store/reducers/userdataSlice';
 
 const SignupScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -35,8 +38,8 @@ const SignupScreen = (props: any) => {
 
 	const imagesData = useMemo(
 		() => [
-			{ id: 1, src: Icons.icnApple, label: 'Apple' },
-			{ id: 2, src: Icons.icnGoogle, label: 'Google' },
+			{ id: 1, src: Icons.icnGoogle, label: 'Google' },
+			{ id: 2, src: Icons.icnApple, label: 'Apple' },
 			{ id: 3, src: Icons.icnFacebook, label: 'Facebook' },
 		],
 		[],
@@ -49,8 +52,51 @@ const SignupScreen = (props: any) => {
 		console.log('[  country ] ----------------------->> ', country);
 	};
 
+	const googleLogin = async () => {
+		try {
+			await GoogleSignin.hasPlayServices();
+			const userInfo: any = await GoogleSignin.signIn();
+			console.log('[ / userInfo google login ] ------->', userInfo);
+			let googleParams = {
+				token: userInfo.data.idToken,
+			};
+			const response: any = await apiPost(ENDPOINT.GOOGLE_LOGIN, googleParams, []);
+			console.log('[ / {google signin Resss }] ------->', response);
+
+			if (response?.requirePhoneNumber == true) {
+				props.navigation.navigate(NavigationKeys.AddMobileNumber, {
+					userId: response?.user?.id,
+				});
+			} else {
+				props.navigation.navigate(NavigationKeys.FinalUser);
+				dispatch(setUserData(response));
+			}
+		} catch (error: any) {
+			if (error.code == statusCodes.SIGN_IN_CANCELLED) {
+				console.log(error);
+			} else if (error.code == statusCodes.IN_PROGRESS) {
+				console.log(error);
+			} else if (error.code == statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+				console.log(error);
+			} else {
+			}
+		}
+	};
+
 	const handlePress = (id: number) => {
-		alert(`${imagesData.find(item => item.id == id)?.label} Icon Pressed`);
+		switch (id) {
+			case 1:
+				googleLogin();
+				break;
+			case 2:
+				alert('Apple Icon Pressed');
+				break;
+			case 3:
+				alert('Facebook Icon Pressed');
+				break;
+			default:
+				break;
+		}
 	};
 
 	const validationSchema = Yup.object().shape({
@@ -74,13 +120,13 @@ const SignupScreen = (props: any) => {
 
 	const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
 		initialValues: {
-			username: 'sagarpawar',
-			firstName: 'sagarppp',
-			lastName: 'pawar',
-			phone: '9510750708',
-			email: 'sagarpawar199628@gmail.com',
-			password: 'asdfg123',
-			confirmPassword: 'asdfg123',
+			username: '',
+			firstName: '',
+			lastName: '',
+			phone: '',
+			email: '',
+			password: '',
+			confirmPassword: '',
 		},
 		validationSchema,
 		onSubmit: (values: any) => {

@@ -51,7 +51,6 @@ const post = async (endpoint: any, data: any, customHeaders = []) => {
 		_showToast('No Internet Connection', 'error');
 		return { error: 'No Internet Connection' };
 	}
-
 	let rootHeaders = {
 		Authorization: `Bearer ${TOKEN}`,
 	};

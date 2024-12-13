@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Dimensions, Image, FlatList, Pressable } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Dimensions, Image, FlatList, Pressable, Alert } from 'react-native';
 import { useTheme } from '../../../../theme/ThemeProvider';
 import { Icons } from '../../../../assets/Icons';
 import { Fonts, FontSize } from '../../../../assets/fonts';
@@ -7,12 +7,13 @@ import { AppMargin, borderRadius10 } from '../../../../constants/commonStyle';
 import AppButton from '../../../../components/AppButton';
 import AppText from '../../../../components/AppText';
 import AppHeader from '../../../../components/AppHeader';
-import ImageCropPicker from 'react-native-image-crop-picker';
-import { AWS_s3_UPLOAD } from '../../../../utils/awsUpload';
+import ImagePicker from 'react-native-image-crop-picker';
+import { s3Upload } from '../../../../utils/awsUpload';
 import { apiPost } from '../../../../services/API/apiServices';
 import { ENDPOINT } from '../../../../services/API/endpoints';
 import AppLoader from '../../../../components/AppLoader';
 import MainContainer from '../../../../components/MainContainer';
+import { _showToast } from '../../../../services/UIs/ToastConfig';
 
 const { height } = Dimensions.get('window');
 
@@ -23,10 +24,10 @@ const AddDocumentsOptions = [
 
 const AddDocuments = props => {
 	const { AppColors } = useTheme();
-
+	const documents = props?.route?.params?.driverDocuments ?? null;
 	// State to handle selected driving license and captured image
-	const [selectedDrivingLicence, setSelectedDrivingLicence] = useState(null);
-	const [capturedImage, setCapturedImage] = useState(null);
+	const [selectedDrivingLicence, setSelectedDrivingLicence] = useState({ path: documents?.drivingLicense } ?? null);
+	const [capturedImage, setCapturedImage] = useState({ path: documents?.driverImage } ?? null);
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -73,24 +74,8 @@ const AddDocuments = props => {
 					  // 		compressImageQuality: 0.7,
 					  // 		includeBase64: true,
 					  //   })
-					  await ImageCropPicker.openPicker({
-							width: 800,
-							height: 800,
-							compressImageMaxWidth: 800,
-							compressImageMaxHeight: 800,
-							compressImageQuality: 0.7,
-							includeBase64: true,
-					  })
-					: await ImageCropPicker.openPicker({
-							width: 800,
-							height: 800,
-							compressImageMaxWidth: 800,
-							compressImageMaxHeight: 800,
-							compressImageQuality: 0.7,
-							includeBase64: true,
-					  });
-
-			console.log('Picked Image:', image);
+					  await selectAndCompressImage()
+					: await selectAndCompressImage();
 
 			// Set the selected file to the respective state
 			if (type == 'camera') {
@@ -103,19 +88,33 @@ const AddDocuments = props => {
 		}
 	}, []);
 
+	const selectAndCompressImage = async () => {
+		try {
+			// Step 1: Pick the image
+			const image = await ImagePicker.openPicker({}).then(data => {
+				return data;
+			});
+			await image;
+			return image;
+		} catch (error) {
+			console.log('Error selecting or compressing image:', error);
+		}
+	};
+
 	// Handle save (upload files)
 	const handleSave = async () => {
+		setIsLoading(true);
 		try {
 			let result1 = null;
 			let result2 = null;
 
 			if (selectedDrivingLicence) {
-				result1 = await AWS_s3_UPLOAD(selectedDrivingLicence);
+				result1 = await s3Upload(selectedDrivingLicence, null, () => {});
 				console.log('Driving License uploaded:', result1);
 			}
 
 			if (capturedImage) {
-				result2 = await AWS_s3_UPLOAD(capturedImage);
+				result2 = await s3Upload(capturedImage, null, () => {});
 				console.log('Captured Image uploaded:', result2);
 			}
 
@@ -127,21 +126,24 @@ const AddDocuments = props => {
 					},
 				};
 
-				setIsLoading(true);
 				// API call to save driver information with the uploaded file links
-				let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
-				setTimeout(() => {
+				await apiPost(ENDPOINT.SET_DRIVER_INFO, params).then(res => {
 					setIsLoading(false);
-				}, 1000);
+					if (res?.success) {
+						console.log(res, '<== res');
 
-				onclose();
-				alert('Files uploaded successfully!');
+						onclose();
+						_showToast('Driver Documents added successfully', 'success');
+					}
+				});
+
+				// alert('Files uploaded successfully!');
 			} else {
-				alert('Please select both a driving license and a selfie to upload.');
+				// alert('Please select both a driving license and a selfie to upload.');
 			}
 		} catch (error) {
 			console.error('Error uploading files:', error);
-			alert('Error uploading files.');
+			// alert('Error uploading files.');
 		}
 	};
 
@@ -165,14 +167,14 @@ const AddDocuments = props => {
 					{selectedDrivingLicence && (
 						<View style={styles.selectedFileItem}>
 							<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._14} title={' Driving License'} />
-							<Image source={{ uri: selectedDrivingLicence.path }} style={styles.selectedFileImage} />
+							<Image source={{ uri: selectedDrivingLicence?.path }} style={styles.selectedFileImage} />
 						</View>
 					)}
 
 					{capturedImage && (
 						<View style={styles.selectedFileItem}>
 							<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._14} title={'Selfie Image'} />
-							<Image source={{ uri: capturedImage.path }} style={styles.selectedFileImage} />
+							<Image source={{ uri: capturedImage?.path }} style={styles.selectedFileImage} />
 						</View>
 					)}
 				</View>
