@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">FlexxyDrive</string>
     <string name="facebook_app_id">2703560303160092</string>
+    <string name="facebook_client_token">2703560303160092|15b95d9f47952c32be337977e1b1236b</string>
     <string name="fb_login_protocol_scheme">2703560303160092</string>
+  <string name="FlexxyDrive">FlexxyDrive</string>
 </resources>

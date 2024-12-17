@@ -156,6 +156,7 @@ const DriverInformation = (props: any) => {
 	};
 	// Country picker change handler
 	const onSelectCountry = (country: any) => {
+		console.log('[ / country ] ------->', country);
 		setShowCountryPicker(false);
 		setSelectedCountry(country.cca2);
 		setCountryName(country.name);

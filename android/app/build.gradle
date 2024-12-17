@@ -113,6 +113,7 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation 'com.google.android.gms:play-services-auth:20.0.0' // or latest version
     implementation 'com.google.firebase:firebase-auth:21.0.0' // or latest version
+    implementation 'com.facebook.android:facebook-android-sdk:+'
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
