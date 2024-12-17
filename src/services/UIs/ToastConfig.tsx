@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { hasNotch } from 'react-native-device-info';
-import Toast, { ToastConfig as ToastMessageType } from 'react-native-toast-message';
+import Toast, { ToastConfig as ToastMessageType, ToastType } from 'react-native-toast-message';
 import { useTheme } from '../../theme/ThemeProvider';
 import { Theme } from '../../types';
 
@@ -22,13 +22,17 @@ const CustomToastView: ToastView = ({ text1, type }) => {
 	let backgroundColor;
 
 	switch (type) {
-		case 'error': backgroundColor = AppColors.error;
+		case 'error':
+			backgroundColor = AppColors.error;
 			break;
-		case 'warning': backgroundColor = AppColors.warning;
+		case 'warning':
+			backgroundColor = AppColors.warning;
 			break;
-		case 'success': backgroundColor = AppColors.success;
+		case 'success':
+			backgroundColor = AppColors.success;
 			break;
-		default: break;
+		default:
+			break;
 	}
 	return (
 		<View style={[styles.mainViewStyle, { backgroundColor }]}>
@@ -43,9 +47,9 @@ const CustomToastView: ToastView = ({ text1, type }) => {
 };
 
 const toastConfig: ToastMessageType = {
-	error: (props) => <CustomToastView  {...props} type="error" />,
-	success: (props) => <CustomToastView {...props} type="success" />,
-	warning: (props) => <CustomToastView {...props} type="warning" />,
+	error: props => <CustomToastView {...props} type="error" />,
+	success: props => <CustomToastView {...props} type="success" />,
+	warning: props => <CustomToastView {...props} type="warning" />,
 };
 
 const createStyles = (AppColors: Theme) => {
@@ -72,8 +76,8 @@ const createStyles = (AppColors: Theme) => {
 	});
 };
 
-export const _showToast = (msg: string, type: string = 'error') => {
-	Toast.show({ type, text1: msg, visibilityTime: 2000 })
+export const _showToast = (msg: string, type: ToastType = 'error') => {
+	Toast.show({ type, text1: msg, visibilityTime: 2000 });
 };
 
 export default toastConfig;

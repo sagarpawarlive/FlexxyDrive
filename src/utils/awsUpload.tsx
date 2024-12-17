@@ -5,11 +5,7 @@ import { ENDPOINT } from '../services/API/endpoints';
 import RNFS from 'react-native-fs';
 import { Buffer } from 'buffer';
 
-export const s3Upload = async (
-	file: any,
-	pathPrefix: string | null = 'public/flexxydrive/album',
-	setIsLoading: (args: boolean) => void,
-) => {
+export const s3Upload = async (file: any, pathPrefix: string | null = 'public/flexxydrive/album') => {
 	const timestamp = Math.floor(new Date().getTime() / 1000);
 	const filePath = `${pathPrefix}/${timestamp}_${file.filename?.toLowerCase()}`;
 
@@ -26,9 +22,6 @@ export const s3Upload = async (
 				contentEncoding: 'base64',
 				onProgress: progress => {
 					const { transferredBytes, totalBytes } = progress;
-					if (transferredBytes === totalBytes) {
-						setIsLoading(false);
-					}
 				},
 			},
 		}).result;

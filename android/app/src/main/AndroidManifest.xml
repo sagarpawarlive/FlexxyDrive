@@ -4,6 +4,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
+    
+
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
@@ -12,6 +14,18 @@
       android:allowBackup="false"
       android:theme="@style/AppTheme"
       android:supportsRtl="true">
+
+      <meta-data
+    android:name="com.facebook.sdk.ApplicationId"
+    android:value="@string/2703560303160092" />
+
+    <activity
+    android:name="com.facebook.FacebookActivity"
+    android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+    android:label="@string/FlexxyDrive" />
+<meta-data
+    android:name="com.facebook.sdk.AutoInitEnabled"
+    android:value="true" />
       <activity
           android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
 android:screenOrientation="portrait"
@@ -28,5 +42,14 @@ android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+      <activity android:name="com.facebook.CustomTabActivity"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="@string/fb_login_protocol_scheme" />
+    </intent-filter>
+</activity>
     </application>
 </manifest>

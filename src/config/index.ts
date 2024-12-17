@@ -1,10 +1,14 @@
 const isProduction = false; // Change this to true for production
 
-const BASE_URL_DEV = 'http://localhost:3001';
-const BASE_URL_PROD = 'http://localhost:3001';
+const LOCAL_URL = 'http://localhost:3001';
+const BASE_URL_DEV = 'http://51.20.189.64:3001';
+const BASE_URL_PROD = 'http://51.20.189.64:3001';
+
+const DOCS = 'http://51.20.189.64:3001/api-docs#/';
 
 const Config = {
-	REACT_NATIVE_SERVER_API_FULL_URL: isProduction ? BASE_URL_PROD : BASE_URL_DEV,
+	// REACT_NATIVE_SERVER_API_FULL_URL: isProduction ? BASE_URL_PROD : BASE_URL_DEV,
+	REACT_NATIVE_SERVER_API_FULL_URL: LOCAL_URL,
 	REACT_NATIVE_SERVER_API_KEY: '', // any ApiKey Here!
 };
 

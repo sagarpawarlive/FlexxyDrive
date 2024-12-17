@@ -109,12 +109,12 @@ const AddDocuments = props => {
 			let result2 = null;
 
 			if (selectedDrivingLicence) {
-				result1 = await s3Upload(selectedDrivingLicence, null, () => {});
+				result1 = await s3Upload(selectedDrivingLicence);
 				console.log('Driving License uploaded:', result1);
 			}
 
 			if (capturedImage) {
-				result2 = await s3Upload(capturedImage, null, () => {});
+				result2 = await s3Upload(capturedImage);
 				console.log('Captured Image uploaded:', result2);
 			}
 

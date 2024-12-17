@@ -23,6 +23,10 @@ import { setUserData } from '../../../store/reducers/userdataSlice';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { ANDROID_CLIENT_ID, FIREBASE_WEB_CLIENT_ID } from '../../../config';
 import { isIOS } from '../../../constants/constants';
+import { AppleButton } from '@invertase/react-native-apple-authentication';
+import { appleAuth } from '@invertase/react-native-apple-authentication';
+import auth from '@react-native-firebase/auth';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 
 const SigninScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -53,7 +57,6 @@ const SigninScreen = (props: any) => {
 			};
 			const response: any = await apiPost(ENDPOINT.GOOGLE_LOGIN, googleParams, []);
 			console.log('[ / {google signin Resss }] ------->', response);
-
 			if (response?.requirePhoneNumber == true) {
 				props.navigation.navigate(NavigationKeys.AddMobileNumber, {
 					userId: response?.user?.id,
@@ -74,6 +77,82 @@ const SigninScreen = (props: any) => {
 		}
 	};
 
+	async function onFacebookButtonPress() {
+		// Attempt login with permissions
+		const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+		if (result.isCancelled) {
+			throw 'User cancelled the login process';
+		}
+
+		// Once signed in, get the users AccessToken
+		const data = await AccessToken.getCurrentAccessToken();
+
+		console.log(data, '<=== data');
+
+		if (!data) {
+			_showToast('Something went wrong obtaining access token', 'success');
+		}
+
+		// const facebookParams = {
+		// 	token: 'appleCredential?.token',
+		// 	secret: 'appleCredential?.secret',
+		// 	providerId: 'appleCredential?.providerId',
+		// };
+
+		// const response: any = await apiPost(ENDPOINT.GOOGLE_LOGIN, facebookParams, []);
+		// console.log('[ / {google signin Resss }] ------->', response);
+		// if (response?.requirePhoneNumber == true) {
+		// 	props.navigation.navigate(NavigationKeys.AddMobileNumber, {
+		// 		userId: response?.user?.id,
+		// 	});
+		// } else {
+		// 	props.navigation.navigate(NavigationKeys.FinalUser);
+		// 	dispatch(setUserData(response));
+		// }
+	}
+
+	async function onAppleButtonPress() {
+		// Start the sign-in request
+		const appleAuthRequestResponse = await appleAuth.performRequest({
+			requestedOperation: appleAuth.Operation.LOGIN,
+			// As per the FAQ of react-native-apple-authentication, the name should come first in the following array.
+			// See: https://github.com/invertase/react-native-apple-authentication#faqs
+			requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+		});
+
+		console.log(appleAuthRequestResponse, '<=== appleAuthRequestResponse');
+
+		// Ensure Apple returned a user identityToken
+		if (!appleAuthRequestResponse.identityToken) {
+			throw new Error('Apple Sign-In failed - no identify token returned');
+		}
+
+		// Create a Firebase credential from the response
+		const { identityToken, nonce } = appleAuthRequestResponse;
+		const appleCredential = await auth.AppleAuthProvider.credential(identityToken, nonce);
+
+		console.log(appleCredential, '<==== appleCredential');
+
+		const appleParams = {
+			token: appleCredential?.token,
+			secret: appleCredential?.secret,
+			providerId: appleCredential?.providerId,
+		};
+
+		const response: any = await apiPost(ENDPOINT.APPLE_LOGIN, appleParams, []);
+		console.log('[ / {apple signin Resss }] ------->', response);
+
+		if (response?.requirePhoneNumber == true) {
+			props.navigation.navigate(NavigationKeys.AddMobileNumber, {
+				userId: response?.user?.id,
+			});
+		} else {
+			props.navigation.navigate(NavigationKeys.FinalUser);
+			dispatch(setUserData(response));
+		}
+	}
+
 	// Handle press event for each icon
 	const handlePress = (id: number) => {
 		switch (id) {
@@ -81,10 +160,10 @@ const SigninScreen = (props: any) => {
 				googleLogin();
 				break;
 			case 2:
-				alert('Apple Icon Pressed');
+				onAppleButtonPress();
 				break;
 			case 3:
-				alert('Facebook Icon Pressed');
+				onFacebookButtonPress();
 				break;
 			default:
 				break;

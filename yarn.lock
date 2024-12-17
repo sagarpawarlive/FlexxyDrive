@@ -2048,6 +2048,11 @@
 "@humanwhocodes/object-schema@^2.0.3":
   version "2.0.3"
 
+"@invertase/react-native-apple-authentication@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.npmjs.org/@invertase/react-native-apple-authentication/-/react-native-apple-authentication-2.4.0.tgz"
+  integrity sha512-H29XdL/4JmMMA/b7CCEHpSKvyg3LdCJKMydE7ont01IAnDIW//uPuRMdL2RkxJKJtw449c/PY2K9ijWLxQAMIQ==
+
 "@isaacs/ttlcache@^1.4.1":
   version "1.4.1"
 
@@ -2513,12 +2518,19 @@
   resolved "https://registry.npmjs.org/@react-native-community/netinfo/-/netinfo-6.0.6.tgz"
   integrity sha512-Lyshmg15NfKLPp3evXkg8yrhBpJlzb4b7M9z5/yDqot7P2WNmBmOYfsYjhlTCLmBV/N/U+MnA5V5NGmUKUS49A==
 
-"@react-native-firebase/app@^21.6.1":
+"@react-native-firebase/app@^21.6.1", "@react-native-firebase/app@21.6.1":
   version "21.6.1"
   resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-21.6.1.tgz"
   integrity sha512-o1i3aQMtJeofue+73j/8KO2l+/bRHaSHqOl7FtIeZfajQZaulaROugD2Rr2Mlc1o7LfEUyoDOoij9nGdrydEyw==
   dependencies:
     firebase "10.13.2"
+
+"@react-native-firebase/auth@^21.6.1":
+  version "21.6.1"
+  resolved "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-21.6.1.tgz"
+  integrity sha512-B/sVBB7QKpE/MLcBKnVM3LHo5XRj7A9uFc3zOkBmQl3JQ37bHqqdlRJxgnbIIvRY5Wz2sPy2hjRwjC0+b04kZg==
+  dependencies:
+    plist "^3.1.0"
 
 "@react-native-google-signin/google-signin@^13.1.0":
   version "13.1.0"
@@ -3501,6 +3513,11 @@
 
 "@ungap/structured-clone@^1.2.0":
   version "1.2.0"
+
+"@xmldom/xmldom@^0.8.8":
+  version "0.8.10"
+  resolved "https://registry.npmjs.org/@xmldom/xmldom/-/xmldom-0.8.10.tgz"
+  integrity sha512-2WALfTl4xo2SkGCYRt6rDTFfk9R1czmBvUQy12gK2KuRKIpWEhcbbzy8EZXtz/jkRqHX8bFEc6FC1HjX4TUWYw==
 
 "@yarnpkg/lockfile@^1.1.0":
   version "1.1.0"
@@ -6583,6 +6600,15 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
+plist@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/plist/-/plist-3.1.0.tgz"
+  integrity sha512-uysumyrvkUX0rX/dEVqt8gC3sTBzd4zoWfLeS29nb53imdaXVvLINYXTI2GNqzaMuvacNx4uJQ8+b3zXR0pkgQ==
+  dependencies:
+    "@xmldom/xmldom" "^0.8.8"
+    base64-js "^1.5.1"
+    xmlbuilder "^15.1.1"
+
 possible-typed-array-names@^1.0.0:
   version "1.0.0"
 
@@ -6821,6 +6847,11 @@ react-native-device-info@^13.0.0:
   resolved "https://registry.npmjs.org/react-native-device-info/-/react-native-device-info-13.0.0.tgz"
   integrity sha512-TKCq4XKl8lzB04RdEbADxkbzDJwOfWcxZxNcf1LweT+A+KRAUv1no7bch7RM0WLyMVKMTa2hbusESnzxB5QQRA==
 
+react-native-fbsdk-next@^13.3.0:
+  version "13.3.0"
+  resolved "https://registry.npmjs.org/react-native-fbsdk-next/-/react-native-fbsdk-next-13.3.0.tgz"
+  integrity sha512-t2HTHx77yB6Awj6VZpCbEslmRBEgSxqqGM85Jg6t1d1kupho4b3iX2hgR/mfDzjWAqoXnZIAkvN4tNnGTWc7KA==
+
 react-native-flipper@^0.164.0:
   version "0.164.0"
   resolved "https://registry.npmjs.org/react-native-flipper/-/react-native-flipper-0.164.0.tgz"
@@ -6976,7 +7007,7 @@ react-native-web@*, react-native-web@0.9.x:
     prop-types "^15.6.0"
     react-timer-mixin "^0.13.4"
 
-react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@^0.0.0-0 || >=0.65 <1.0", "react-native@>= 0.30.0", react-native@>=0.29, react-native@>=0.35, react-native@>=0.40.0, react-native@>=0.42.0, react-native@>=0.48.4, react-native@>=0.56, react-native@>=0.57, react-native@>=0.59, react-native@>=0.65.0, react-native@>=0.70, react-native@>=0.70.0, react-native@>0.62.0, react-native@0.75.2:
+react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@^0.0.0-0 || >=0.65 <1.0", "react-native@>= 0.30.0", react-native@>=0.29, react-native@>=0.35, react-native@>=0.40.0, react-native@>=0.42.0, react-native@>=0.48.4, react-native@>=0.56, react-native@>=0.57, react-native@>=0.59, react-native@>=0.63.3, react-native@>=0.65.0, react-native@>=0.70, react-native@>=0.70.0, react-native@>0.62.0, react-native@0.75.2:
   version "0.75.2"
   dependencies:
     "@jest/create-cache-key-function" "^29.6.3"
@@ -8025,6 +8056,11 @@ xdate@^0.8.0:
   version "0.8.3"
   resolved "https://registry.npmjs.org/xdate/-/xdate-0.8.3.tgz"
   integrity sha512-1NhJWPJwN+VjbkACT9XHbQK4o6exeSVtS2CxhMPwUE7xQakoEFTlwra9YcqV/uHQVyeEUYoYC46VGDJ+etnIiw==
+
+xmlbuilder@^15.1.1:
+  version "15.1.1"
+  resolved "https://registry.npmjs.org/xmlbuilder/-/xmlbuilder-15.1.1.tgz"
+  integrity sha512-yMqGBqtXyeN1e3TGYvgNgDVZ3j84W4cwkOXQswghol6APgZWaff9lnbvN7MHYJOiXsvGPXtjTYJEiC9J2wv9Eg==
 
 xtend@~4.0.1:
   version "4.0.2"
