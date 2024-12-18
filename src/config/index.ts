@@ -1,7 +1,7 @@
 const isProduction = false; // Change this to true for production
 
 const LOCAL_URL = 'http://localhost:3001';
-const BASE_URL_DEV = 'http://localhost:3001';
+const BASE_URL_DEV = 'http://51.20.189.64:3001';
 const BASE_URL_PROD = 'http://51.20.189.64:3001';
 
 const DOCS = 'http://51.20.189.64:3001/api-docs#/';
