@@ -175,6 +175,11 @@ const NextOfKin = (props: any) => {
 							editable={false}
 							value={countryName}
 							placeholder="Country"
+							texInputProps={{
+								onPress: () => {
+									setShowCountryPicker(true);
+								},
+							}}
 							rightNode={
 								<CountryPicker
 									visible={showCountryPicker}

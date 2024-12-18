@@ -407,7 +407,11 @@ const DriverInformation = (props: any) => {
 							icon={Icons.icnBack}
 						/>
 						<AppDriverButtons
-							onClick={() => props.navigation.navigate(NavigationKeys.AddEmergencyContacts)}
+							onClick={() =>
+								props.navigation.navigate(NavigationKeys.AddEmergencyContacts, {
+									driverInfos: driverInfoRes,
+								})
+							}
 							buttonLabel="Emergency Contacts"
 							iconTint={AppColors.white}
 							icon={Icons.icnBack}

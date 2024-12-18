@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, Image, StyleSheet, View } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Fonts, FontSize } from '../../../../assets/fonts';
 import { Icons } from '../../../../assets/Icons';
 import AppButton from '../../../../components/AppButton';
@@ -17,14 +17,13 @@ import { ENDPOINT } from '../../../../services/API/endpoints';
 const AddEmergencyContacts = (props: any) => {
 	const dispatch = useDispatch();
 	const { isDarkMode, toggleTheme, AppColors } = useTheme();
+
+	console.log(props, '<== props');
+
+	const { emergencyContacts = [] } = props?.route?.params?.driverInfos;
+
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
-	const [contactList, setContactList] = useState([
-		{
-			name: 'John Doe',
-			phoneNumber: '123-456-7890',
-			email: 'KtZQG@example.com',
-		},
-	]);
+	const [contactList, setContactList] = useState([]);
 	const [newContact, setNewContact] = useState(false);
 
 	const onBackPress = () => {
@@ -34,6 +33,10 @@ const AddEmergencyContacts = (props: any) => {
 	const toggleContactAdd = () => {
 		setNewContact(!newContact);
 	};
+
+	useEffect(() => {
+		setContactList(emergencyContacts);
+	}, [emergencyContacts]);
 
 	const handleSaveContact = async newContact => {
 		setContactList(prevContacts => {
