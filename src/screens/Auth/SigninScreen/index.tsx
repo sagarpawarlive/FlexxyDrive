@@ -67,7 +67,7 @@ const SigninScreen = (props: any) => {
 					userId: response?.user?.id,
 				});
 			} else {
-				if (response.statusCode >= 200 && response.statusCodes < 299) {
+				if (response?.token?.length > 0) {
 					props.navigation.navigate(NavigationKeys.FinalUser);
 					dispatch(setUserData(response));
 				} else {
