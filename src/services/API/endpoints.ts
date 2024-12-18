@@ -25,4 +25,7 @@ export const ENDPOINT = {
 	GET_DRIVER_CAR_DETAILS: '/api/driver/car-details', //get
 	UPDATE_DRIVER_CAR_DETAILS: '/api/driver/car-details', // /{car-id} put
 	DELETE_DRIVER_CAR_DETAILS: '/api/driver/car-details', // /{car-id} delete
+
+	//Verify Document
+	VERIFY_DOCUMENT: '/verification/document', //post
 };

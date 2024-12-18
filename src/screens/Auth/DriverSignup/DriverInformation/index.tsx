@@ -28,6 +28,7 @@ import { apiPost } from '../../../../services/API/apiServices';
 import { ENDPOINT } from '../../../../services/API/endpoints';
 import RadioGroup from 'react-native-radio-buttons-group';
 import moment from 'moment';
+import { _showToast } from '../../../../services/UIs/ToastConfig';
 
 const DriverInformation = (props: any) => {
 	const dispatch = useDispatch();
@@ -105,6 +106,7 @@ const DriverInformation = (props: any) => {
 
 			setDate(driverInfoRes?.dob ?? '');
 			setCountryName(driverInfoRes?.country ?? '');
+			setSelectedCountry(driverInfoRes?.countryCode ?? '');
 			setSelectedId(driverInfoRes?.gender == 'Male' ? '1' : driverInfoRes?.gender == 'Female' ? '2' : '');
 		}
 	}, [driverInfoRes]);
@@ -144,15 +146,45 @@ const DriverInformation = (props: any) => {
 			postCode: values.postCode,
 			street: values.street,
 			streetNumber: values.streetNumber,
+			countryCode: selectedCountry,
 		};
 
 		setIsLoading(true);
 		let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params, { token: userData.token });
-		setTimeout(() => {
-			setIsLoading(false);
-		}, 1000);
-		// props.navigation.navigate(NavigationKeys.OtpScreen);
-		// dispatch(setIsLogin(true));
+
+		console.log(res, '<== res');
+
+		if (res?.error) {
+			_showToast(res?.message, 'error');
+		}
+
+		if (res?.success) {
+			_showToast(res?.message, 'success');
+
+			if (res?.data?.documents) {
+				if (res?.data?.documents?.drivingLicense?.length > 0 && res?.data?.documents?.driverImage?.length > 0) {
+					const verifyDocumentParams = {
+						selfie: res?.data?.documents?.driverImage,
+						idImage: res?.data?.documents?.drivingLicense,
+						// country: res?.data?.countryCode,
+						country: 'DE',
+						idType: 'DRIVERS_LICENSE',
+					};
+					const verifyResponse = await apiPost(ENDPOINT.VERIFY_DOCUMENT, verifyDocumentParams);
+					console.log(verifyResponse, '<==== verifyResponse');
+				}
+			}
+		}
+
+		setIsLoading(false);
+
+		/* 
+				const verifyDocument = {
+					
+				}
+				await apiPost(ENDPOINT.VERIFY_DOCUMENT, verifyDocument).then(res => { })
+		
+		*/
 	};
 	// Country picker change handler
 	const onSelectCountry = (country: any) => {

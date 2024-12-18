@@ -4,8 +4,7 @@ import { getFullApiUrl } from '../../config';
 import { _showToast } from '../UIs/ToastConfig';
 import store from '../../store';
 
-const TIME_OUT = 5000; // 5 seconds
-const TOKEN = store.getState().userDataSlice.userData.token;
+const TIME_OUT = 1000000; // 50 seconds
 
 const _checkInternetConnectivity = async (): Promise<any> => {
 	const netInfoState = await NetInfo.fetch();
@@ -13,6 +12,8 @@ const _checkInternetConnectivity = async (): Promise<any> => {
 };
 
 const get = async (endpoint: any, params: any = '', customHeaders: any = {}) => {
+	const TOKEN = await store.getState().userDataSlice.userData.token;
+
 	const isConnected = await _checkInternetConnectivity();
 
 	if (!isConnected) {
@@ -45,6 +46,8 @@ const get = async (endpoint: any, params: any = '', customHeaders: any = {}) => 
 };
 
 const post = async (endpoint: any, data: any, customHeaders = []) => {
+	const TOKEN = await store.getState().userDataSlice.userData.token;
+
 	const isConnected = await _checkInternetConnectivity();
 
 	if (!isConnected) {

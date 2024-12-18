@@ -26,12 +26,14 @@ const AddDocuments = props => {
 	const { AppColors } = useTheme();
 	const documents = props?.route?.params?.driverDocuments ?? null;
 	// State to handle selected driving license and captured image
-	const [selectedDrivingLicence, setSelectedDrivingLicence] = useState({ path: documents?.drivingLicense } ?? null);
-	const [capturedImage, setCapturedImage] = useState({ path: documents?.driverImage } ?? null);
+	const [selectedDrivingLicence, setSelectedDrivingLicence] = useState(
+		{ path: documents?.drivingLicense, isFile: false } ?? null,
+	);
+	const [capturedImage, setCapturedImage] = useState({ path: documents?.driverImage, isFile: false } ?? null);
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	const onclose = () => {
+	const onclose = async () => {
 		props.navigation.goBack();
 	};
 
@@ -79,9 +81,9 @@ const AddDocuments = props => {
 
 			// Set the selected file to the respective state
 			if (type == 'camera') {
-				setCapturedImage(image); // Set selfie image
+				setCapturedImage({ ...image, isFile: true }); // Set selfie image
 			} else {
-				setSelectedDrivingLicence(image); // Set driving license image
+				setSelectedDrivingLicence({ ...image, isFile: true }); // Set driving license image
 			}
 		} catch (error) {
 			console.error('Error picking image:', error);
@@ -105,42 +107,40 @@ const AddDocuments = props => {
 	const handleSave = async () => {
 		setIsLoading(true);
 		try {
-			let result1 = null;
-			let result2 = null;
+			let updateDocuments = documents;
 
-			if (selectedDrivingLicence) {
-				result1 = await s3Upload(selectedDrivingLicence);
-				console.log('Driving License uploaded:', result1);
-			}
-
-			if (capturedImage) {
-				result2 = await s3Upload(capturedImage);
-				console.log('Captured Image uploaded:', result2);
-			}
-
-			if (result1 && result2) {
-				const params = {
-					documents: {
-						drivingLicense: result1,
-						driverImage: result2,
-					},
+			if (selectedDrivingLicence && selectedDrivingLicence.isFile) {
+				const license = await s3Upload(selectedDrivingLicence);
+				updateDocuments = {
+					...updateDocuments,
+					drivingLicense: license,
 				};
 
-				// API call to save driver information with the uploaded file links
-				await apiPost(ENDPOINT.SET_DRIVER_INFO, params).then(res => {
-					setIsLoading(false);
-					if (res?.success) {
-						console.log(res, '<== res');
-
-						onclose();
-						_showToast('Driver Documents added successfully', 'success');
-					}
-				});
-
-				// alert('Files uploaded successfully!');
-			} else {
-				// alert('Please select both a driving license and a selfie to upload.');
+				console.log('Driving License uploaded:', license);
 			}
+
+			if (capturedImage && capturedImage.isFile) {
+				const selfie = await s3Upload(capturedImage);
+				updateDocuments = {
+					...updateDocuments,
+					driverImage: selfie,
+				};
+
+				console.log('Captured Image uploaded:', selfie);
+			}
+			const params = {
+				documents: updateDocuments,
+			};
+			// API call to save driver information with the uploaded file links
+			await apiPost(ENDPOINT.SET_DRIVER_INFO, params).then(res => {
+				setIsLoading(false);
+				if (res?.success) {
+					console.log(res, '<== res');
+
+					onclose();
+					_showToast('Driver Documents added successfully', 'success');
+				}
+			});
 		} catch (error) {
 			console.error('Error uploading files:', error);
 			// alert('Error uploading files.');
