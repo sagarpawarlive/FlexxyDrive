@@ -1,54 +1,54 @@
 {
-	"project_info": {
-		"project_number": "593736862384",
-		"project_id": "flexxydrive",
-		"storage_bucket": "flexxydrive.firebasestorage.app"
-	},
-	"client": [
-		{
-			"client_info": {
-				"mobilesdk_app_id": "1:593736862384:android:a5250e6bce3fc43f2dc975",
-				"android_client_info": {
-					"package_name": "com.flexxydrive"
-				}
-			},
-			"oauth_client": [
-				{
-					"client_id": "593736862384-kh84to0kmedh66ghh92bbbcljrlp3onl.apps.googleusercontent.com",
-					"client_type": 1,
-					"android_info": {
-						"package_name": "com.flexxydrive",
-						"certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-					}
-				},
-				{
-					"client_id": "593736862384-uptirv0611upv03oluqdqrheg25vffph.apps.googleusercontent.com",
-					"client_type": 3
-				}
-			],
-			"api_key": [
-				{
-					"current_key": "AIzaSyBrEezqBrv0u9p_UDiqNxwc3ExHZWclDzw"
-				}
-			],
-			"services": {
-				"appinvite_service": {
-					"other_platform_oauth_client": [
-						{
-							"client_id": "593736862384-uptirv0611upv03oluqdqrheg25vffph.apps.googleusercontent.com",
-							"client_type": 3
-						},
-						{
-							"client_id": "593736862384-6gt0eu9enlvk5i38kf0m9l10ar4t0phk.apps.googleusercontent.com",
-							"client_type": 2,
-							"ios_info": {
-								"bundle_id": "com.flexxydrive"
-							}
-						}
-					]
-				}
-			}
-		}
-	],
-	"configuration_version": "1"
+  "project_info": {
+    "project_number": "593736862384",
+    "project_id": "flexxydrive",
+    "storage_bucket": "flexxydrive.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593736862384:android:a5250e6bce3fc43f2dc975",
+        "android_client_info": {
+          "package_name": "com.flexxydrive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593736862384-kh84to0kmedh66ghh92bbbcljrlp3onl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flexxydrive",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "593736862384-uptirv0611upv03oluqdqrheg25vffph.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrEezqBrv0u9p_UDiqNxwc3ExHZWclDzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "593736862384-uptirv0611upv03oluqdqrheg25vffph.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "593736862384-6gt0eu9enlvk5i38kf0m9l10ar4t0phk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flexxydrive"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
 }

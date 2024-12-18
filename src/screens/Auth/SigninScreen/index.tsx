@@ -41,6 +41,11 @@ const SigninScreen = (props: any) => {
 		{ id: 3, src: Icons.icnFacebook, label: 'Facebook' },
 	];
 
+	const ImagesDataAndroid = [
+		{ id: 1, src: Icons.icnGoogle, label: 'Google' },
+		{ id: 3, src: Icons.icnFacebook, label: 'Facebook' },
+	];
+
 	useEffect(() => {
 		GoogleSignin.configure({
 			webClientId: isIOS ? FIREBASE_WEB_CLIENT_ID : ANDROID_CLIENT_ID,
@@ -62,8 +67,12 @@ const SigninScreen = (props: any) => {
 					userId: response?.user?.id,
 				});
 			} else {
-				props.navigation.navigate(NavigationKeys.FinalUser);
-				dispatch(setUserData(response));
+				if (response.statusCode >= 200 && response.statusCodes < 299) {
+					props.navigation.navigate(NavigationKeys.FinalUser);
+					dispatch(setUserData(response));
+				} else {
+					_showToast(response?.message, 'error');
+				}
 			}
 		} catch (error: any) {
 			if (error.code == statusCodes.SIGN_IN_CANCELLED) {
@@ -274,7 +283,7 @@ const SigninScreen = (props: any) => {
 								<FlatList
 									bounces={false}
 									scrollEnabled={false}
-									data={imagesData}
+									data={isIOS ? imagesData : ImagesDataAndroid}
 									horizontal
 									keyExtractor={item => item.id.toString()}
 									renderItem={({ item }) => (
@@ -344,7 +353,7 @@ const createStyles = (AppColors: Theme) => {
 			shadowRadius: 10.84,
 			elevation: 5,
 		},
-		primaryContainer: { flex: 1, backgroundColor: AppColors.background },
+		primaryContainer: { flex: 1, backgroundColor: AppColors.background, paddingBottom: 20 },
 		forgotPasswordContainer: {
 			marginVertical: AppMargin._10,
 			alignItems: 'flex-end',

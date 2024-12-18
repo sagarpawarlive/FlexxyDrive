@@ -226,7 +226,7 @@ const SignupScreen = (props: any) => {
 						{renderFormField('Confirm Password', 'confirmPassword', true)}
 
 						<View style={{ marginTop: AppMargin._40 }}>
-							<View style={styles.socialLoginContainer}>
+							{/* <View style={styles.socialLoginContainer}>
 								<FlatList
 									bounces={false}
 									scrollEnabled={false}
@@ -241,7 +241,7 @@ const SignupScreen = (props: any) => {
 										</TouchableOpacity>
 									)}
 								/>
-							</View>
+							</View> */}
 							<AppButton
 								top={AppMargin._40}
 								fontSize={FontSize._16}
@@ -320,7 +320,7 @@ const createStyles = (AppColors: Theme) => {
 			shadowRadius: 10.84,
 			elevation: 5,
 		},
-		primaryContainer: { flex: 1, backgroundColor: AppColors.background },
+		primaryContainer: { flex: 1, backgroundColor: AppColors.background, paddingBottom: 20 },
 		signupLinkContainer: {
 			justifyContent: 'center',
 			marginTop: 20,
