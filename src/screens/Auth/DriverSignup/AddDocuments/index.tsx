@@ -24,7 +24,7 @@ const AddDocumentsOptions = [
 
 const AddDocuments = props => {
 	const { AppColors } = useTheme();
-	const documents = props?.route?.params?.driverDocuments ?? null;
+	const { documents, isVerified } = props?.route?.params?.driverDocuments ?? null;
 	// State to handle selected driving license and captured image
 	const [selectedDrivingLicence, setSelectedDrivingLicence] = useState(
 		{ path: documents?.drivingLicense, isFile: false } ?? null,
@@ -41,8 +41,10 @@ const AddDocuments = props => {
 	const renderItem = ({ item }) => (
 		<Pressable
 			onPress={() => {
-				if (item.id === 2) openImagePicker('camera'); // Open camera for selfie
-				else openImagePicker('gallery'); // Open gallery for document
+				if (!isVerified) {
+					if (item.id === 2) openImagePicker('camera'); // Open camera for selfie
+					else openImagePicker('gallery'); // Open gallery for document
+				}
 			}}
 			style={[
 				styles.listItem,
@@ -179,15 +181,25 @@ const AddDocuments = props => {
 					)}
 				</View>
 
+				{isVerified && (
+					<AppText
+						textColor={'#90EE90'}
+						fontFamily={Fonts.REGULAR}
+						fontSize={FontSize._14}
+						title={'Documents are verified'}
+					/>
+				)}
 				{/* Save Button */}
-				<AppButton
-					top={AppMargin._20}
-					textColor={AppColors.textDark}
-					fontSize={FontSize._16}
-					fontFamily={Fonts.MEDIUM}
-					buttonLabel={'Save'}
-					onClick={handleSave}
-				/>
+				{!isVerified && (
+					<AppButton
+						top={AppMargin._20}
+						textColor={AppColors.textDark}
+						fontSize={FontSize._16}
+						fontFamily={Fonts.MEDIUM}
+						buttonLabel={'Save'}
+						onClick={handleSave}
+					/>
+				)}
 				<AppLoader isLoading={isLoading} />
 			</View>
 		</MainContainer>

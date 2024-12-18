@@ -162,7 +162,11 @@ const DriverInformation = (props: any) => {
 			_showToast(res?.message, 'success');
 
 			if (res?.data?.documents) {
-				if (res?.data?.documents?.drivingLicense?.length > 0 && res?.data?.documents?.driverImage?.length > 0) {
+				if (
+					res?.data?.documents?.drivingLicense?.length > 0 &&
+					res?.data?.documents?.driverImage?.length > 0 &&
+					!driverInfoRes?.isVerified
+				) {
 					const verifyDocumentParams = {
 						selfie: res?.data?.documents?.driverImage,
 						idImage: res?.data?.documents?.drivingLicense,
@@ -360,7 +364,7 @@ const DriverInformation = (props: any) => {
 						<AppDriverButtons
 							onClick={() =>
 								props.navigation.navigate(NavigationKeys.AddDocuments, {
-									driverDocuments: driverInfoRes?.documents,
+									driverDocuments: driverInfoRes,
 								})
 							}
 							rotate={'0deg'}
