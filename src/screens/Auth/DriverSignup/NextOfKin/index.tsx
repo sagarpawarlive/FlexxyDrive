@@ -18,6 +18,7 @@ import * as Yup from 'yup';
 import { apiPost } from '../../../../services/API/apiServices';
 import { ENDPOINT } from '../../../../services/API/endpoints';
 import AppLoader from '../../../../components/AppLoader';
+import { _showToast } from '../../../../services/UIs/ToastConfig';
 
 const NextOfKin = (props: any) => {
 	const dispatch = useDispatch();
@@ -114,14 +115,14 @@ const NextOfKin = (props: any) => {
 			const res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
 
 			if (res.success) {
-				Alert.alert('Success', 'Next of Kin details saved successfully');
+				_showToast('Next of Kin details saved successfully', 'success');
 				props.navigation.goBack(); // Or navigate to the next screen
 			} else {
-				Alert.alert('Error', res.message || 'Failed to save details');
+				_showToast('Failed to save details', 'error');
 			}
 		} catch (error) {
 			console.error('Error saving Next of Kin details', error);
-			Alert.alert('Error', 'An unexpected error occurred');
+			_showToast('An unexpected error occurred', 'error');
 		} finally {
 			setIsLoading(false);
 			// onBackPress();
