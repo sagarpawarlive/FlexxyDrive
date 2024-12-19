@@ -245,10 +245,14 @@ const DriverInformation = (props: any) => {
 				<View style={styles.profileContainer}>
 					<View style={styles.profileSubContainer}>
 						<Image
-							source={Images.imgDriverPlaceholder}
-							style={{ height: AppHeight._175, width: AppHeight._175 }}
+							source={
+								driverInfoRes?.documents?.driverImage
+									? { uri: driverInfoRes?.documents?.driverImage }
+									: Images.imgDriverPlaceholder
+							}
+							style={{ height: AppHeight._175, width: AppHeight._175, borderRadius: 100 }}
 						/>
-						<Pressable onPress={toggleImageModal} style={{ position: 'absolute', bottom: 0, right: 0 }}>
+						<Pressable onPress={() => {}} style={{ position: 'absolute', bottom: 0, right: 0 }}>
 							<Image source={Icons.icnProfilePicker} style={{}} />
 						</Pressable>
 					</View>
@@ -257,7 +261,7 @@ const DriverInformation = (props: any) => {
 				<AppScrollView bounces={false} extraHeight={AppHeight._350}>
 					<View style={{ marginTop: AppMargin._50 }}>
 						<AppTextInput
-							height={AppHeight._50}
+							// height={AppHeight._50}
 							borderBottomWidth={1}
 							placeholder={driverInfoRes?.firstName ?? 'First name'}
 							value={values.firstName}
@@ -266,7 +270,7 @@ const DriverInformation = (props: any) => {
 							showError={touched.firstName && errors.firstName}
 						/>
 						<AppTextInput
-							height={AppHeight._50}
+							// height={AppHeight._50}
 							borderBottomWidth={1}
 							placeholder="Last name"
 							value={values.lastName}
@@ -277,7 +281,7 @@ const DriverInformation = (props: any) => {
 
 						<AppTextInput
 							editable={false}
-							height={AppHeight._50}
+							// height={AppHeight._50}
 							borderBottomWidth={1}
 							placeholder="DOB"
 							value={date ? moment(date).format('DD-MM-YYYY') : ''}
@@ -325,7 +329,7 @@ const DriverInformation = (props: any) => {
 						/>
 
 						<AppTextInput
-							height={AppHeight._50}
+							// height={AppHeight._50}
 							borderBottomWidth={1}
 							placeholder="City"
 							value={values.city}
@@ -334,7 +338,7 @@ const DriverInformation = (props: any) => {
 							showError={touched.city && errors.city}
 						/>
 						<AppTextInput
-							height={AppHeight._50}
+							// height={AppHeight._50}
 							borderBottomWidth={1}
 							placeholder="Post code"
 							value={values.postCode}
@@ -343,7 +347,7 @@ const DriverInformation = (props: any) => {
 							showError={touched.postCode && errors.postCode}
 						/>
 						<AppTextInput
-							height={AppHeight._50}
+							// height={AppHeight._50}
 							borderBottomWidth={1}
 							placeholder="Street"
 							value={values.street}
@@ -352,7 +356,7 @@ const DriverInformation = (props: any) => {
 							showError={touched.street && errors.street}
 						/>
 						<AppTextInput
-							height={AppHeight._50}
+							// height={AppHeight._50}
 							borderBottomWidth={1}
 							placeholder="Street Number"
 							value={values.streetNumber}
