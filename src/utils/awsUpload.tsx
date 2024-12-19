@@ -18,9 +18,17 @@ export const s3Upload = async (file: any, pathPrefix: string | null = 'public/fl
 			sourceURL: file.path, // Update to converted file path
 			filename: `${timestamp}.jpg`, // Update filename with new extension
 		};
+	} else {
+		// added block
+		processedFile = {
+			...file,
+			sourceURL: file.path,
+			filename: `${timestamp}${file.filename}`, // Update filename with new extension
+		};
 	}
 
 	const fileContent = await RNFS.readFile(processedFile.sourceURL, 'base64'); // Read as base64
+	console.log('[ / fileContent ] ------->', fileContent);
 	const cleanBase64 = fileContent.replace(/^data:image\/\w+;base64,/, '');
 	const base64Data = Buffer.from(cleanBase64, 'base64');
 
@@ -36,6 +44,7 @@ export const s3Upload = async (file: any, pathPrefix: string | null = 'public/fl
 				},
 			},
 		}).result;
+		console.log('[ / result ] ------->', result);
 
 		const fileUrl = ENDPOINT.AWS_BASEURL_S3 + result.path;
 		console.log('Succeeded URL: ------>', fileUrl);

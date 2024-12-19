@@ -8,11 +8,19 @@ export const nativeAlert = async (msg: string, title = APP_TITLE) => {
 	Alert.alert(title, msg);
 };
 
-export const nativeAlertwithAction = async (title: string, msg: string, callback = (result: boolean) => { }) => {
-	Alert.alert(title, msg, [{
-		text: 'Cancel',
-		onPress: () => callback(false),
-		style: 'cancel',
-	}, { text: 'OK', onPress: () => callback(true) },
+export const nativeAlertwithAction = async (title: string, msg: string, callback = (result: boolean) => {}) => {
+	Alert.alert(title, msg, [
+		{
+			text: 'Cancel',
+			onPress: () => callback(false),
+			style: 'cancel',
+		},
+		{ text: 'OK', onPress: () => callback(true) },
 	]);
+};
+
+export const generateUniqueFileName = originalName => {
+	const timestamp = new Date().getTime(); // Get current timestamp
+	const extension = originalName.split('.').pop(); // Get the file extension
+	return `${timestamp}.${extension}`;
 };

@@ -14,6 +14,9 @@ import { ENDPOINT } from '../../../../services/API/endpoints';
 import AppLoader from '../../../../components/AppLoader';
 import MainContainer from '../../../../components/MainContainer';
 import { _showToast } from '../../../../services/UIs/ToastConfig';
+import { generateUniqueFileName, isIOS } from '../../../../constants/constants';
+import RNFS from 'react-native-fs';
+import { App_Permission } from '../../../../services/Permissions';
 
 const { height } = Dimensions.get('window');
 
@@ -25,6 +28,7 @@ const AddDocumentsOptions = [
 const AddDocuments = props => {
 	const { AppColors } = useTheme();
 	const { documents, isVerified } = props?.route?.params?.driverDocuments ?? null;
+
 	// State to handle selected driving license and captured image
 	const [selectedDrivingLicence, setSelectedDrivingLicence] = useState(
 		{ path: documents?.drivingLicense, isFile: false } ?? null,
@@ -41,10 +45,10 @@ const AddDocuments = props => {
 	const renderItem = ({ item }) => (
 		<Pressable
 			onPress={() => {
-				if (!isVerified) {
-					if (item.id === 2) openImagePicker('camera'); // Open camera for selfie
-					else openImagePicker('gallery'); // Open gallery for document
-				}
+				// if (!isVerified) {
+				if (item.id === 2) openImagePicker('camera'); // Open camera for selfie
+				else openImagePicker('gallery'); // Open gallery for document
+				// }
 			}}
 			style={[
 				styles.listItem,
@@ -93,15 +97,27 @@ const AddDocuments = props => {
 	}, []);
 
 	const selectAndCompressImage = async () => {
-		try {
-			// Step 1: Pick the image
-			const image = await ImagePicker.openPicker({}).then(data => {
-				return data;
-			});
-			await image;
-			return image;
-		} catch (error) {
-			console.log('Error selecting or compressing image:', error);
+		const photoPermission = (await App_Permission._askPhotoPermission()) ?? false;
+		if (photoPermission) {
+			try {
+				const image = await ImagePicker.openPicker({}).then(data => {
+					return data;
+				});
+
+				const localFilePath = `${RNFS.DocumentDirectoryPath}/${generateUniqueFileName(image.filename)}`;
+				await RNFS.copyFile(image.path, localFilePath);
+				const androidFilePath = 'file://' + localFilePath;
+				let dict = {
+					...image,
+					sourceURL: androidFilePath,
+					path: androidFilePath,
+				};
+				(await isIOS) ? image : dict;
+				console.log('[ / dict ] ------->', dict);
+				return isIOS ? image : dict;
+			} catch (error) {
+				console.log('Error selecting or compressing image:', error);
+			}
 		}
 	};
 
@@ -145,7 +161,8 @@ const AddDocuments = props => {
 			});
 		} catch (error) {
 			console.error('Error uploading files:', error);
-			// alert('Error uploading files.');
+			alert('Error uploading files.');
+			setIsLoading(false);
 		}
 	};
 
@@ -190,16 +207,16 @@ const AddDocuments = props => {
 					/>
 				)}
 				{/* Save Button */}
-				{!isVerified && (
-					<AppButton
-						top={AppMargin._20}
-						textColor={AppColors.textDark}
-						fontSize={FontSize._16}
-						fontFamily={Fonts.MEDIUM}
-						buttonLabel={'Save'}
-						onClick={handleSave}
-					/>
-				)}
+				{/* {!isVerified && ( */}
+				<AppButton
+					top={AppMargin._20}
+					textColor={AppColors.textDark}
+					fontSize={FontSize._16}
+					fontFamily={Fonts.MEDIUM}
+					buttonLabel={'Save'}
+					onClick={handleSave}
+				/>
+				{/* )} */}
 				<AppLoader isLoading={isLoading} />
 			</View>
 		</MainContainer>
