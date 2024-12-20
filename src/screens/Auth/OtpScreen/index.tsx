@@ -80,7 +80,7 @@ const OtpScreen = (props: any) => {
 
 					<View style={{ marginTop: AppMargin._20, flexDirection: 'row' }}>
 						<AppText fontFamily={Fonts.REGULAR} label={`A code has been sent to `} />
-						<AppText fontFamily={Fonts.BOLD} label={`Email Id /Phone Number.`} />
+						<AppText fontFamily={Fonts.BOLD} label={`Phone Number.`} />
 					</View>
 
 					<AppOtpView
@@ -129,6 +129,7 @@ const createStyles = (AppColors: Theme) => {
 			flex: 1,
 			backgroundColor: AppColors.background,
 			paddingHorizontal: 20,
+			paddingBottom: 20,
 		},
 		bottomContainer: {
 			justifyContent: 'center',

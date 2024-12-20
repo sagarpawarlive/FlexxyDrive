@@ -93,6 +93,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('release.keystore')
+            storePassword 'flexxyDrive'
+            keyAlias 'flexxyDrive'
+            keyPassword 'flexxyDrive'
+        }
     }
     buildTypes {
         debug {
@@ -104,7 +110,7 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            debuggable true // Enable debugging for release builds
+            // debuggable true // Enable debugging for release builds
         }
     }
 }
