@@ -11,6 +11,7 @@ import { useTheme } from '../../../theme/ThemeProvider';
 import { Theme } from '../../../types';
 import { Fonts, FontSize } from '../../../assets/fonts';
 import { App_Permission } from '../../../services/Permissions';
+import { isIOS } from '../../../constants/constants';
 
 const IntroScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -39,7 +40,11 @@ const IntroScreen = (props: any) => {
 					<Image resizeMode="contain" source={Images.imgSplash} />
 				</View>
 
-				<View style={[styles.bottomContainer, { backgroundColor: AppColors.background }]}>
+				<View
+					style={[
+						styles.bottomContainer,
+						{ backgroundColor: AppColors.background, paddingBottom: isIOS ? 0 : 20 },
+					]}>
 					<View style={styles.welcomeTextContainer}>
 						<AppText fontFamily={Fonts.BOLD} fontSize={FontSize._24} title="Welcome to FlexxyDrive" />
 					</View>

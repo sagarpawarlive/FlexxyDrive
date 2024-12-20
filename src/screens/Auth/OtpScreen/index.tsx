@@ -26,6 +26,7 @@ const OtpScreen = (props: any) => {
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 	const [otpValue, setOtpValue] = useState('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [enableResend, setEnableResend] = useState(true);
 
 	const onBackPress = () => {
 		props.navigation.goBack();
@@ -46,6 +47,27 @@ const OtpScreen = (props: any) => {
 			_showToast(response?.message, 'error');
 		}
 		setIsLoading(false);
+	};
+
+	const resentOtp = async () => {
+		if (enableResend) {
+			setEnableResend(false);
+			const responseOtp: any = await APIMethods.post(
+				ENDPOINT.SEND_SMS_OTP,
+				{
+					phoneNumber: otpNumber,
+				},
+				[],
+			);
+
+			if (responseOtp?.message) {
+				_showToast(responseOtp.message, 'info');
+			}
+
+			setTimeout(() => {
+				setEnableResend(true);
+			}, 15000);
+		}
 	};
 
 	return (
@@ -69,10 +91,10 @@ const OtpScreen = (props: any) => {
 
 					<View style={styles.bottomContainer}>
 						<AppText fontSize={FontSize._16} fontFamily={Fonts.REGULAR} label={`Don't receive a code?`} />
-						<Pressable onPress={() => alert('resent!!')}>
+						<Pressable onPress={resentOtp}>
 							<AppText
 								left={5}
-								textColor={AppColors.primary}
+								textColor={enableResend ? AppColors.primary : 'gray'}
 								fontSize={FontSize._16}
 								fontFamily={Fonts.MEDIUM}
 								label={`Resend`}

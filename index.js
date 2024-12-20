@@ -11,7 +11,7 @@ import amplifyconfig from './src/amplifyconfiguration.json';
 Amplify.configure(amplifyconfig);
 
 if (__DEV__) {
-    require("./ReactotronConfig");
+	require('./ReactotronConfig');
 }
 
 AppRegistry.registerComponent(appName, () => App);

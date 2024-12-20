@@ -278,19 +278,17 @@ const DriverInformation = (props: any) => {
 							onBlur={handleBlur('lastName')}
 							showError={touched.lastName && errors.lastName}
 						/>
-
-						<AppTextInput
-							editable={false}
-							// height={AppHeight._50}
-							borderBottomWidth={1}
-							placeholder="DOB"
-							value={date ? moment(date).format('DD-MM-YYYY') : ''}
-							iconRight={Icons.icnCalender}
-							texInputProps={{
-								onPress: toggleModal,
-							}}
-						/>
-
+						<Pressable onPress={toggleModal}>
+							<AppTextInput
+								editable={false}
+								// height={AppHeight._50}
+								borderBottomWidth={1}
+								placeholder="DOB"
+								value={date ? moment(date).format('DD-MM-YYYY') : ''}
+								iconRight={Icons.icnCalender}
+								iconRightClick={toggleModal}
+							/>
+						</Pressable>
 						<View style={styles.radioButtonsContainer}>
 							<AppText fontSize={FontSize._16} title="Gender" />
 							<RadioGroup
@@ -421,16 +419,17 @@ const DriverInformation = (props: any) => {
 							icon={Icons.icnBack}
 						/>
 					</View>
-
-					<AppButton
-						top={AppMargin._20}
-						textColor={AppColors.textDark}
-						fontSize={FontSize._16}
-						fontFamily={Fonts.MEDIUM}
-						position="end"
-						buttonLabel={'Verify'}
-						onClick={handleSubmit}
-					/>
+					<View style={{ marginBottom: 10 }}>
+						<AppButton
+							top={AppMargin._20}
+							textColor={AppColors.textDark}
+							fontSize={FontSize._16}
+							fontFamily={Fonts.MEDIUM}
+							position="end"
+							buttonLabel={'Verify'}
+							onClick={handleSubmit}
+						/>
+					</View>
 				</AppScrollView>
 			</View>
 
@@ -446,7 +445,6 @@ const DriverInformation = (props: any) => {
 			/>
 			<ImagePicker isVisible={isImagePickerVisible} onClose={toggleImageModal} title={'Select upload option'} />
 			<AddDocuments isVisible={isDocumentModalVisible} title={'Add Document'} onClose={toggleDocumentModal} />
-
 			<AppLoader isLoading={isLoading} />
 		</MainContainer>
 	);

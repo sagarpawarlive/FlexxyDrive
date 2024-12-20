@@ -4,7 +4,7 @@ import { uploadData } from '@aws-amplify/storage';
 import { ENDPOINT } from '../services/API/endpoints';
 import RNFS from 'react-native-fs';
 import { Buffer } from 'buffer';
-import ImagePicker from 'react-native-image-crop-picker';
+import { isIOS } from '../constants/constants';
 
 export const s3Upload = async (file: any, pathPrefix: string | null = 'public/flexxydrive/album') => {
 	const timestamp = Math.floor(new Date().getTime() / 1000);
@@ -28,17 +28,23 @@ export const s3Upload = async (file: any, pathPrefix: string | null = 'public/fl
 	}
 
 	const fileContent = await RNFS.readFile(processedFile.sourceURL, 'base64'); // Read as base64
-	console.log('[ / fileContent ] ------->', fileContent);
 	const cleanBase64 = fileContent.replace(/^data:image\/\w+;base64,/, '');
 	const base64Data = Buffer.from(cleanBase64, 'base64');
+	const options = isIOS
+		? {
+				contentType: 'image/jpeg', // Use JPEG as default content type
+				contentEncoding: 'base64',
+		  }
+		: {
+				contentType: file?.mime,
+		  };
 
 	try {
 		const result = await uploadData({
 			path: filePath,
 			data: base64Data,
 			options: {
-				contentType: 'image/jpeg', // Use JPEG as default content type
-				contentEncoding: 'base64',
+				...options,
 				onProgress: progress => {
 					const { transferredBytes, totalBytes } = progress;
 				},

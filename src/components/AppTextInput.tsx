@@ -53,7 +53,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 	icon,
 	tint,
 	iconRight,
-	iconRightClick,
+	iconRightClick = () => {},
 	inputMode,
 	borderColor,
 	onChangeText,
@@ -113,6 +113,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 						{...texInputProps}
 						onBlur={onBlur}
 					/>
+
 					{rightNode}
 				</View>
 				{iconRight && (

@@ -45,10 +45,10 @@ const AddDocuments = props => {
 	const renderItem = ({ item }) => (
 		<Pressable
 			onPress={() => {
-				// if (!isVerified) {
-				if (item.id === 2) openImagePicker('camera'); // Open camera for selfie
-				else openImagePicker('gallery'); // Open gallery for document
-				// }
+				if (!isVerified) {
+					if (item.id === 2) openImagePicker('camera'); // Open camera for selfie
+					else openImagePicker('gallery'); // Open gallery for document
+				}
 			}}
 			style={[
 				styles.listItem,
@@ -153,15 +153,12 @@ const AddDocuments = props => {
 			await apiPost(ENDPOINT.SET_DRIVER_INFO, params).then(res => {
 				setIsLoading(false);
 				if (res?.success) {
-					console.log(res, '<== res');
-
 					onclose();
 					_showToast('Driver Documents added successfully', 'success');
 				}
 			});
 		} catch (error) {
-			console.error('Error uploading files:', error);
-			alert('Error uploading files.');
+			_showToast('Error uploading files:', 'error');
 			setIsLoading(false);
 		}
 	};
@@ -207,16 +204,16 @@ const AddDocuments = props => {
 					/>
 				)}
 				{/* Save Button */}
-				{/* {!isVerified && ( */}
-				<AppButton
-					top={AppMargin._20}
-					textColor={AppColors.textDark}
-					fontSize={FontSize._16}
-					fontFamily={Fonts.MEDIUM}
-					buttonLabel={'Save'}
-					onClick={handleSave}
-				/>
-				{/* )} */}
+				{!isVerified && (
+					<AppButton
+						top={AppMargin._20}
+						textColor={AppColors.textDark}
+						fontSize={FontSize._16}
+						fontFamily={Fonts.MEDIUM}
+						buttonLabel={'Save'}
+						onClick={handleSave}
+					/>
+				)}
 				<AppLoader isLoading={isLoading} />
 			</View>
 		</MainContainer>

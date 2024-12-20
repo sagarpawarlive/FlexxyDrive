@@ -76,12 +76,13 @@ const SigninScreen = (props: any) => {
 			}
 		} catch (error: any) {
 			if (error.code == statusCodes.SIGN_IN_CANCELLED) {
-				console.log(error);
-			} else if (error.code == statusCodes.IN_PROGRESS) {
-				console.log(error);
-			} else if (error.code == statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-				console.log(error);
+				_showToast(error?.message, 'error');
+			} else if (error?.code == statusCodes.IN_PROGRESS) {
+				_showToast(error?.message, 'error');
+			} else if (error?.code == statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+				_showToast(error?.message, 'error');
 			} else {
+				_showToast(error?.message, 'error');
 			}
 		}
 	};

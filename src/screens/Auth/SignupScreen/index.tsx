@@ -83,28 +83,12 @@ const SignupScreen = (props: any) => {
 		}
 	};
 
-	const handlePress = (id: number) => {
-		switch (id) {
-			case 1:
-				googleLogin();
-				break;
-			case 2:
-				alert('Apple Icon Pressed');
-				break;
-			case 3:
-				alert('Facebook Icon Pressed');
-				break;
-			default:
-				break;
-		}
-	};
-
 	const validationSchema = Yup.object().shape({
 		username: Yup.string().required('Username  is required'),
 		firstName: Yup.string().required('First name is required'),
 		lastName: Yup.string().required('Last name is required'),
 		phone: Yup.string()
-			.matches(/^[0-9]{10}$/, 'Phone number must be 10 digits')
+			.matches(/^[0-9]{1,15}$/, 'Phone number must be 15 digits')
 			.required('Phone number is required'),
 		email: Yup.string().email('Enter valid Email address').required('Email is required'),
 		password: Yup.string()
@@ -129,7 +113,7 @@ const SignupScreen = (props: any) => {
 			confirmPassword: '',
 		},
 		validationSchema,
-		onSubmit: (values: any) => {
+		onSubmit: async (values: any) => {
 			const New_phone = `+${countryCallingCode}${values.phone}`;
 
 			//signup params
@@ -148,10 +132,9 @@ const SignupScreen = (props: any) => {
 			Keyboard.dismiss();
 
 			setIsLoading(true);
-			let res = apiSignup(params);
+			let res = await apiSignup(params);
 
 			// _showToast('You have received an OTP', 'success');
-			setIsLoading(false);
 		},
 	});
 
@@ -166,10 +149,13 @@ const SignupScreen = (props: any) => {
 				});
 				console.log('[ / {newUser}] ------->', newUser);
 				_showToast('You have received an OTP', 'success');
+			} else {
+				_showToast(responseOtp?.message, 'error');
 			}
 		} else {
 			_showToast(response?.message, 'error');
 		}
+		setIsLoading(false);
 	};
 
 	const renderFormField = (
@@ -180,7 +166,7 @@ const SignupScreen = (props: any) => {
 	) => (
 		<View style={{ marginTop: AppMargin._20 }}>
 			<AppTextInput
-				maxLength={fieldName === 'phone' ? 10 : undefined}
+				maxLength={fieldName === 'phone' ? 15 : undefined}
 				marginTop={AppMargin._5}
 				placeholder={placeholder}
 				value={values[fieldName]}
