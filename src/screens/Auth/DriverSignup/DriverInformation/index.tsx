@@ -75,12 +75,12 @@ const DriverInformation = (props: any) => {
 	const [selectedId, setSelectedId] = useState<any>();
 
 	useEffect(() => {
-		const unsubscribe = props.navigation.addListener('focus', () => {
-			api_getDriverInfo();
-		});
-		return () => {
-			unsubscribe();
-		};
+		// const unsubscribe = props.navigation.addListener('focus', () => {
+		api_getDriverInfo();
+		// });
+		// return () => {
+		// 	unsubscribe();
+		// };
 	}, [props.navigation]);
 
 	const api_getDriverInfo = async () => {
