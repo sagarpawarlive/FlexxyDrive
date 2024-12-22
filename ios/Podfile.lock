@@ -1385,6 +1385,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-date-picker (5.0.8):
+    - React-Core
   - react-native-fbsdk-next (13.3.0):
     - React-Core
     - react-native-fbsdk-next/Core (= 13.3.0)
@@ -1858,6 +1860,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
+  - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-fbsdk-next (from `../node_modules/react-native-fbsdk-next`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
@@ -2008,6 +2011,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
+  react-native-date-picker:
+    :path: "../node_modules/react-native-date-picker"
   react-native-fbsdk-next:
     :path: "../node_modules/react-native-fbsdk-next"
   react-native-get-random-values:
@@ -2161,6 +2166,7 @@ SPEC CHECKSUMS:
   React-logger: 8db32983d75dc2ad54f278f344ccb9b256e694fc
   React-Mapbuffer: db173bede5ac5cb1c82d4a6a8597477ba87c5648
   React-microtasksnativemodule: 0c1d7b6f26fbeae097279569cf2430255fa3d3a9
+  react-native-date-picker: 8a0d56cdef18f61945e6d0dfd250dc1b8e7a313e
   react-native-fbsdk-next: b430fc002cf9b8675b8688d43fe6eddd5ff4e029
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-netinfo: 40b91995cd49c33ae57996486db76f0af067b630
@@ -2209,8 +2215,8 @@ SPEC CHECKSUMS:
   RNScreens: de55b9d7de8a017d1588dcb70415492d0b0597c2
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
-  Yoga: c6584ec444ef4aee46e0575049f90cd2aab1e6ed
+  Yoga: 36d44f1d31d7c11be1067e5c7a70a12c2eed355c
 
 PODFILE CHECKSUM: b15e55130abb5e78430d019d9cac2cca9089bacb
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2

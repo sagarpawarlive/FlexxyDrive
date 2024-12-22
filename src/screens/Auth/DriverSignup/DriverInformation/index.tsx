@@ -52,21 +52,25 @@ const DriverInformation = (props: any) => {
 	const [driverInfoRes, setDriverInfoRes] = useState<any>(null);
 	// console.log('[ / driverInfoRes ] ------->', driverInfoRes);
 
+	const radioDesigns = {
+		borderColor: AppColors.primary,
+		color: AppColors.primary,
+		labelStyle: { color: AppColors.white },
+	};
+
 	const radioButtons = useMemo(
 		() => [
 			{
 				id: '1', // acts as primary key, should be unique and non-empty string
 				label: 'Male',
 				value: 'male',
-				borderColor: AppColors.white,
-				labelStyle: { color: AppColors.white },
+				...radioDesigns,
 			},
 			{
 				id: '2',
 				label: 'Female',
 				value: 'female',
-				borderColor: AppColors.white,
-				labelStyle: { color: AppColors.white },
+				...radioDesigns,
 			},
 		],
 		[],
@@ -182,12 +186,12 @@ const DriverInformation = (props: any) => {
 
 		setIsLoading(false);
 
-		/* 
+		/*
 				const verifyDocument = {
-					
+
 				}
 				await apiPost(ENDPOINT.VERIFY_DOCUMENT, verifyDocument).then(res => { })
-		
+
 		*/
 	};
 	// Country picker change handler

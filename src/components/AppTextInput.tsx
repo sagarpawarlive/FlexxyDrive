@@ -29,7 +29,7 @@ interface AppTextInputProps {
 	secureTextEntry?: boolean;
 	onChangeText?: (text: string) => void;
 	marginTop?: number; // Allow customizing marginTop
-	onBlur?: () => void;
+	onBlur?: (event: any) => void;
 	borderColor?: string;
 	showError?: any;
 	borderWidth?: number;

@@ -51,11 +51,30 @@ const AddMobileNumber = (props: any) => {
 			userId: userId,
 			phoneNumber: New_phone,
 		};
+
+		const otpParams: any = {
+			phoneNumber: New_phone,
+		};
 		setIsLoading(true);
 		const response: any = await APIMethods.post(ENDPOINT.ADD_PHONE_NUMBER, params, []);
-		_showToast(response?.message, response?.user ? 'success' : 'error');
-		if (response?.user) props.navigation.navigate(NavigationKeys.FinalUser);
-		dispatch(setUserData(response));
+		// _showToast(response?.message, response?.user ? 'success' : 'error');
+		// if (response?.user) props.navigation.navigate(NavigationKeys.FinalUser);
+
+		if (response?.token?.length > 0) {
+			const responseOtp: any = await APIMethods.post(ENDPOINT.SEND_SMS_OTP, otpParams, []);
+			if (responseOtp?.statusCode == 200) {
+				props.navigation.navigate(NavigationKeys.OtpScreen, {
+					phone: New_phone,
+					newUser: response,
+				});
+				_showToast('You have received an OTP', 'success');
+			} else {
+				_showToast(responseOtp?.message, 'error');
+			}
+		} else {
+			_showToast(response?.message, 'error');
+		}
+		// dispatch(setUserData(response));
 		setIsLoading(false);
 	};
 
@@ -80,7 +99,7 @@ const AddMobileNumber = (props: any) => {
 						returnKeyLabel="Done"
 						returnKeyType="done"
 						marginTop={AppMargin._40}
-						maxLength={10}
+						maxLength={15}
 						placeholder={'Phone Number'}
 						value={values.phone}
 						inputMode={'numeric'}
