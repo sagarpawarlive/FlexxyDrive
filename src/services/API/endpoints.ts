@@ -17,6 +17,7 @@ export const ENDPOINT = {
 	//Drivers
 	SET_DRIVER_INFO: '/api/driver/info', //post
 	GET_DRIVER_INFO: '/api/driver/info', //get
+	GET_PROFILE_INFO: '/auth/profile', //get
 	UPDATE_DRIVER_INFO: '/api/driver/info', //put
 	DELETE_DRIVER_INFO: '/api/driver/info', //delete
 

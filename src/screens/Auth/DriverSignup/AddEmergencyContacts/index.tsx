@@ -36,7 +36,7 @@ const AddEmergencyContacts = (props: any) => {
 
 	useEffect(() => {
 		setContactList(emergencyContacts);
-	}, [emergencyContacts]);
+	}, []);
 
 	const handleSaveContact = async newContact => {
 		setContactList(prevContacts => {

@@ -59,8 +59,8 @@ const AddMobileNumber = (props: any) => {
 		const response: any = await APIMethods.post(ENDPOINT.ADD_PHONE_NUMBER, params, []);
 		// _showToast(response?.message, response?.user ? 'success' : 'error');
 		// if (response?.user) props.navigation.navigate(NavigationKeys.FinalUser);
-
-		if (response?.token?.length > 0) {
+		// console.log('[ /Add phone response ] ------->', response);
+		if (response?.user?.id) {
 			const responseOtp: any = await APIMethods.post(ENDPOINT.SEND_SMS_OTP, otpParams, []);
 			if (responseOtp?.statusCode == 200) {
 				props.navigation.navigate(NavigationKeys.OtpScreen, {

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Fonts, FontSize } from '../../../../assets/fonts';
@@ -17,14 +17,13 @@ import { Icons } from '../../../../assets/Icons';
 import AppScrollView from '../../../../components/AppScrollView';
 import AppDriverButtons from '../../../../components/AppDriverButtons';
 import { NavigationKeys } from '../../../../constants/navigationKeys';
-import { Calendar } from 'react-native-calendars';
 import AppCalender from '../../../../subviews/AppCalender';
 import DriverPrefs from '../../../../subviews/DriverPrefs';
 import ImagePicker from '../../../../subviews/imagePicker';
 import AddDocuments from '../../../../subviews/AddDocuments';
 import CountryPicker, { Flag } from 'react-native-country-picker-modal';
 import AppLoader from '../../../../components/AppLoader';
-import { apiPost } from '../../../../services/API/apiServices';
+import { apiGet, apiPost } from '../../../../services/API/apiServices';
 import { ENDPOINT } from '../../../../services/API/endpoints';
 import RadioGroup from 'react-native-radio-buttons-group';
 import moment from 'moment';
@@ -41,7 +40,6 @@ const DriverInformation = (props: any) => {
 	const [isImagePickerVisible, setIsImagePickerVisible] = useState(false);
 	const [isDocumentModalVisible, setIsDocumentModalVisible] = useState(false);
 
-	const [countryCode, setCountryCode] = useState('+91');
 	const [selectedCountry, setSelectedCountry] = useState('IN');
 	const [showCountryPicker, setShowCountryPicker] = useState(false);
 	const [countryName, setCountryName] = useState('India');
@@ -51,6 +49,22 @@ const DriverInformation = (props: any) => {
 
 	const [driverInfoRes, setDriverInfoRes] = useState<any>(null);
 	// console.log('[ / driverInfoRes ] ------->', driverInfoRes);
+	const {
+		firstName,
+		lastName,
+		city,
+		postCode,
+		street,
+		streetNumber,
+		dob,
+		country,
+		countryCode,
+		gender,
+		documents,
+		guarantor,
+		carDetails,
+		preferences,
+	} = driverInfoRes?.driverInfo ?? {};
 
 	const radioDesigns = {
 		borderColor: AppColors.primary,
@@ -92,7 +106,8 @@ const DriverInformation = (props: any) => {
 			token: userData?.token,
 		};
 		setIsLoading(true);
-		const response = await apiPost(ENDPOINT.GET_DRIVER_INFO, params);
+		const response = await apiGet(ENDPOINT.GET_PROFILE_INFO, '', params);
+		console.log('[ / response / GET_PROFILE_INFO ] ------->', response);
 		setDriverInfoRes(response.data);
 		setIsLoading(false);
 	};
@@ -100,18 +115,18 @@ const DriverInformation = (props: any) => {
 	useEffect(() => {
 		if (driverInfoRes) {
 			setValues({
-				firstName: driverInfoRes.firstName,
-				lastName: driverInfoRes.lastName,
-				city: driverInfoRes.city,
-				postCode: driverInfoRes.postCode,
-				street: driverInfoRes.street,
-				streetNumber: driverInfoRes.streetNumber,
+				firstName: firstName ?? '',
+				lastName: lastName ?? '',
+				city: city ?? '',
+				postCode: postCode ?? '',
+				street: street ?? '',
+				streetNumber: streetNumber ?? '',
 			});
 
-			setDate(driverInfoRes?.dob ?? '');
-			setCountryName(driverInfoRes?.country ?? '');
-			setSelectedCountry(driverInfoRes?.countryCode ?? '');
-			setSelectedId(driverInfoRes?.gender == 'Male' ? '1' : driverInfoRes?.gender == 'Female' ? '2' : '');
+			setDate(dob ?? '');
+			setCountryName(country ?? '');
+			setSelectedCountry(countryCode ?? '');
+			setSelectedId(gender == 'Male' ? '1' : gender == 'Female' ? '2' : '');
 		}
 	}, [driverInfoRes]);
 
@@ -225,6 +240,13 @@ const DriverInformation = (props: any) => {
 		console.log('Date selected:', date);
 	};
 
+	const firstNameRef = useRef<any>(null);
+	const lastNameRef = useRef<any>(null);
+	const cityRef = useRef<any>(null);
+	const postCodeRef = useRef<any>(null);
+	const streetRef = useRef<any>(null);
+	const streetNumberRef = useRef<any>(null);
+
 	return (
 		<MainContainer hideTop>
 			<View style={[styles.innerMainContainer, { paddingTop: AppMargin._30 }]}>
@@ -250,15 +272,13 @@ const DriverInformation = (props: any) => {
 					<View style={styles.profileSubContainer}>
 						<Image
 							source={
-								driverInfoRes?.documents?.driverImage
-									? { uri: driverInfoRes?.documents?.driverImage }
-									: Images.imgDriverPlaceholder
+								documents?.driverImage ? { uri: documents?.driverImage } : Images.imgDriverPlaceholder
 							}
 							style={{ height: AppHeight._175, width: AppHeight._175, borderRadius: 100 }}
 						/>
-						<Pressable onPress={() => {}} style={{ position: 'absolute', bottom: 0, right: 0 }}>
+						{/* <Pressable onPress={() => {}} style={{ position: 'absolute', bottom: 0, right: 0 }}>
 							<Image source={Icons.icnProfilePicker} style={{}} />
-						</Pressable>
+						</Pressable> */}
 					</View>
 				</View>
 
@@ -370,7 +390,7 @@ const DriverInformation = (props: any) => {
 						<AppDriverButtons
 							onClick={() =>
 								props.navigation.navigate(NavigationKeys.AddDocuments, {
-									driverDocuments: driverInfoRes,
+									driverDocuments: driverInfoRes?.driverInfo,
 								})
 							}
 							rotate={'0deg'}
@@ -385,7 +405,7 @@ const DriverInformation = (props: any) => {
 							icon={Icons.icnBack}
 							onClick={() => {
 								props.navigation.navigate(NavigationKeys.NextOfKin, {
-									driverInfoRes: driverInfoRes?.guarantor,
+									driverInfoRes: guarantor,
 								});
 							}}
 						/>
@@ -399,7 +419,7 @@ const DriverInformation = (props: any) => {
 						<AppDriverButtons
 							onClick={() =>
 								props.navigation.navigate(NavigationKeys.AddCarDetails, {
-									AllCarDetails: driverInfoRes?.carDetails,
+									AllCarDetails: carDetails,
 								})
 							}
 							buttonLabel="Add Car"
@@ -415,7 +435,7 @@ const DriverInformation = (props: any) => {
 						<AppDriverButtons
 							onClick={() =>
 								props.navigation.navigate(NavigationKeys.AddEmergencyContacts, {
-									driverInfos: driverInfoRes,
+									driverInfos: driverInfoRes?.driverInfo,
 								})
 							}
 							buttonLabel="Emergency Contacts"
@@ -439,7 +459,7 @@ const DriverInformation = (props: any) => {
 
 			<AppCalender isVisible={isCalenderVisible} onClose={toggleModal} onDateSelect={handleDateSelect} />
 			<DriverPrefs
-				data={driverInfoRes?.preferences}
+				data={preferences}
 				onClose={() => {
 					setIsPrefModalVisible(false);
 					api_getDriverInfo();

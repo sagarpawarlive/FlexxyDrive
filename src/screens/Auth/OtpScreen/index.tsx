@@ -42,7 +42,7 @@ const OtpScreen = (props: any) => {
 		const response: any = await APIMethods.post(ENDPOINT.VERIFY_OTP, params);
 		if (response.statusCode == 200) {
 			props.navigation.navigate(NavigationKeys.FinalUser);
-			dispatch(setUserData(newUser));
+			dispatch(setUserData(response));
 		} else {
 			_showToast(response?.message, 'error');
 		}

@@ -18,6 +18,7 @@ import { Icons } from '../assets/Icons';
 
 interface AppTextInputProps {
 	value?: string;
+	ref?: any;
 	placeholder?: string;
 	maxLength?: number;
 	editable?: boolean;
@@ -42,10 +43,13 @@ interface AppTextInputProps {
 	texInputProps?: TextInputProps;
 	returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send';
 	returnKeyLabel?: string;
+	onSubmitEditing?: () => void;
 }
 
 const AppTextInput: React.FC<AppTextInputProps> = ({
 	value,
+	ref,
+	onSubmitEditing,
 	secureTextEntry,
 	placeholder,
 	maxLength,
@@ -98,6 +102,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 					{icon && <Image style={styles.icon} source={icon} />}
 					{leftNode}
 					<TextInput
+						ref={ref}
 						secureTextEntry={secureTextEntry}
 						placeholderTextColor={AppColors.placeholder}
 						value={value}
@@ -112,6 +117,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 						returnKeyType={returnKeyType}
 						{...texInputProps}
 						onBlur={onBlur}
+						onSubmitEditing={onSubmitEditing}
 					/>
 
 					{rightNode}
