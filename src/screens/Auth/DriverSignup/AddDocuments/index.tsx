@@ -17,6 +17,8 @@ import { _showToast } from '../../../../services/UIs/ToastConfig';
 import { generateUniqueFileName, isIOS } from '../../../../constants/constants';
 import RNFS from 'react-native-fs';
 import { App_Permission } from '../../../../services/Permissions';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserState } from '../../../../store/reducers/userdataSlice';
 
 const { height } = Dimensions.get('window');
 
@@ -27,8 +29,9 @@ const AddDocumentsOptions = [
 
 const AddDocuments = props => {
 	const { AppColors } = useTheme();
-	const { documents, isVerified } = props?.route?.params?.driverDocuments ?? null;
-
+	const { documents = {}, isVerified } = props?.route?.params?.driverDocuments ?? null;
+	const dispatch = useDispatch();
+	const userData = useSelector(state => state.userDataSlice.userData.user);
 	// State to handle selected driving license and captured image
 	const [selectedDrivingLicence, setSelectedDrivingLicence] = useState(
 		{ path: documents?.drivingLicense, isFile: false } ?? null,
@@ -154,6 +157,11 @@ const AddDocuments = props => {
 				setIsLoading(false);
 				if (res?.success) {
 					onclose();
+					dispatch(
+						updateUserState({
+							driverInfo: { ...res?.data },
+						}),
+					);
 					_showToast('Driver Documents added successfully', 'success');
 				}
 			});

@@ -1,6 +1,6 @@
 import { CommonActions, NavigationContainer } from '@react-navigation/native';
 import { NativeStackNavigationOptions, createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import I18n from 'react-native-i18n';
 import { useSelector } from 'react-redux';
 import SplashScreen from '../screens/SplashScreen';
@@ -9,6 +9,7 @@ import AuthNavigator from './AuthNavigator';
 import BottomTabNavigation from './BottomTabNavigator';
 import StarterScreen from '../screens/StarterScreen';
 import FinalUser from '../screens/Auth/FinalUser';
+import { navigationRef } from '../utils/navigationUtils';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,7 +19,7 @@ const RootNavigation: React.FC = (props: any) => {
 	I18n.locale = commonData.localize;
 
 	return (
-		<NavigationContainer>
+		<NavigationContainer ref={navigationRef}>
 			<Stack.Navigator
 				initialRouteName={NavigationKeys.SplashScreen}
 				screenOptions={{ headerShown: false, gestureEnabled: false }}>

@@ -9,7 +9,7 @@ interface userDataSliceState {
 }
 
 const initialState: userDataSliceState = {
-	userData: [],
+	userData: {},
 	isLogin: false,
 	localize: 'en',
 	isDarkMode: false,
@@ -43,10 +43,19 @@ const userDataSlice = createSlice({
 		logout: state => {
 			state.userData = {};
 		},
+		updateUserState: (state, action) => {
+			state.userData = {
+				...state.userData,
+				user: {
+					...state.userData.user,
+					...action?.payload,
+				},
+			};
+		},
 	},
 });
 
-export const { setUserData, setLocalize, setIsLogin, setIsDarkMode, setIsThemeSystemSetting, logout } =
+export const { setUserData, setLocalize, setIsLogin, setIsDarkMode, setIsThemeSystemSetting, logout, updateUserState } =
 	userDataSlice.actions;
 
 export default userDataSlice.reducer;

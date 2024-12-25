@@ -10,12 +10,16 @@ import { AllCenter, AppMargin, borderRadius10 } from '../constants/commonStyle';
 import AppButton from '../components/AppButton';
 import { apiPost } from '../services/API/apiServices';
 import { ENDPOINT } from '../services/API/endpoints';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserState } from '../store/reducers/userdataSlice';
+import { _showToast } from '../services/UIs/ToastConfig';
 
 const { height } = Dimensions.get('window');
 
 const DriverPrefs = ({ isVisible, onClose, title, data }: any) => {
 	const { AppColors } = useTheme();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const dispatch = useDispatch();
 
 	// Preferences structure with initial values
 	const initialSwitchData = {
@@ -53,7 +57,15 @@ const DriverPrefs = ({ isVisible, onClose, title, data }: any) => {
 
 		setIsLoading(true);
 		try {
-			await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
+			const response = await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
+			if (response?.success) {
+				const { data = {} } = response ?? {};
+
+				dispatch(updateUserState({ driverInfo: { ...response?.data } }));
+				_showToast('Preferences Updated Successfully', 'success');
+			} else {
+				_showToast(response?.message, 'error');
+			}
 		} catch (error) {
 			console.error('Failed to update driver info:', error);
 		} finally {

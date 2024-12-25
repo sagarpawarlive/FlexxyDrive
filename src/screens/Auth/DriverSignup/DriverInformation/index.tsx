@@ -28,35 +28,21 @@ import { ENDPOINT } from '../../../../services/API/endpoints';
 import RadioGroup from 'react-native-radio-buttons-group';
 import moment from 'moment';
 import { _showToast } from '../../../../services/UIs/ToastConfig';
+import { logout, setUserData, updateUserState } from '../../../../store/reducers/userdataSlice';
 
 const DriverInformation = (props: any) => {
 	const dispatch = useDispatch();
-	const { isDarkMode, toggleTheme, AppColors } = useTheme();
-	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
-
-	const [date, setDate] = useState('');
-	const [isCalenderVisible, setIsCalenderVisible] = useState(false);
-	const [isPrefModalVisible, setIsPrefModalVisible] = useState(false);
-	const [isImagePickerVisible, setIsImagePickerVisible] = useState(false);
-	const [isDocumentModalVisible, setIsDocumentModalVisible] = useState(false);
-
-	const [selectedCountry, setSelectedCountry] = useState('IN');
-	const [showCountryPicker, setShowCountryPicker] = useState(false);
-	const [countryName, setCountryName] = useState('India');
-
-	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { userData } = useSelector((state: any) => state.userDataSlice);
-
-	const [driverInfoRes, setDriverInfoRes] = useState<any>(null);
-	// console.log('[ / driverInfoRes ] ------->', driverInfoRes);
+	const userDataSlice = useSelector(state => state?.userDataSlice ?? {});
+	const { userData } = userDataSlice ?? {};
+	const { firstName: fName, lastName: lName, username, phoneNumber, email, driverInfo = {} } = userData?.user ?? {};
 	const {
-		firstName,
-		lastName,
+		firstName = fName,
+		lastName = lName,
 		city,
 		postCode,
 		street,
 		streetNumber,
-		dob,
+		dob = '',
 		country,
 		countryCode,
 		gender,
@@ -64,7 +50,26 @@ const DriverInformation = (props: any) => {
 		guarantor,
 		carDetails,
 		preferences,
-	} = driverInfoRes?.driverInfo ?? {};
+		isVerified,
+	} = driverInfo ?? {};
+
+	const { AppColors } = useTheme();
+	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
+	const [date, setDate] = useState(dob);
+	const [isCalenderVisible, setIsCalenderVisible] = useState(false);
+	const [isPrefModalVisible, setIsPrefModalVisible] = useState(false);
+	const [isImagePickerVisible, setIsImagePickerVisible] = useState(false);
+	const [isDocumentModalVisible, setIsDocumentModalVisible] = useState(false);
+	const [selectedId, setSelectedId] = useState<any>(gender == 'Male' ? '1' : gender == 'Female' ? '2' : '');
+
+	const [selectedCountry, setSelectedCountry] = useState(countryCode);
+	const [showCountryPicker, setShowCountryPicker] = useState(false);
+	const [countryName, setCountryName] = useState(country);
+
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+
+	const [driverInfoRes, setDriverInfoRes] = useState<any>(null);
+	console.log('[ / driverInfoRes ] ------->', driverInfoRes);
 
 	const radioDesigns = {
 		borderColor: AppColors.primary,
@@ -89,9 +94,6 @@ const DriverInformation = (props: any) => {
 		],
 		[],
 	);
-
-	const [selectedId, setSelectedId] = useState<any>();
-
 	useEffect(() => {
 		// const unsubscribe = props.navigation.addListener('focus', () => {
 		api_getDriverInfo();
@@ -105,40 +107,28 @@ const DriverInformation = (props: any) => {
 		const params = {
 			token: userData?.token,
 		};
+
 		setIsLoading(true);
 		const response = await apiGet(ENDPOINT.GET_PROFILE_INFO, '', params);
-		console.log('[ / response / GET_PROFILE_INFO ] ------->', response);
-		setDriverInfoRes(response.data);
-		setIsLoading(false);
-	};
-
-	useEffect(() => {
-		if (driverInfoRes) {
-			setValues({
-				firstName: firstName ?? '',
-				lastName: lastName ?? '',
-				city: city ?? '',
-				postCode: postCode ?? '',
-				street: street ?? '',
-				streetNumber: streetNumber ?? '',
-			});
-
-			setDate(dob ?? '');
-			setCountryName(country ?? '');
-			setSelectedCountry(countryCode ?? '');
-			setSelectedId(gender == 'Male' ? '1' : gender == 'Female' ? '2' : '');
+		if (response?.success) {
+			setDriverInfoRes(response.data);
+			setIsLoading(false);
+			dispatch(updateUserState({ ...response?.data }));
+		} else {
+			setIsLoading(false);
+			_showToast(response.message, 'error');
 		}
-	}, [driverInfoRes]);
+	};
 
 	// Form states using Formik
 	const { values, errors, touched, handleChange, handleBlur, handleSubmit, setValues } = useFormik({
 		initialValues: {
-			firstName: '',
-			lastName: '',
-			city: '',
-			postCode: '',
-			street: '',
-			streetNumber: '',
+			firstName: firstName,
+			lastName: lastName,
+			city: city,
+			postCode: postCode,
+			street: street,
+			streetNumber: streetNumber,
 		},
 		validationSchema: Yup.object({
 			firstName: Yup.string().required('First name is required'),
@@ -179,12 +169,12 @@ const DriverInformation = (props: any) => {
 
 		if (res?.success) {
 			_showToast(res?.message, 'success');
-
+			dispatch(updateUserState({ driverInfo: { ...res.data } }));
 			if (res?.data?.documents) {
 				if (
 					res?.data?.documents?.drivingLicense?.length > 0 &&
 					res?.data?.documents?.driverImage?.length > 0 &&
-					!driverInfoRes?.isVerified
+					!isVerified
 				) {
 					const verifyDocumentParams = {
 						selfie: res?.data?.documents?.driverImage,
@@ -302,7 +292,7 @@ const DriverInformation = (props: any) => {
 							onBlur={handleBlur('lastName')}
 							showError={touched.lastName && errors.lastName}
 						/>
-						<Pressable onPress={toggleModal}>
+						<TouchableOpacity onPress={toggleModal}>
 							<AppTextInput
 								editable={false}
 								// height={AppHeight._50}
@@ -312,7 +302,7 @@ const DriverInformation = (props: any) => {
 								iconRight={Icons.icnCalender}
 								iconRightClick={toggleModal}
 							/>
-						</Pressable>
+						</TouchableOpacity>
 						<View style={styles.radioButtonsContainer}>
 							<AppText fontSize={FontSize._16} title="Gender" />
 							<RadioGroup
@@ -390,7 +380,7 @@ const DriverInformation = (props: any) => {
 						<AppDriverButtons
 							onClick={() =>
 								props.navigation.navigate(NavigationKeys.AddDocuments, {
-									driverDocuments: driverInfoRes?.driverInfo,
+									driverDocuments: driverInfoRes?.driverInfo ?? {},
 								})
 							}
 							rotate={'0deg'}
@@ -405,7 +395,7 @@ const DriverInformation = (props: any) => {
 							icon={Icons.icnBack}
 							onClick={() => {
 								props.navigation.navigate(NavigationKeys.NextOfKin, {
-									driverInfoRes: guarantor,
+									driverInfoRes: guarantor ?? {},
 								});
 							}}
 						/>
@@ -419,7 +409,7 @@ const DriverInformation = (props: any) => {
 						<AppDriverButtons
 							onClick={() =>
 								props.navigation.navigate(NavigationKeys.AddCarDetails, {
-									AllCarDetails: carDetails,
+									AllCarDetails: carDetails ?? {},
 								})
 							}
 							buttonLabel="Add Car"
@@ -462,7 +452,7 @@ const DriverInformation = (props: any) => {
 				data={preferences}
 				onClose={() => {
 					setIsPrefModalVisible(false);
-					api_getDriverInfo();
+					// api_getDriverInfo();
 				}}
 				isVisible={isPrefModalVisible}
 				title={'Select Preferences'}
