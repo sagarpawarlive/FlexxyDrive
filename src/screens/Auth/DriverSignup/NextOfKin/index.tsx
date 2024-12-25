@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, Alert } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Fonts, FontSize } from '../../../../assets/fonts';
 import { Icons } from '../../../../assets/Icons';
 import AppButton from '../../../../components/AppButton';
@@ -19,6 +19,8 @@ import { apiPost } from '../../../../services/API/apiServices';
 import { ENDPOINT } from '../../../../services/API/endpoints';
 import AppLoader from '../../../../components/AppLoader';
 import { _showToast } from '../../../../services/UIs/ToastConfig';
+import { updateUserState } from '../../../../store/reducers/userdataSlice';
+import moment from 'moment';
 
 const NextOfKin = (props: any) => {
 	const dispatch = useDispatch();
@@ -26,6 +28,9 @@ const NextOfKin = (props: any) => {
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 
 	const next_Kin = props?.route?.params?.driverInfoRes;
+
+	const userDetails = useSelector((state: any) => state?.userDataSlice.userData ?? {});
+	const nextOfKinData = userDetails?.user?.driverInfo?.guarantor ?? {};
 
 	const [isCalenderVisible, setIsCalenderVisible] = useState(false);
 	const [date, setDate] = useState('');
@@ -56,29 +61,20 @@ const NextOfKin = (props: any) => {
 	};
 
 	useEffect(() => {
-		setValues({
-			fullName: next_Kin?.name,
-			phoneNumber: next_Kin?.phoneNumber,
-			email: next_Kin?.email,
-			city: next_Kin?.city,
-			postalCode: next_Kin?.postCode,
-			street: next_Kin?.street,
-			streetNumber: next_Kin?.streetNumber,
-		});
-		setDate(next_Kin?.dob);
-		setCountryName(next_Kin?.country);
+		setDate(nextOfKinData?.dob ?? '');
+		setCountryName(nextOfKinData.country ?? '');
 	}, []);
 
 	// Formik setup
 	const { values, errors, touched, handleChange, handleBlur, handleSubmit, setValues } = useFormik({
 		initialValues: {
-			fullName: '',
-			phoneNumber: '',
-			email: '',
-			city: '',
-			postalCode: '',
-			street: '',
-			streetNumber: '',
+			fullName: nextOfKinData?.name ?? '',
+			phoneNumber: nextOfKinData?.phoneNumber ?? '',
+			email: nextOfKinData?.email ?? '',
+			city: nextOfKinData?.city ?? '',
+			postalCode: nextOfKinData?.postCode ?? '',
+			street: nextOfKinData?.street ?? '',
+			streetNumber: nextOfKinData?.streetNumber ?? '',
 		},
 		validationSchema: Yup.object({
 			fullName: Yup.string().required('Full name is required'),
@@ -117,6 +113,7 @@ const NextOfKin = (props: any) => {
 			if (res.success) {
 				_showToast('Next of Kin details saved successfully', 'success');
 				props.navigation.goBack(); // Or navigate to the next screen
+				dispatch(updateUserState({ driverInfo: { ...res?.data } }));
 			} else {
 				_showToast('Failed to save details', 'error');
 			}
@@ -166,7 +163,7 @@ const NextOfKin = (props: any) => {
 							showError={touched.email && errors.email}
 						/>
 						<AppTextInput
-							value={date}
+							value={date ? moment(date).format('DD-MM-YYYY') : ''}
 							editable={false}
 							placeholder="DOB"
 							iconRight={Icons.icnCalender}

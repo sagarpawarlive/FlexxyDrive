@@ -69,7 +69,13 @@ const DriverInformation = (props: any) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const [driverInfoRes, setDriverInfoRes] = useState<any>(null);
-	console.log('[ / driverInfoRes ] ------->', driverInfoRes);
+
+	const firstNameRef = useRef<any>(null);
+	const lastNameRef = useRef<any>(null);
+	const cityRef = useRef<any>(null);
+	const postCodeRef = useRef<any>(null);
+	const streetRef = useRef<any>(null);
+	const streetNumberRef = useRef<any>(null);
 
 	const radioDesigns = {
 		borderColor: AppColors.primary,
@@ -112,8 +118,8 @@ const DriverInformation = (props: any) => {
 		const response = await apiGet(ENDPOINT.GET_PROFILE_INFO, '', params);
 		if (response?.success) {
 			setDriverInfoRes(response.data);
-			setIsLoading(false);
 			dispatch(updateUserState({ ...response?.data }));
+			setIsLoading(false);
 		} else {
 			setIsLoading(false);
 			_showToast(response.message, 'error');
@@ -168,7 +174,6 @@ const DriverInformation = (props: any) => {
 		}
 
 		if (res?.success) {
-			_showToast(res?.message, 'success');
 			dispatch(updateUserState({ driverInfo: { ...res.data } }));
 			if (res?.data?.documents) {
 				if (
@@ -188,8 +193,8 @@ const DriverInformation = (props: any) => {
 				}
 			}
 		}
-
 		setIsLoading(false);
+		_showToast(res?.message, 'success');
 
 		/*
 				const verifyDocument = {
@@ -230,13 +235,6 @@ const DriverInformation = (props: any) => {
 		console.log('Date selected:', date);
 	};
 
-	const firstNameRef = useRef<any>(null);
-	const lastNameRef = useRef<any>(null);
-	const cityRef = useRef<any>(null);
-	const postCodeRef = useRef<any>(null);
-	const streetRef = useRef<any>(null);
-	const streetNumberRef = useRef<any>(null);
-
 	return (
 		<MainContainer hideTop>
 			<View style={[styles.innerMainContainer, { paddingTop: AppMargin._30 }]}>
@@ -276,33 +274,38 @@ const DriverInformation = (props: any) => {
 					<View style={{ marginTop: AppMargin._50 }}>
 						<AppTextInput
 							// height={AppHeight._50}
+							ref={firstNameRef}
 							borderBottomWidth={1}
 							placeholder={driverInfoRes?.firstName ?? 'First name'}
 							value={values.firstName}
 							onChangeText={handleChange('firstName')}
 							onBlur={handleBlur('firstName')}
 							showError={touched.firstName && errors.firstName}
+							onSubmitEditing={() => lastNameRef?.current?.focus()}
 						/>
 						<AppTextInput
 							// height={AppHeight._50}
+							ref={lastNameRef}
 							borderBottomWidth={1}
 							placeholder="Last name"
 							value={values.lastName}
 							onChangeText={handleChange('lastName')}
 							onBlur={handleBlur('lastName')}
 							showError={touched.lastName && errors.lastName}
+							onSubmitEditing={toggleModal}
 						/>
-						<TouchableOpacity onPress={toggleModal}>
-							<AppTextInput
-								editable={false}
-								// height={AppHeight._50}
-								borderBottomWidth={1}
-								placeholder="DOB"
-								value={date ? moment(date).format('DD-MM-YYYY') : ''}
-								iconRight={Icons.icnCalender}
-								iconRightClick={toggleModal}
-							/>
-						</TouchableOpacity>
+
+						<AppTextInput
+							editable={false}
+							// height={AppHeight._50}
+							borderBottomWidth={1}
+							placeholder="DOB"
+							value={date ? moment(date).format('DD-MM-YYYY') : ''}
+							iconRight={Icons.icnCalender}
+							iconRightClick={toggleModal}
+							wholePress={() => toggleModal()}
+						/>
+
 						<View style={styles.radioButtonsContainer}>
 							<AppText fontSize={FontSize._16} title="Gender" />
 							<RadioGroup
@@ -341,6 +344,7 @@ const DriverInformation = (props: any) => {
 						/>
 
 						<AppTextInput
+							ref={cityRef}
 							// height={AppHeight._50}
 							borderBottomWidth={1}
 							placeholder="City"
@@ -350,6 +354,7 @@ const DriverInformation = (props: any) => {
 							showError={touched.city && errors.city}
 						/>
 						<AppTextInput
+							ref={postCodeRef}
 							// height={AppHeight._50}
 							borderBottomWidth={1}
 							placeholder="Post code"
@@ -359,6 +364,7 @@ const DriverInformation = (props: any) => {
 							showError={touched.postCode && errors.postCode}
 						/>
 						<AppTextInput
+							ref={streetRef}
 							// height={AppHeight._50}
 							borderBottomWidth={1}
 							placeholder="Street"
@@ -368,6 +374,7 @@ const DriverInformation = (props: any) => {
 							showError={touched.street && errors.street}
 						/>
 						<AppTextInput
+							ref={streetNumberRef}
 							// height={AppHeight._50}
 							borderBottomWidth={1}
 							placeholder="Street Number"

@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -24,9 +24,14 @@ import AppLoader from '../../../../components/AppLoader';
 // Services
 import { apiPost } from '../../../../services/API/apiServices';
 import { ENDPOINT } from '../../../../services/API/endpoints';
+import { updateUserState } from '../../../../store/reducers/userdataSlice';
 
 const AddCarDetails = (props: any) => {
 	const dispatch = useDispatch();
+
+	const userDetails = useSelector((state: any) => state?.userDataSlice.userData ?? {});
+	const carData = userDetails?.user?.driverInfo?.carDetails ?? {};
+
 	const { isDarkMode, AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 
@@ -80,7 +85,11 @@ const AddCarDetails = (props: any) => {
 		try {
 			setIsLoading(true);
 			const res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
-
+			dispatch(
+				updateUserState({
+					driverInfo: { ...res?.data },
+				}),
+			);
 			if (res.success) {
 				Alert.alert('Success', 'Car details saved successfully');
 				props.navigation.goBack(); // or navigate to next screen
@@ -146,22 +155,20 @@ const AddCarDetails = (props: any) => {
 
 	// Pre-fill form values if `driverInfoRes?.carDetails` is available
 	useEffect(() => {
-		const carDetails = props.route?.params?.AllCarDetails;
-
-		if (carDetails) {
-			setSelectedCarOption(carDetails.carModel);
-			setSelectedCarType(carDetails.vehicleType);
+		if (carData) {
+			setSelectedCarOption(carData.carModel);
+			setSelectedCarType(carData.vehicleType);
 			formik.setValues({
-				firstRegistration: carDetails.firstRegistrationYear?.toString() || '',
-				fuel: carDetails.fuel || '',
-				color: carDetails.color || '',
-				mileage: carDetails.mileage?.toString() || '',
-				numberOfSeats: carDetails.numberOfSeats?.toString() || '',
-				licensePlate: carDetails.licensePlateNumber || '',
-				otherCarModel: carDetails.carModel === 'Others' ? carDetails.carModel : '',
-				otherVehicleType: carDetails.vehicleType === 'Others' ? carDetails.vehicleType : '',
+				firstRegistration: carData.firstRegistrationYear?.toString() || '',
+				fuel: carData.fuel || '',
+				color: carData.color || '',
+				mileage: carData.mileage?.toString() || '',
+				numberOfSeats: carData.numberOfSeats?.toString() || '',
+				licensePlate: carData.licensePlateNumber || '',
+				otherCarModel: carData.carModel === 'Others' ? carData.carModel : '',
+				otherVehicleType: carData.vehicleType === 'Others' ? carData.vehicleType : '',
 			});
-			setImageUri(carDetails.imageUrl || null);
+			setImageUri(carData.imageUrl || null);
 		}
 	}, [props.driverInfoRes]);
 

@@ -7,6 +7,7 @@ import {
 	StyleSheet,
 	TextInput,
 	TextInputProps,
+	TouchableOpacity,
 	View,
 } from 'react-native';
 import { useTheme } from '../theme/ThemeProvider';
@@ -44,6 +45,7 @@ interface AppTextInputProps {
 	returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send';
 	returnKeyLabel?: string;
 	onSubmitEditing?: () => void;
+	wholePress?: () => void;
 }
 
 const AppTextInput: React.FC<AppTextInputProps> = ({
@@ -74,73 +76,79 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 	autoCaps,
 	returnKeyType,
 	returnKeyLabel,
+	wholePress,
 }) => {
 	const { AppColors, isDarkMode } = useTheme();
 	const styles = createStyles(AppColors);
 
 	return (
 		<View>
-			<View
-				style={[
-					styles.container,
-					{
-						height: height ?? AppHeight._70,
-						marginTop,
-						borderColor: borderColor ?? AppColors.white,
-						borderWidth: borderBottomWidth ? 0 : 1,
-						borderBottomWidth: borderWidth ? 0 : 1,
-						paddingHorizontal: borderBottomWidth ? 0 : 10,
-						backgroundColor: backgroundColor ?? AppColors.background,
-					},
-				]}>
+			<TouchableOpacity disabled={!wholePress} onPress={wholePress}>
 				<View
-					style={{
-						flexDirection: 'row',
-						alignItems: 'center',
-						flex: 1,
-					}}>
-					{icon && <Image style={styles.icon} source={icon} />}
-					{leftNode}
-					<TextInput
-						ref={ref}
-						secureTextEntry={secureTextEntry}
-						placeholderTextColor={AppColors.placeholder}
-						value={value}
-						placeholder={placeholder}
-						maxLength={maxLength}
-						editable={editable}
-						keyboardType={inputMode}
-						style={[styles.input]}
-						onChangeText={onChangeText}
-						autoCapitalize={autoCaps}
-						returnKeyLabel={returnKeyLabel}
-						returnKeyType={returnKeyType}
-						{...texInputProps}
-						onBlur={onBlur}
-						onSubmitEditing={onSubmitEditing}
-					/>
+					style={[
+						styles.container,
+						{
+							height: height ?? AppHeight._70,
+							marginTop,
+							borderColor: borderColor ?? AppColors.white,
+							borderWidth: borderBottomWidth ? 0 : 1,
+							borderBottomWidth: borderWidth ? 0 : 1,
+							paddingHorizontal: borderBottomWidth ? 0 : 10,
+							backgroundColor: backgroundColor ?? AppColors.background,
+						},
+					]}>
+					<View
+						style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+							flex: 1,
+						}}>
+						{icon && <Image style={styles.icon} source={icon} />}
+						{leftNode}
+						<TextInput
+							ref={ref}
+							secureTextEntry={secureTextEntry}
+							placeholderTextColor={AppColors.placeholder}
+							value={value}
+							placeholder={placeholder}
+							maxLength={maxLength}
+							editable={editable}
+							keyboardType={inputMode}
+							style={[styles.input]}
+							onChangeText={onChangeText}
+							autoCapitalize={autoCaps}
+							returnKeyLabel={returnKeyLabel}
+							returnKeyType={returnKeyType}
+							{...texInputProps}
+							onBlur={onBlur}
+							onSubmitEditing={onSubmitEditing}
+						/>
 
-					{rightNode}
+						{rightNode}
+					</View>
+					{iconRight && (
+						<Pressable style={{ flex: 0.15 }} onPress={iconRightClick}>
+							<Image
+								style={[styles.icon, { tintColor: tint ?? AppColors.secondary }]}
+								source={iconRight}
+							/>
+						</Pressable>
+					)}
 				</View>
-				{iconRight && (
-					<Pressable style={{ flex: 0.15 }} onPress={iconRightClick}>
-						<Image style={[styles.icon, { tintColor: tint ?? AppColors.secondary }]} source={iconRight} />
-					</Pressable>
+				{showError && (
+					<View style={styles.errorContainer}>
+						<Image style={[styles.icon, { tintColor: AppColors.error }]} source={Icons.icnError} />
+						<AppText
+							width={'90%'}
+							left={AppMargin._10}
+							textColor={AppColors.error}
+							fontFamily={Fonts.REGULAR}
+							fontSize={FontSize._14}
+							label={showError}
+						/>
+					</View>
 				)}
-			</View>
-			{showError && (
-				<View style={styles.errorContainer}>
-					<Image style={[styles.icon, { tintColor: AppColors.error }]} source={Icons.icnError} />
-					<AppText
-						width={'90%'}
-						left={AppMargin._10}
-						textColor={AppColors.error}
-						fontFamily={Fonts.REGULAR}
-						fontSize={FontSize._14}
-						label={showError}
-					/>
-				</View>
-			)}
+			</TouchableOpacity>
 		</View>
 	);
 };

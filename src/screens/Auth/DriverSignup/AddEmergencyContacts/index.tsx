@@ -13,17 +13,17 @@ import { useTheme } from '../../../../theme/ThemeProvider';
 import { Theme } from '../../../../types';
 import { apiPost } from '../../../../services/API/apiServices';
 import { ENDPOINT } from '../../../../services/API/endpoints';
+import { updateUserState } from '../../../../store/reducers/userdataSlice';
+import { _showToast } from '../../../../services/UIs/ToastConfig';
 
 const AddEmergencyContacts = (props: any) => {
 	const dispatch = useDispatch();
 	const { isDarkMode, toggleTheme, AppColors } = useTheme();
 
-	console.log(props, '<== props');
-
-	const { emergencyContacts = [] } = props?.route?.params?.driverInfos;
-
+	const userData = useSelector((state: any) => state.userDataSlice.userData);
+	console.log('[ / userData ] ------->', userData);
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
-	const [contactList, setContactList] = useState([]);
+	const [contactList, setContactList] = useState(userData?.user?.driverInfo?.emergencyContacts ?? []);
 	const [newContact, setNewContact] = useState(false);
 
 	const onBackPress = () => {
@@ -34,20 +34,20 @@ const AddEmergencyContacts = (props: any) => {
 		setNewContact(!newContact);
 	};
 
-	useEffect(() => {
-		setContactList(emergencyContacts);
-	}, []);
-
 	const handleSaveContact = async newContact => {
 		setContactList(prevContacts => {
 			const updatedList = [...prevContacts, newContact];
-
 			const params = { emergencyContacts: updatedList };
-
 			apiPost(ENDPOINT.SET_DRIVER_INFO, params)
 				.then(res => {
 					// Handle success or failure
-					if (res.success) {
+					if (res?.success) {
+						dispatch(
+							updateUserState({
+								driverInfo: { ...res?.data },
+							}),
+						);
+						_showToast('Contact saved successfully!', 'success');
 						console.log('Contact saved successfully!');
 					} else {
 						console.error('Failed to save contact');
@@ -56,7 +56,6 @@ const AddEmergencyContacts = (props: any) => {
 				.catch(error => {
 					console.error('Error occurred:', error);
 				});
-
 			return updatedList; // Return the updated contact list
 		});
 	};
