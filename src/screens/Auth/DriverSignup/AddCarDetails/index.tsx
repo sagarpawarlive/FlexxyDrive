@@ -180,7 +180,21 @@ const AddCarDetails = (props: any) => {
 				<AppScrollView bounces={false} extraHeight={AppHeight._350}>
 					<View style={{ marginTop: AppMargin._50 }}>
 						{/* Car Make/Model Picker */}
+
 						<AppCustomPicker
+							showSearch
+							onSearchPress={() => alert('Search Car Make/Model')}
+							selectedItem={selectedCarOption}
+							setSelectedItem={setSelectedCarOption}
+							unselectedText={'Select Brand'}
+							options={car_options}
+							setSearchItem={item => {
+								alert(item);
+							}}
+						/>
+
+						<AppCustomPicker
+							marginTop={AppMargin._20}
 							selectedItem={selectedCarOption}
 							setSelectedItem={setSelectedCarOption}
 							unselectedText={'Select Make/Model'}

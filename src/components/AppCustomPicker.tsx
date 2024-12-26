@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
 import { AppHeight, AppMargin, borderRadius10 } from '../constants/commonStyle';
 import { Fonts, FontSize } from '../assets/fonts';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icons } from '../assets/Icons';
+import AppTextInput from './AppTextInput';
+import AppText from './AppText';
 
 const AppCustomPicker = ({
 	options,
@@ -13,10 +15,16 @@ const AppCustomPicker = ({
 	marginTop,
 	borderWidth,
 	borderBottomWidth,
+	showSearch,
+	onSearchPress,
+	setSearchItem,
 }: any) => {
 	// const [selectedItem, setSelectedItem] = useState('');
 	const [isPickerOpen, setIsPickerOpen] = useState(false);
 	const { AppColors } = useTheme();
+
+	const [searchText, setSearchText] = useState('');
+
 	// Toggle dropdown visibility
 	const togglePicker = () => {
 		setIsPickerOpen(!isPickerOpen);
@@ -25,6 +33,7 @@ const AppCustomPicker = ({
 	// Handle selecting an option
 	const selectItem = (item, index) => {
 		setSelectedItem(item);
+		setSearchItem(searchText);
 		setIsPickerOpen(false); // Close the picker after selection
 	};
 
@@ -45,17 +54,43 @@ const AppCustomPicker = ({
 				<Image style={{ transform: [{ rotate: isPickerOpen ? '90deg' : '270deg' }] }} source={Icons.icnBack} />
 			</TouchableOpacity>
 
+			{showSearch && isPickerOpen && (
+				<AppTextInput
+					placeholder="Search"
+					value={searchText}
+					marginHorizontal={20}
+					onChangeText={setSearchText}
+					rightNode={
+						<TouchableOpacity onPress={onSearchPress}>
+							<AppText
+								textColor={AppColors.primary}
+								fontFamily={Fonts.MEDIUM}
+								fontSize={FontSize._16}
+								title={'Search'}
+							/>
+						</TouchableOpacity>
+					}
+				/>
+			)}
+
 			{/* Custom dropdown that opens/closes */}
 			{isPickerOpen && (
 				<View style={styles.dropdown}>
-					{options.map((item, index) => (
-						<TouchableOpacity
-							key={index}
-							style={[styles.option, { borderBottomWidth: index !== options.length - 1 ? 1 : 0 }]}
-							onPress={() => selectItem(item, index)}>
-							<Text style={[styles.optionText, { color: AppColors.white }]}>{item}</Text>
-						</TouchableOpacity>
-					))}
+					<FlatList
+						style={{ marginTop: 10 }}
+						data={options}
+						renderItem={({ item, index }) => {
+							return (
+								<TouchableOpacity
+									key={index}
+									style={[styles.option, { borderBottomWidth: index !== options.length - 1 ? 1 : 0 }]}
+									onPress={() => selectItem(item, index)}>
+									<Text style={[styles.optionText, { color: AppColors.white }]}>{item}</Text>
+								</TouchableOpacity>
+							);
+						}}
+						keyExtractor={(item, index) => index.toString()}
+					/>
 				</View>
 			)}
 		</View>
@@ -74,7 +109,6 @@ const styles = StyleSheet.create({
 	},
 	pickerButton: {
 		flexDirection: 'row',
-
 		borderRadius: 8,
 		height: AppHeight._70,
 		alignItems: 'center',
@@ -86,6 +120,7 @@ const styles = StyleSheet.create({
 		fontSize: FontSize._16,
 	},
 	dropdown: {
+		height: AppHeight._250,
 		width: '100%',
 	},
 	option: {

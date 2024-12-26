@@ -45,6 +45,7 @@ interface AppTextInputProps {
 	returnKeyLabel?: string;
 	onSubmitEditing?: () => void;
 	wholePress?: () => void;
+	marginHorizontal?: number;
 }
 
 const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
@@ -77,6 +78,7 @@ const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
 			returnKeyType,
 			returnKeyLabel,
 			wholePress,
+			marginHorizontal,
 		},
 		ref,
 	) => {
@@ -97,6 +99,7 @@ const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
 								borderBottomWidth: borderWidth ? 0 : 1,
 								paddingHorizontal: borderBottomWidth ? 0 : 10,
 								backgroundColor: backgroundColor ?? AppColors.background,
+								marginHorizontal: marginHorizontal,
 							},
 						]}>
 						<View
