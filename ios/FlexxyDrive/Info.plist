@@ -2,123 +2,105 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleDevelopmentRegion</key>
-    <string>en</string>
-    <key>CFBundleDisplayName</key>
-    <string>FlexxyDrive</string>
-    <key>CFBundleExecutable</key>
-    <string>$(EXECUTABLE_NAME)</string>
-    <key>CFBundleIdentifier</key>
-    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-    <key>CFBundleInfoDictionaryVersion</key>
-    <string>6.0</string>
-    <key>CFBundleName</key>
-    <string>$(PRODUCT_NAME)</string>
-    <key>CFBundlePackageType</key>
-    <string>APPL</string>
-    <key>CFBundleShortVersionString</key>
-    <string>$(MARKETING_VERSION)</string>
-    <key>CFBundleSignature</key>
-    <string>????</string>
-    <key>CFBundleVersion</key>
-    <string>$(CURRENT_PROJECT_VERSION)</string>
-
-    <!-- Facebook App Configuration -->
-    <key>FacebookAppID</key>
-    <string>2703560303160092</string>
-    <key>FacebookDisplayName</key>
-    <string>FlexxyDrive</string>
-
-    <!-- URL Schemes -->
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>fb2703560303160092</string>
-                <string>com.googleusercontent.apps.593736862384-6gt0eu9enlvk5i38kf0m9l10ar4t0phk</string>
-            </array>
-        </dict>
-    </array>
-
-    <!-- Supported Schemes -->
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>fbapi</string>
-        <string>fb-messenger-api</string>
-        <string>fbauth2</string>
-        <string>fbshareextension</string>
-        <string>google</string>
-        <string>comgoogle</string>
-    </array>
-
-    <!-- Google Sign-In Configuration -->
-    <key>GIDClientID</key>
-    <string>593736862384-6gt0eu9enlvk5i38kf0m9l10ar4t0phk.apps.googleusercontent.com</string>
-    <key>GIDReverseClientID</key>
-    <string>com.googleusercontent.apps.593736862384-6gt0eu9enlvk5i38kf0m9l10ar4t0phk</string>
-
-    <!-- Permissions -->
-<key>NSAppTransportSecurity</key>
-<dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
-    <key>NSExceptionDomains</key>
-    <dict>
-        <key>http://51.20.189.64</key>
-        <dict>
-            <key>NSIncludesSubdomains</key>
-            <true/>
-            <key>NSExceptionAllowsInsecureHTTPLoads</key>
-            <true/>
-            <key>NSExceptionRequiresForwardSecrecy</key>
-            <true/>
-        </dict>
-    <!-- add more domain here -->
-    </dict>
-</dict>
-
-    <key>NSAppleMusicUsageDescription</key>
-    <string>We need access to your audio recording, for security reasons</string>
-    <key>NSCameraUsageDescription</key>
-    <string>Need to use camera to capture Image for profile</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>We need your location to ensure drivers can find you even when you're not actively using the app.</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>We need your location to match you with nearby drivers and calculate ride distances accurately.</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Your app needs access to the photo library to select images.</string>
-
-    <!-- Fonts -->
-    <key>UIAppFonts</key>
-    <array>
-        <string>Poppins-Bold.ttf</string>
-        <string>Poppins-Medium.ttf</string>
-        <string>Poppins-Regular.ttf</string>
-    </array>
-
-    <!-- Launch Screen -->
-    <key>UILaunchStoryboardName</key>
-    <string>LaunchScreen</string>
-
-    <!-- Device Capabilities -->
-    <key>UIRequiredDeviceCapabilities</key>
-    <array>
-        <string>arm64</string>
-    </array>
-
-    <!-- Supported Orientations -->
-    <key>UISupportedInterfaceOrientations</key>
-    <array>
-        <string>UIInterfaceOrientationPortrait</string>
-        <string>UIInterfaceOrientationLandscapeLeft</string>
-        <string>UIInterfaceOrientationLandscapeRight</string>
-    </array>
-
-    <!-- Status Bar Appearance -->
-    <key>UIViewControllerBasedStatusBarAppearance</key>
-    <false/>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>FlexxyDrive</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb2703560303160092</string>
+				<string>com.googleusercontent.apps.593736862384-6gt0eu9enlvk5i38kf0m9l10ar4t0phk</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FacebookAppID</key>
+	<string>2703560303160092</string>
+	<key>FacebookDisplayName</key>
+	<string>FlexxyDrive</string>
+	<key>GIDClientID</key>
+	<string>593736862384-6gt0eu9enlvk5i38kf0m9l10ar4t0phk.apps.googleusercontent.com</string>
+	<key>GIDReverseClientID</key>
+	<string>com.googleusercontent.apps.593736862384-6gt0eu9enlvk5i38kf0m9l10ar4t0phk</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+		<string>google</string>
+		<string>comgoogle</string>
+	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>http://51.20.189.64</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>We need access to your audio recording, for security reasons</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Need to use camera to capture Image for profile</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need your location to ensure drivers can find you even when you're not actively using the app.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location to match you with nearby drivers and calculate ride distances accurately.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Your app needs access to the photo library to select images.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Poppins-Bold.ttf</string>
+		<string>Poppins-Medium.ttf</string>
+		<string>Poppins-Regular.ttf</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>arm64</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

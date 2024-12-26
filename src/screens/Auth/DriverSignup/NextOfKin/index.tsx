@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, View, Alert } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,7 +35,7 @@ const NextOfKin = (props: any) => {
 	const [isCalenderVisible, setIsCalenderVisible] = useState(false);
 	const [date, setDate] = useState('');
 
-	const [selectedCountry, setSelectedCountry] = useState('IN');
+	const [selectedCountry, setSelectedCountry] = useState(nextOfKinData?.countryCode ?? 'IN');
 	const [showCountryPicker, setShowCountryPicker] = useState(false);
 	const [countryName, setCountryName] = useState('India');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -103,6 +103,7 @@ const NextOfKin = (props: any) => {
 				postCode: values.postalCode,
 				street: values.street,
 				streetNumber: values.streetNumber,
+				countryCode: selectedCountry,
 			},
 		};
 
@@ -126,6 +127,11 @@ const NextOfKin = (props: any) => {
 		}
 	};
 
+	const phoneNumberRef = useRef<any>(null);
+	const cityRef = useRef<any>(null);
+	const streetRef = useRef<any>(null);
+	const streetNumberRef = useRef<any>(null);
+
 	return (
 		<MainContainer>
 			<View style={styles.innerMainContainer}>
@@ -144,8 +150,11 @@ const NextOfKin = (props: any) => {
 							onChangeText={handleChange('fullName')}
 							onBlur={handleBlur('fullName')}
 							showError={touched.fullName && errors.fullName}
+							onSubmitEditing={() => phoneNumberRef?.current?.focus()}
+							returnKeyType={'next'}
 						/>
 						<AppTextInput
+							ref={phoneNumberRef}
 							returnKeyType={'done'}
 							inputMode={'number-pad'}
 							placeholder="Phone Number"
@@ -161,6 +170,8 @@ const NextOfKin = (props: any) => {
 							onChangeText={handleChange('email')}
 							onBlur={handleBlur('email')}
 							showError={touched.email && errors.email}
+							onSubmitEditing={() => toggleCalenderModal()}
+							returnKeyType={'next'}
 						/>
 						<AppTextInput
 							value={date ? moment(date).format('DD-MM-YYYY') : ''}
@@ -205,27 +216,38 @@ const NextOfKin = (props: any) => {
 							onChangeText={handleChange('city')}
 							onBlur={handleBlur('city')}
 							showError={touched.city && errors.city}
+							onSubmitEditing={() => cityRef?.current?.focus()}
+							returnKeyType="next"
 						/>
 						<AppTextInput
+							ref={cityRef}
 							placeholder="Postal Code"
 							value={values.postalCode}
 							onChangeText={handleChange('postalCode')}
 							onBlur={handleBlur('postalCode')}
 							showError={touched.postalCode && errors.postalCode}
+							onSubmitEditing={() => cityRef?.current?.focus()}
+							returnKeyType="done"
+							inputMode="number-pad"
 						/>
 						<AppTextInput
+							ref={streetRef}
 							placeholder="Street"
 							value={values.street}
 							onChangeText={handleChange('street')}
 							onBlur={handleBlur('street')}
 							showError={touched.street && errors.street}
+							onSubmitEditing={() => streetNumberRef?.current?.focus()}
+							returnKeyType="next"
 						/>
 						<AppTextInput
+							ref={streetNumberRef}
 							placeholder="Street Number"
 							value={values.streetNumber}
 							onChangeText={handleChange('streetNumber')}
 							onBlur={handleBlur('streetNumber')}
 							showError={touched.streetNumber && errors.streetNumber}
+							returnKeyType="done"
 						/>
 					</View>
 

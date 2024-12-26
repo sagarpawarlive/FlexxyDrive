@@ -323,6 +323,7 @@ const createStyles = (AppColors: Theme) => {
 			flex: 1,
 			backgroundColor: AppColors.background,
 			paddingHorizontal: 20,
+			paddingVertical: 16,
 		},
 	});
 };

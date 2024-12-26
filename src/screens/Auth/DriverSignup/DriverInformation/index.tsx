@@ -28,7 +28,7 @@ import { ENDPOINT } from '../../../../services/API/endpoints';
 import RadioGroup from 'react-native-radio-buttons-group';
 import moment from 'moment';
 import { _showToast } from '../../../../services/UIs/ToastConfig';
-import { logout, setUserData, updateUserState } from '../../../../store/reducers/userdataSlice';
+import { updateUserState } from '../../../../store/reducers/userdataSlice';
 
 const DriverInformation = (props: any) => {
 	const dispatch = useDispatch();
@@ -282,6 +282,7 @@ const DriverInformation = (props: any) => {
 							onBlur={handleBlur('firstName')}
 							showError={touched.firstName && errors.firstName}
 							onSubmitEditing={() => lastNameRef?.current?.focus()}
+							returnKeyType="next"
 						/>
 						<AppTextInput
 							// height={AppHeight._50}
@@ -293,6 +294,7 @@ const DriverInformation = (props: any) => {
 							onBlur={handleBlur('lastName')}
 							showError={touched.lastName && errors.lastName}
 							onSubmitEditing={toggleModal}
+							returnKeyType="next"
 						/>
 
 						<AppTextInput
@@ -304,6 +306,7 @@ const DriverInformation = (props: any) => {
 							iconRight={Icons.icnCalender}
 							iconRightClick={toggleModal}
 							wholePress={() => toggleModal()}
+							returnKeyType="next"
 						/>
 
 						<View style={styles.radioButtonsContainer}>
@@ -352,6 +355,8 @@ const DriverInformation = (props: any) => {
 							onChangeText={handleChange('city')}
 							onBlur={handleBlur('city')}
 							showError={touched.city && errors.city}
+							onSubmitEditing={() => postCodeRef?.current?.focus()}
+							returnKeyType="next"
 						/>
 						<AppTextInput
 							ref={postCodeRef}
@@ -362,6 +367,9 @@ const DriverInformation = (props: any) => {
 							onChangeText={handleChange('postCode')}
 							onBlur={handleBlur('postCode')}
 							showError={touched.postCode && errors.postCode}
+							onSubmitEditing={() => streetRef?.current?.focus()}
+							returnKeyType="done"
+							inputMode="number-pad"
 						/>
 						<AppTextInput
 							ref={streetRef}
@@ -372,6 +380,8 @@ const DriverInformation = (props: any) => {
 							onChangeText={handleChange('street')}
 							onBlur={handleBlur('street')}
 							showError={touched.street && errors.street}
+							onSubmitEditing={() => streetNumberRef?.current?.focus()}
+							returnKeyType="next"
 						/>
 						<AppTextInput
 							ref={streetNumberRef}
@@ -382,6 +392,7 @@ const DriverInformation = (props: any) => {
 							onChangeText={handleChange('streetNumber')}
 							onBlur={handleBlur('streetNumber')}
 							showError={touched.streetNumber && errors.streetNumber}
+							returnKeyType="done"
 						/>
 
 						<AppDriverButtons
