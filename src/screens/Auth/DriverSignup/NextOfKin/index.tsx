@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, Pressable, Text, Image } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { Fonts, FontSize } from '../../../../assets/fonts';
@@ -78,7 +78,9 @@ const NextOfKin = (props: any) => {
 		},
 		validationSchema: Yup.object({
 			fullName: Yup.string().required('Full name is required'),
-			phoneNumber: Yup.string().required('Phone number is required'),
+			phoneNumber: Yup.string()
+				.required('Phone number is required')
+				.matches(/^(\+?\d{1,4}[\s-]?)?(\(?\d{3}\)?[\s-]?)?[\d\s-]{7,}$/, 'Phone number is not valid'),
 			email: Yup.string().email('Invalid email format').required('Email is required'),
 			city: Yup.string().required('City is required'),
 			postalCode: Yup.string().required('Postal code is required'),
@@ -158,13 +160,14 @@ const NextOfKin = (props: any) => {
 							returnKeyType={'done'}
 							inputMode={'number-pad'}
 							placeholder="Phone Number"
-							maxLength={10}
+							maxLength={20}
 							value={values.phoneNumber}
 							onChangeText={handleChange('phoneNumber')}
 							onBlur={handleBlur('phoneNumber')}
 							showError={touched.phoneNumber && errors.phoneNumber}
 						/>
 						<AppTextInput
+							autoCaps={false}
 							placeholder="Email"
 							value={values.email}
 							onChangeText={handleChange('email')}
@@ -173,13 +176,25 @@ const NextOfKin = (props: any) => {
 							onSubmitEditing={() => toggleCalenderModal()}
 							returnKeyType={'next'}
 						/>
-						<AppTextInput
+						<Pressable style={styles.dobContainer} onPress={() => toggleCalenderModal()}>
+							<Text
+								style={{
+									flex: 1,
+									fontSize: FontSize._16,
+									color: date ? AppColors.text : AppColors.placeholder,
+								}}>
+								{date ? moment(date).format('DD-MM-YYYY') : 'DOB'}
+							</Text>
+							<Image source={Icons.icnCalender} style={{ tintColor: AppColors.primary }} />
+						</Pressable>
+
+						{/* <AppTextInput
 							value={date ? moment(date).format('DD-MM-YYYY') : ''}
 							editable={false}
 							placeholder="DOB"
 							iconRight={Icons.icnCalender}
 							iconRightClick={() => toggleCalenderModal()}
-						/>
+						/> */}
 						<AppTextInput
 							editable={false}
 							value={countryName}
@@ -279,6 +294,16 @@ const createStyles = (AppColors: Theme) => {
 			flex: 1,
 			backgroundColor: AppColors.background,
 			paddingHorizontal: 20,
+		},
+		dobContainer: {
+			borderWidth: 1,
+			borderColor: AppColors.white,
+			borderRadius: 10,
+			padding: 15,
+			height: AppHeight._70,
+			flexDirection: 'row',
+			alignItems: 'center',
+			marginTop: 20,
 		},
 	});
 };

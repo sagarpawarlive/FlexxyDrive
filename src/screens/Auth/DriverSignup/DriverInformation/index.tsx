@@ -54,6 +54,7 @@ const DriverInformation = (props: any) => {
 		preferences,
 		isVerified,
 	} = driverInfo ?? {};
+	console.log(driverInfo, '<=== driverInfo');
 
 	const { AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
@@ -109,6 +110,31 @@ const DriverInformation = (props: any) => {
 		// 	unsubscribe();
 		// };
 	}, [props.navigation]);
+
+	useEffect(() => {
+		if (driverInfoRes) {
+			setValues({
+				firstName: driverInfoRes?.driverInfo?.firstName ?? '',
+				lastName: driverInfoRes?.driverInfo?.lastName ?? '',
+				city: driverInfoRes?.driverInfo?.city ?? '',
+				postCode: driverInfoRes?.driverInfo?.postCode ?? '',
+				street: driverInfoRes?.driverInfo?.street ?? '',
+				streetNumber: driverInfoRes?.driverInfo?.streetNumber ?? '',
+				dob: driverInfoRes?.driverInfo?.dob ?? '',
+			});
+
+			setDate(driverInfoRes?.driverInfo?.dob ?? '');
+			setCountryName(driverInfoRes?.driverInfo?.country ?? '');
+			setSelectedCountry(driverInfoRes?.driverInfo?.countryCode ?? '');
+			setSelectedId(
+				driverInfoRes?.driverInfo?.gender == 'Male'
+					? '1'
+					: driverInfoRes?.driverInfo?.gender == 'Female'
+					? '2'
+					: '',
+			);
+		}
+	}, [driverInfoRes]);
 
 	const api_getDriverInfo = async () => {
 		const params = { token: userData?.token };

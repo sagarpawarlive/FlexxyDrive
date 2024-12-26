@@ -39,7 +39,7 @@ interface AppTextInputProps {
 	backgroundColor?: string;
 	leftNode?: React.ReactNode;
 	rightNode?: React.ReactNode;
-	autoCaps?: 'none' | 'sentences' | 'words' | 'characters';
+	autoCaps?: 'none' | 'sentences' | 'words' | 'characters' | boolean;
 	texInputProps?: TextInputProps;
 	returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send';
 	returnKeyLabel?: string;

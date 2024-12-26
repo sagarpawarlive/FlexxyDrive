@@ -1,7 +1,7 @@
 import { uploadData } from 'aws-amplify/storage';
 import { useFormik } from 'formik';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { Image, Keyboard, StyleSheet, View } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -18,6 +18,7 @@ import { _showToast } from '../../../services/UIs/ToastConfig';
 import { useTheme } from '../../../theme/ThemeProvider';
 import { Theme } from '../../../types';
 import { logout } from '../../../store/reducers/userdataSlice';
+import { Images } from '../../../assets/images';
 
 const FinalUser = (props: any) => {
 	const dispatch = useDispatch();
@@ -29,14 +30,14 @@ const FinalUser = (props: any) => {
 			<View style={styles.primaryContainer}>
 				<AppScrollView bounces={false} extraHeight={AppHeight._350}>
 					<View style={[AppContainer]}>
-						<View style={styles.logoContainer}>
-							<AppText fontSize={FontSize._40} fontFamily={Fonts.BOLD} title={'LOGO'} />
+						<View style={styles.imageContainer}>
+							<Image resizeMode="contain" source={Images.imgSplash} />
 						</View>
 
-						<View style={[styles.logoContainer, { marginTop: AppMargin._100 }]}>
+						<View style={[styles.logoContainer]}>
 							<AppText fontSize={FontSize._24} fontFamily={Fonts.BOLD} title={'Welcome to FlexxyDrive'} />
 						</View>
-						<View style={{ marginTop: AppMargin._100 }}>
+						<View style={{ marginTop: AppMargin._50 }}>
 							<AppButton
 								top={AppMargin._40}
 								fontSize={FontSize._16}
@@ -92,6 +93,13 @@ const createStyles = (AppColors: Theme) => {
 			alignItems: 'center',
 		},
 		primaryContainer: { flex: 1, backgroundColor: AppColors.background },
+		imageContainer: {
+			// height: 100,
+			// width: '100%',
+			// marginTop: AppMargin._90,
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
 	});
 };
 
