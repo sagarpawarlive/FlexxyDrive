@@ -153,7 +153,7 @@ const DriverInformation = (props: any) => {
 		const params = {
 			firstName: values.firstName,
 			lastName: values.lastName,
-			dob: date,
+			dob: date ?? '',
 			gender: selectedId == '1' ? 'Male' : selectedId == '2' ? 'Female' : '',
 			country: countryName,
 			city: values.city,
