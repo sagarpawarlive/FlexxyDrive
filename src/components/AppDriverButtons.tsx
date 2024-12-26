@@ -24,6 +24,7 @@ interface AppDriverButtonsProps {
 	iconTint?: any;
 	rotate?: any;
 	iconNode?: any;
+	height?: any;
 }
 
 const AppDriverButtons: React.FC<AppDriverButtonsProps> = (props: AppDriverButtonsProps) => {
@@ -45,8 +46,8 @@ const AppDriverButtons: React.FC<AppDriverButtonsProps> = (props: AppDriverButto
 						<Image
 							resizeMode="contain"
 							style={{
-								height: 14,
-								width: 14,
+								height: props.height ?? 14,
+								width: props.width ?? 14,
 								// left: 20,
 								transform: [{ rotate: props.rotate ?? '180deg' }],
 							}}

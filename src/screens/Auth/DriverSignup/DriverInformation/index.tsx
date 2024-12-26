@@ -30,6 +30,8 @@ import moment from 'moment';
 import { _showToast } from '../../../../services/UIs/ToastConfig';
 import { updateUserState } from '../../../../store/reducers/userdataSlice';
 
+let update = false;
+
 const DriverInformation = (props: any) => {
 	const dispatch = useDispatch();
 	const userDataSlice = useSelector(state => state?.userDataSlice ?? {});
@@ -67,7 +69,6 @@ const DriverInformation = (props: any) => {
 	const [countryName, setCountryName] = useState(country);
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-
 	const [driverInfoRes, setDriverInfoRes] = useState<any>(null);
 
 	const firstNameRef = useRef<any>(null);
@@ -110,10 +111,7 @@ const DriverInformation = (props: any) => {
 	}, [props.navigation]);
 
 	const api_getDriverInfo = async () => {
-		const params = {
-			token: userData?.token,
-		};
-
+		const params = { token: userData?.token };
 		setIsLoading(true);
 		const response = await apiGet(ENDPOINT.GET_PROFILE_INFO, '', params);
 		if (response?.success) {
@@ -132,6 +130,7 @@ const DriverInformation = (props: any) => {
 			firstName: firstName,
 			lastName: lastName,
 			city: city,
+			dob: date,
 			postCode: postCode,
 			street: street,
 			streetNumber: streetNumber,
@@ -165,8 +164,8 @@ const DriverInformation = (props: any) => {
 		};
 
 		setIsLoading(true);
-		let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params, { token: userData.token });
 
+		let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params, { token: userData.token });
 		console.log(res, '<== res');
 
 		if (res?.error) {
@@ -297,7 +296,7 @@ const DriverInformation = (props: any) => {
 							returnKeyType="next"
 						/>
 
-						<AppTextInput
+						{/* <AppTextInput
 							editable={false}
 							// height={AppHeight._50}
 							borderBottomWidth={1}
@@ -307,7 +306,14 @@ const DriverInformation = (props: any) => {
 							iconRightClick={toggleModal}
 							wholePress={() => toggleModal()}
 							returnKeyType="next"
-						/>
+						/> */}
+
+						<Pressable style={styles.dobContainer} onPress={() => toggleModal()}>
+							<Text style={{ flex: 1, fontSize: FontSize._16, color: AppColors.text }}>
+								{date ? moment(date).format('DD-MM-YYYY') : 'DOB'}
+							</Text>
+							<Image source={Icons.icnCalender} style={{ tintColor: AppColors.primary }} />
+						</Pressable>
 
 						<View style={styles.radioButtonsContainer}>
 							<AppText fontSize={FontSize._16} title="Gender" />
@@ -395,17 +401,22 @@ const DriverInformation = (props: any) => {
 							returnKeyType="done"
 						/>
 
-						<AppDriverButtons
-							onClick={() =>
-								props.navigation.navigate(NavigationKeys.AddDocuments, {
-									driverDocuments: driverInfoRes?.driverInfo ?? {},
-								})
-							}
-							rotate={'0deg'}
-							buttonLabel="Add Document"
-							iconTint={AppColors.primary}
-							icon={Icons.icnUpload}
-						/>
+						<View>
+							<AppDriverButtons
+								onClick={() =>
+									props.navigation.navigate(NavigationKeys.AddDocuments, {
+										driverDocuments: driverInfoRes?.driverInfo ?? {},
+									})
+								}
+								rotate={'0deg'}
+								buttonLabel="Add Document"
+								iconTint={AppColors.primary}
+								icon={Icons.icnUpload}
+								height={24}
+								width={24}
+							/>
+							<AppText top={5} left={10} label="JPG, PNG " />
+						</View>
 
 						<AppDriverButtons
 							buttonLabel="Next of Kin"
@@ -512,6 +523,16 @@ const createStyles = (AppColors: Theme) => {
 			flexDirection: 'row',
 			justifyContent: 'space-between', // Ensure equal spacing between buttons
 			alignItems: 'center',
+		},
+		dobContainer: {
+			// backgroundColor: 'red',
+			borderBottomWidth: 1,
+			borderBottomColor: AppColors.white,
+			paddingVertical: 15,
+			marginHorizontal: 10,
+			flexDirection: 'row',
+			alignItems: 'center',
+			marginVertical: 10,
 		},
 	});
 };
