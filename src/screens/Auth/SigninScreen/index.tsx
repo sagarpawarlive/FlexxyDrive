@@ -153,9 +153,9 @@ const SigninScreen = (props: any) => {
 		const response: any = await apiPost(ENDPOINT.APPLE_LOGIN, appleParams, []);
 		console.log('[ / {apple signin Resss }] ------->', response);
 
-		if (response?.requirePhoneNumber == true) {
+		if (response?.data?.requirePhoneNumber == true) {
 			props.navigation.navigate(NavigationKeys.AddMobileNumber, {
-				userId: response?.user?.id,
+				userId: response?.data?.user?.id,
 			});
 		} else {
 			props.navigation.navigate(NavigationKeys.FinalUser);

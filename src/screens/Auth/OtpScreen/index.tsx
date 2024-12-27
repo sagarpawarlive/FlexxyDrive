@@ -40,9 +40,9 @@ const OtpScreen = (props: any) => {
 
 		setIsLoading(true);
 		const response: any = await APIMethods.post(ENDPOINT.VERIFY_OTP, params);
-		if (response.statusCode == 200) {
+		if (response.statusCode >= 200 && response.statusCode <= 299) {
 			props.navigation.navigate(NavigationKeys.FinalUser);
-			dispatch(setUserData(response));
+			dispatch(setUserData({ data: response }));
 		} else {
 			_showToast(response?.message, 'error');
 		}
