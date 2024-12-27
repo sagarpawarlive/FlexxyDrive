@@ -29,7 +29,7 @@ const NextOfKin = (props: any) => {
 
 	const next_Kin = props?.route?.params?.driverInfoRes;
 
-	const userDetails = useSelector((state: any) => state?.userDataSlice.userData ?? {});
+	const userDetails = useSelector((state: any) => state?.userDataSlice.userData.data ?? {});
 	const nextOfKinData = userDetails?.user?.driverInfo?.guarantor ?? {};
 
 	const [isCalenderVisible, setIsCalenderVisible] = useState(false);
@@ -268,6 +268,7 @@ const NextOfKin = (props: any) => {
 
 					<AppButton
 						top={AppMargin._30}
+						bottom={AppMargin._30}
 						textColor={AppColors.textDark}
 						fontSize={FontSize._16}
 						fontFamily={Fonts.MEDIUM}

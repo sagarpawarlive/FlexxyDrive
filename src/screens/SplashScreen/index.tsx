@@ -28,12 +28,12 @@ const SplashScreen: React.FC<SplashScreenProps> = props => {
 		const unsubscribe = props.navigation.addListener('focus', () => {
 			setTimeout(() => {
 				switch (true) {
-					case userData?.userData && userData?.userData?.token?.length > 0:
+					case userData?.userData && userData?.userData?.data?.token?.length > 0:
 						props.navigation.navigate(NavigationKeys.AuthNavigator, {
 							screen: NavigationKeys.FinalUser,
 						});
 						break;
-					case !userData?.token:
+					case !userData?.data?.token:
 						props.navigation.navigate(NavigationKeys.AuthNavigator);
 						break;
 					default:

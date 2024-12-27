@@ -22,63 +22,95 @@ import AppCustomPicker from '../../../../components/AppCustomPicker';
 import AppLoader from '../../../../components/AppLoader';
 
 // Services
-import { apiPost } from '../../../../services/API/apiServices';
+import { apiGet, apiPost } from '../../../../services/API/apiServices';
 import { ENDPOINT } from '../../../../services/API/endpoints';
 import { updateUserState } from '../../../../store/reducers/userdataSlice';
+import { App_Permission } from '../../../../services/Permissions';
+import ImagePicker from 'react-native-image-crop-picker';
+import RNFS from 'react-native-fs';
+import { generateUniqueFileName, isIOS } from '../../../../constants/constants';
+import { s3Upload } from '../../../../utils/awsUpload';
+import { _showToast } from '../../../../services/UIs/ToastConfig';
 
 const AddCarDetails = (props: any) => {
 	const dispatch = useDispatch();
 
-	const userDetails = useSelector((state: any) => state?.userDataSlice.userData ?? {});
+	const userDetails = useSelector((state: any) => state?.userDataSlice.userData.data ?? {});
 	const carData = userDetails?.user?.driverInfo?.carDetails ?? {};
 
 	const { isDarkMode, AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 
-	const [selectedCarOption, setSelectedCarOption] = useState('');
+	const [selectedCarOption, setSelectedCarOption] = useState(carData?.carBrand);
+	const [selectedCarModel, setSelectedCarModel] = useState(carData?.carModel);
 	const [selectedCarType, setSelectedCarType] = useState('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [imageUri, setImageUri] = useState<string | null>(null);
-
-	const car_options = [
-		'Mercedes Benz(GLC)',
-		'Mercedes Benz(AMG)',
-		'BMW 3 Series',
-		'Audi A4',
-		'Toyota Camry',
-		'Others',
-	];
-
-	const car_type_options = ['SUV', 'Saloon', 'Estate Car', 'Cabriolet/Roadster', 'Van/Minibus', 'Others'];
-
+	const [brands, setBrands] = useState([]);
+	const [models, setModels] = useState([]);
+	const [capturedImage, setCapturedImage] = useState({ path: '', isFile: false } ?? null);
+	const [brandModalLoading, setBrandModalLoading] = useState(false);
 	const onBackPress = () => {
 		props.navigation.goBack();
 	};
 
-	const handleImageUpload = () => {
-		// Implement image picker logic
-		Alert.alert('Upload Car Image', 'Implement image picker here');
+	const handleImageUpload = async () => {
+		setIsLoading(true);
+		const photoPermission = (await App_Permission._askPhotoPermission()) ?? false;
+		if (photoPermission) {
+			try {
+				const image = await ImagePicker.openPicker({}).then(data => {
+					setCapturedImage({ ...data });
+					return data;
+				});
+
+				const localFilePath = `${RNFS.DocumentDirectoryPath}/${generateUniqueFileName(image.filename)}`;
+				await RNFS.copyFile(image.path, localFilePath);
+				const androidFilePath = 'file://' + localFilePath;
+				let dict = {
+					...image,
+					sourceURL: androidFilePath,
+					path: androidFilePath,
+				};
+				setCapturedImage(isIOS ? image : dict);
+				setIsLoading(false);
+			} catch (error) {
+				console.log('Error selecting or compressing image:', error);
+				setIsLoading(false);
+			}
+		}
 	};
 
 	// API Call to Save Car Details
 	const api_AddDriverInfo = async () => {
 		const isValid = await formik.validateForm();
+
+		if (!selectedCarModel?.name || !selectedCarOption?.name) {
+			_showToast('Please select car', 'warning');
+			return;
+		}
+
 		if (Object.keys(isValid).length > 0) {
 			formik.handleSubmit();
 			return;
 		}
+		let carImage = '';
+		if (capturedImage?.path !== '') {
+			carImage = await s3Upload(capturedImage);
+		}
 
 		const params = {
 			carDetails: {
-				carModel: selectedCarOption === 'Others' ? formik.values.otherCarModel : selectedCarOption,
+				carModel: selectedCarModel?.name ?? '',
+				carBrand: selectedCarOption?.name ?? '',
 				firstRegistrationYear: parseInt(formik.values.firstRegistration),
 				fuel: formik.values.fuel,
 				color: formik.values.color,
 				mileage: parseInt(formik.values.mileage),
 				numberOfSeats: parseInt(formik.values.numberOfSeats),
-				vehicleType: selectedCarType === 'Others' ? formik.values.otherVehicleType : selectedCarType,
+				// vehicleType: selectedCarType?.name ?? '',
 				licensePlateNumber: formik.values.licensePlate,
-				imageUrl: imageUri,
+				imageUrl: carImage || imageUri,
 			},
 		};
 
@@ -91,14 +123,13 @@ const AddCarDetails = (props: any) => {
 				}),
 			);
 			if (res.success) {
-				Alert.alert('Success', 'Car details saved successfully');
+				_showToast('Car details saved successfully', 'success');
 				props.navigation.goBack(); // or navigate to next screen
 			} else {
-				Alert.alert('Error', res.message || 'Failed to save car details');
+				_showToast(res?.message, 'error');
 			}
 		} catch (error) {
-			console.error('Error saving car details', error);
-			Alert.alert('Error', 'An unexpected error occurred');
+			_showToast('An unexpected error occurred', 'error');
 		} finally {
 			setIsLoading(false);
 		}
@@ -109,15 +140,12 @@ const AddCarDetails = (props: any) => {
 		firstRegistration: Yup.number()
 			.positive('Registration year must be a positive number')
 			.integer('Registration year must be an integer')
-			.min(1900, 'Registration year must be after 1900')
+			.min(1989, 'Registration year must be after 1989')
 			.max(new Date().getFullYear(), 'Registration year cannot be in the future')
 			.required('Registration year is required'),
 		fuel: Yup.string().required('Fuel type is required'),
 		color: Yup.string().required('Color is required'),
-		mileage: Yup.number()
-			.positive('Mileage must be a positive number')
-			.integer('Mileage must be an integer')
-			.required('Mileage is required'),
+		mileage: Yup.string().required('Mileage is required'),
 		numberOfSeats: Yup.number()
 			.positive('Number of seats must be a positive number')
 			.integer('Number of seats must be an integer')
@@ -131,10 +159,10 @@ const AddCarDetails = (props: any) => {
 			is: 'Others',
 			then: Yup.string().required('Please specify car model'),
 		}),
-		otherVehicleType: Yup.string().when('selectedCarType', {
-			is: 'Others',
-			then: Yup.string().required('Please specify vehicle type'),
-		}),
+		// otherVehicleType: Yup.string().when('selectedCarType', {
+		// 	is: 'Others',
+		// 	then: Yup.string().required('Please specify vehicle type'),
+		// }),
 	});
 
 	// Formik Form Management
@@ -147,7 +175,6 @@ const AddCarDetails = (props: any) => {
 			numberOfSeats: '',
 			licensePlate: '',
 			otherCarModel: '',
-			otherVehicleType: '',
 		},
 		validationSchema,
 		onSubmit: api_AddDriverInfo,
@@ -156,7 +183,8 @@ const AddCarDetails = (props: any) => {
 	// Pre-fill form values if `driverInfoRes?.carDetails` is available
 	useEffect(() => {
 		if (carData) {
-			setSelectedCarOption(carData.carModel);
+			setSelectedCarOption({ name: carData.carBrand });
+			setSelectedCarModel({ name: carData.carModel });
 			setSelectedCarType(carData.vehicleType);
 			formik.setValues({
 				firstRegistration: carData.firstRegistrationYear?.toString() || '',
@@ -165,12 +193,29 @@ const AddCarDetails = (props: any) => {
 				mileage: carData.mileage?.toString() || '',
 				numberOfSeats: carData.numberOfSeats?.toString() || '',
 				licensePlate: carData.licensePlateNumber || '',
-				otherCarModel: carData.carModel === 'Others' ? carData.carModel : '',
-				otherVehicleType: carData.vehicleType === 'Others' ? carData.vehicleType : '',
+				otherCarModel: carData.carModel,
 			});
 			setImageUri(carData.imageUrl || null);
 		}
 	}, [props.driverInfoRes]);
+
+	const searchBrand = async (carBrand: string) => {
+		setBrandModalLoading(true);
+		const res = await apiGet(`${ENDPOINT.GET_BRAND}?search=${carBrand}`);
+		setBrands(res?.data ?? []);
+		setModels([]);
+		setSelectedCarModel('');
+		setBrandModalLoading(false);
+	};
+
+	const getModal = async (brand: { id: number; name: string }) => {
+		setBrandModalLoading(true);
+		setModels([]);
+		setSelectedCarModel('');
+		const res = await apiGet(`${ENDPOINT.GET_MODELS}/${brand?.id}`);
+		setModels(res?.data ?? []);
+		setBrandModalLoading(false);
+	};
 
 	return (
 		<MainContainer>
@@ -179,35 +224,31 @@ const AddCarDetails = (props: any) => {
 
 				<AppScrollView bounces={false} extraHeight={AppHeight._350}>
 					<View style={{ marginTop: AppMargin._50 }}>
-						{/* Car Make/Model Picker */}
-
 						<AppCustomPicker
+							brandModalLoading={brandModalLoading}
 							showSearch
-							onSearchPress={() => alert('Search Car Make/Model')}
+							onSearchPress={searchBrand}
 							selectedItem={selectedCarOption}
-							setSelectedItem={setSelectedCarOption}
+							setSelectedItem={item => {
+								getModal(item);
+								setSelectedCarOption(item);
+							}}
 							unselectedText={'Select Brand'}
-							options={car_options}
+							options={brands}
 							setSearchItem={item => {
-								alert(item);
+								// console.log(item, '<== item');
+								// alert(item.name);
 							}}
 						/>
 
 						<AppCustomPicker
+							brandModalLoading={brandModalLoading}
 							marginTop={AppMargin._20}
-							selectedItem={selectedCarOption}
-							setSelectedItem={setSelectedCarOption}
+							selectedItem={selectedCarModel}
+							setSelectedItem={setSelectedCarModel}
 							unselectedText={'Select Make/Model'}
-							options={car_options}
+							options={models ?? []}
 						/>
-						{selectedCarOption === 'Others' && (
-							<AppTextInput
-								placeholder="Enter Car Model"
-								value={formik.values.otherCarModel}
-								onChangeText={formik.handleChange('otherCarModel')}
-								showError={formik.touched.otherCarModel && formik.errors.otherCarModel}
-							/>
-						)}
 
 						{/* First Registration Input */}
 						<AppTextInput
@@ -244,7 +285,6 @@ const AddCarDetails = (props: any) => {
 							onChangeText={formik.handleChange('mileage')}
 							showError={formik.touched.mileage && formik.errors.mileage}
 							texInputProps={{
-								keyboardType: 'number-pad',
 								returnKeyType: 'done',
 							}}
 						/>
@@ -262,13 +302,13 @@ const AddCarDetails = (props: any) => {
 						/>
 
 						{/* Vehicle Type Picker */}
-						<AppCustomPicker
+						{/* <AppCustomPicker
 							marginTop={AppMargin._20}
 							selectedItem={selectedCarType}
 							setSelectedItem={setSelectedCarType}
 							unselectedText={'Vehicle Type'}
 							options={car_type_options}
-						/>
+						/> */}
 						{selectedCarType === 'Others' && (
 							<AppTextInput
 								placeholder="Enter Vehicle Type"
@@ -306,7 +346,21 @@ const AddCarDetails = (props: any) => {
 										'Upload Car Images (image should\nbe Front of Car with License plate visible)'
 									}
 								/>
-								<Image style={{ marginHorizontal: AppMargin._30 }} source={Icons.icnLargePicker} />
+								<Image
+									style={{
+										marginHorizontal: AppMargin._20,
+										height: 50,
+										width: 50,
+										borderRadius: 25,
+									}}
+									source={
+										capturedImage?.sourceURL
+											? { uri: capturedImage?.sourceURL }
+											: imageUri
+											? { uri: imageUri }
+											: Icons.icnLargePicker
+									}
+								/>
 							</View>
 						</Pressable>
 					</View>

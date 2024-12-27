@@ -67,6 +67,7 @@ const AddPayments = (props: any) => {
 				</View>
 
 				<AppButton
+					bottom={AppMargin._30}
 					textColor={AppColors.textDark}
 					fontSize={FontSize._16}
 					fontFamily={Fonts.MEDIUM}

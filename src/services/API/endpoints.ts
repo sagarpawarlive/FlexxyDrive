@@ -29,4 +29,8 @@ export const ENDPOINT = {
 
 	//Verify Document
 	VERIFY_DOCUMENT: '/verification/document', //post
+
+	//Car details
+	GET_BRAND: '/carsdata/brands', //get
+	GET_MODELS: '/carsdata/models', //get
 };

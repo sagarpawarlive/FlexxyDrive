@@ -62,12 +62,12 @@ const SigninScreen = (props: any) => {
 			};
 			const response: any = await apiPost(ENDPOINT.GOOGLE_LOGIN, googleParams, []);
 			console.log('[ / {google signin Resss }] ------->', response);
-			if (response?.requirePhoneNumber == true) {
+			if (response?.data?.requirePhoneNumber == true) {
 				props.navigation.navigate(NavigationKeys.AddMobileNumber, {
-					userId: response?.user?.id,
+					userId: response?.data?.user?.id,
 				});
 			} else {
-				if (response?.token?.length > 0) {
+				if (response?.data?.token?.length > 0) {
 					props.navigation.navigate(NavigationKeys.FinalUser);
 					dispatch(setUserData(response));
 				} else {
@@ -211,8 +211,10 @@ const SigninScreen = (props: any) => {
 	const api_signin = async (values: any) => {
 		setIsLoading(true);
 		const response: any = await APIMethods.post(ENDPOINT.LOGIN, values, []);
-		_showToast(response?.message, response?.user ? 'success' : 'error');
-		if (response?.user) props.navigation.navigate(NavigationKeys.FinalUser);
+		console.log(response, '<== response hello');
+
+		_showToast(response?.message, response?.data?.user ? 'success' : 'error');
+		if (response?.data?.user) props.navigation.navigate(NavigationKeys.FinalUser);
 		dispatch(setUserData(response));
 		setIsLoading(false);
 	};

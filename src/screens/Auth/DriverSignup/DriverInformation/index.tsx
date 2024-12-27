@@ -36,7 +36,14 @@ const DriverInformation = (props: any) => {
 	const dispatch = useDispatch();
 	const userDataSlice = useSelector(state => state?.userDataSlice ?? {});
 	const { userData } = userDataSlice ?? {};
-	const { firstName: fName, lastName: lName, username, phoneNumber, email, driverInfo = {} } = userData?.user ?? {};
+	const {
+		firstName: fName,
+		lastName: lName,
+		username,
+		phoneNumber,
+		email,
+		driverInfo = {},
+	} = userData?.data?.user ?? {};
 	const {
 		firstName = fName,
 		lastName = lName,
@@ -54,7 +61,6 @@ const DriverInformation = (props: any) => {
 		preferences,
 		isVerified,
 	} = driverInfo ?? {};
-	console.log(driverInfo, '<=== driverInfo');
 
 	const { AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
@@ -114,8 +120,8 @@ const DriverInformation = (props: any) => {
 	useEffect(() => {
 		if (driverInfoRes) {
 			setValues({
-				firstName: driverInfoRes?.driverInfo?.firstName ?? '',
-				lastName: driverInfoRes?.driverInfo?.lastName ?? '',
+				firstName: driverInfoRes?.driverInfo?.firstName ?? fName,
+				lastName: driverInfoRes?.driverInfo?.lastName ?? lName,
 				city: driverInfoRes?.driverInfo?.city ?? '',
 				postCode: driverInfoRes?.driverInfo?.postCode ?? '',
 				street: driverInfoRes?.driverInfo?.street ?? '',
@@ -137,7 +143,7 @@ const DriverInformation = (props: any) => {
 	}, [driverInfoRes]);
 
 	const api_getDriverInfo = async () => {
-		const params = { token: userData?.token };
+		const params = { token: userData?.data?.token };
 		setIsLoading(true);
 		const response = await apiGet(ENDPOINT.GET_PROFILE_INFO, '', params);
 		if (response?.success) {

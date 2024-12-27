@@ -46,9 +46,12 @@ const userDataSlice = createSlice({
 		updateUserState: (state, action) => {
 			state.userData = {
 				...state.userData,
-				user: {
-					...state.userData.user,
-					...action?.payload,
+				data: {
+					...state.userData?.data,
+					user: {
+						...state.userData?.data?.user,
+						...action?.payload,
+					},
 				},
 			};
 		},

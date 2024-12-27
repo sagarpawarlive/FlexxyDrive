@@ -20,7 +20,7 @@ const AddEmergencyContacts = (props: any) => {
 	const dispatch = useDispatch();
 	const { isDarkMode, toggleTheme, AppColors } = useTheme();
 
-	const userData = useSelector((state: any) => state.userDataSlice.userData);
+	const userData = useSelector((state: any) => state.userDataSlice.userData?.data);
 	console.log('[ / userData ] ------->', userData);
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 	const [contactList, setContactList] = useState(userData?.user?.driverInfo?.emergencyContacts ?? []);

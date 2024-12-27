@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList, ActivityIndicator } from 'react-native';
 import { AppHeight, AppMargin, borderRadius10 } from '../constants/commonStyle';
 import { Fonts, FontSize } from '../assets/fonts';
 import { useTheme } from '../theme/ThemeProvider';
@@ -17,12 +17,12 @@ const AppCustomPicker = ({
 	borderBottomWidth,
 	showSearch,
 	onSearchPress,
-	setSearchItem,
+	setSearchItem = () => {},
+	brandModalLoading = false,
 }: any) => {
 	// const [selectedItem, setSelectedItem] = useState('');
 	const [isPickerOpen, setIsPickerOpen] = useState(false);
 	const { AppColors } = useTheme();
-
 	const [searchText, setSearchText] = useState('');
 
 	// Toggle dropdown visibility
@@ -50,7 +50,9 @@ const AppCustomPicker = ({
 			]}>
 			{/* Touchable to open or close the picker */}
 			<TouchableOpacity style={styles.pickerButton} onPress={togglePicker}>
-				<Text style={[styles.pickerText, { color: AppColors.white }]}>{selectedItem || unselectedText}</Text>
+				<Text style={[styles.pickerText, { color: AppColors.white }]}>
+					{selectedItem?.name || unselectedText}
+				</Text>
 				<Image style={{ transform: [{ rotate: isPickerOpen ? '90deg' : '270deg' }] }} source={Icons.icnBack} />
 			</TouchableOpacity>
 
@@ -61,7 +63,7 @@ const AppCustomPicker = ({
 					marginHorizontal={20}
 					onChangeText={setSearchText}
 					rightNode={
-						<TouchableOpacity onPress={onSearchPress}>
+						<TouchableOpacity onPress={() => onSearchPress(searchText)}>
 							<AppText
 								textColor={AppColors.primary}
 								fontFamily={Fonts.MEDIUM}
@@ -76,6 +78,11 @@ const AppCustomPicker = ({
 			{/* Custom dropdown that opens/closes */}
 			{isPickerOpen && (
 				<View style={styles.dropdown}>
+					{brandModalLoading && (
+						<View style={{ marginTop: 10 }}>
+							<ActivityIndicator animating size={'small'} />
+						</View>
+					)}
 					<FlatList
 						style={{ marginTop: 10 }}
 						data={options}
@@ -85,11 +92,12 @@ const AppCustomPicker = ({
 									key={index}
 									style={[styles.option, { borderBottomWidth: index !== options.length - 1 ? 1 : 0 }]}
 									onPress={() => selectItem(item, index)}>
-									<Text style={[styles.optionText, { color: AppColors.white }]}>{item}</Text>
+									<Text style={[styles.optionText, { color: AppColors.white }]}>{item?.name}</Text>
 								</TouchableOpacity>
 							);
 						}}
 						keyExtractor={(item, index) => index.toString()}
+						nestedScrollEnabled
 					/>
 				</View>
 			)}

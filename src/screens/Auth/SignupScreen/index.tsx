@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { FlatList, Image, Keyboard, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -27,23 +27,20 @@ const SignupScreen = (props: any) => {
 	const dispatch = useDispatch();
 	const { AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
-
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-
 	const [countryCallingCode, setCountryCallingCode] = useState('91'); // Default to USA country code
 	const [selectedCountry, setSelectedCountry]: any = useState('IN'); // To store selected country
 	const [showCountryPicker, setShowCountryPicker] = useState(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [newUser, setNewUser] = useState<any>();
 
-	const imagesData = useMemo(
-		() => [
-			{ id: 1, src: Icons.icnGoogle, label: 'Google' },
-			{ id: 2, src: Icons.icnApple, label: 'Apple' },
-			{ id: 3, src: Icons.icnFacebook, label: 'Facebook' },
-		],
-		[],
-	);
+	const userNameRef = useRef<any>(null);
+	const firstNameRef = useRef<any>(null);
+	const lastNameRef = useRef<any>(null);
+	const phoneNumberRef = useRef<any>(null);
+	const emailRef = useRef<any>(null);
+	const passwordRef = useRef<any>(null);
+	const confirmPasswordRef = useRef<any>(null);
 
 	const onSelectCountry = (country: any) => {
 		setShowCountryPicker(false);
@@ -140,9 +137,11 @@ const SignupScreen = (props: any) => {
 
 	const apiSignup = async (values: any) => {
 		const response: any = await APIMethods.post(ENDPOINT.SIGNUP, values, []);
-		if (response?.token?.length > 0) {
+		console.log(response, '<== response');
+
+		if (response?.user?.id) {
 			const responseOtp: any = await APIMethods.post(ENDPOINT.SEND_SMS_OTP, values, []);
-			if (responseOtp?.statusCode == 200) {
+			if (responseOtp?.statusCode >= 200 && responseOtp?.statusCode <= 299) {
 				props.navigation.navigate(NavigationKeys.OtpScreen, {
 					phone: values.phoneNumber,
 					newUser: response,
@@ -163,9 +162,12 @@ const SignupScreen = (props: any) => {
 		fieldName: string,
 		isPassword: boolean = false,
 		isCountry = false,
+		ref,
+		nextRef,
 	) => (
 		<View style={{ marginTop: AppMargin._20 }}>
 			<AppTextInput
+				ref={ref}
 				maxLength={fieldName === 'phone' ? 15 : undefined}
 				marginTop={AppMargin._5}
 				placeholder={placeholder}
@@ -185,6 +187,13 @@ const SignupScreen = (props: any) => {
 				iconRight={isPassword ? (showPassword ? Icons.icnShowPass : Icons.icnHidePass) : undefined}
 				iconRightClick={() => setShowPassword(!showPassword)}
 				showError={touched[fieldName] && errors[fieldName]}
+				returnKeyType={placeholder === 'Confirm Password' ? 'done' : 'next'}
+				onSubmitEditing={() =>
+					placeholder === 'Confirm Password' ? Keyboard.dismiss() : nextRef?.current?.focus()
+				}
+				texInputProps={{
+					blurOnSubmit: false,
+				}}
 			/>
 		</View>
 	);
@@ -203,13 +212,13 @@ const SignupScreen = (props: any) => {
 						</View>
 
 						{/* Render Form Fields */}
-						{renderFormField('Username', 'username')}
-						{renderFormField('First Name', 'firstName')}
-						{renderFormField('Last Name', 'lastName')}
-						{renderFormField('Phone Number', 'phone', false, true)}
-						{renderFormField('Email Id', 'email')}
-						{renderFormField('Password', 'password', true)}
-						{renderFormField('Confirm Password', 'confirmPassword', true)}
+						{renderFormField('Username', 'username', false, false, userNameRef, firstNameRef)}
+						{renderFormField('First Name', 'firstName', false, false, firstNameRef, lastNameRef)}
+						{renderFormField('Last Name', 'lastName', false, false, lastNameRef, phoneNumberRef)}
+						{renderFormField('Phone Number', 'phone', false, true, phoneNumberRef, emailRef)}
+						{renderFormField('Email Id', 'email', false, false, emailRef, passwordRef)}
+						{renderFormField('Password', 'password', true, false, passwordRef, confirmPasswordRef)}
+						{renderFormField('Confirm Password', 'confirmPassword', true, false, confirmPasswordRef)}
 
 						<View style={{ marginTop: AppMargin._40 }}>
 							{/* <View style={styles.socialLoginContainer}>

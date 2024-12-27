@@ -12,7 +12,7 @@ const _checkInternetConnectivity = async (): Promise<any> => {
 };
 
 const get = async (endpoint: any, params: any = '', customHeaders: any = {}) => {
-	const TOKEN = await store.getState().userDataSlice.userData.token;
+	const TOKEN = await store.getState().userDataSlice.userData.data?.token;
 
 	const isConnected = await _checkInternetConnectivity();
 
@@ -46,7 +46,7 @@ const get = async (endpoint: any, params: any = '', customHeaders: any = {}) => 
 };
 
 const post = async (endpoint: any, data: any, customHeaders = []) => {
-	const TOKEN = await store.getState().userDataSlice.userData.token;
+	const TOKEN = await store.getState().userDataSlice.userData.data?.token;
 
 	const isConnected = await _checkInternetConnectivity();
 
