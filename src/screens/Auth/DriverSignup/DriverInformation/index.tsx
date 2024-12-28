@@ -328,18 +328,6 @@ const DriverInformation = (props: any) => {
 							returnKeyType="next"
 						/>
 
-						{/* <AppTextInput
-							editable={false}
-							// height={AppHeight._50}
-							borderBottomWidth={1}
-							placeholder="DOB"
-							value={date ? moment(date).format('DD-MM-YYYY') : ''}
-							iconRight={Icons.icnCalender}
-							iconRightClick={toggleModal}
-							wholePress={() => toggleModal()}
-							returnKeyType="next"
-						/> */}
-
 						<Pressable style={styles.dobContainer} onPress={() => toggleModal()}>
 							<Text style={{ flex: 1, fontSize: FontSize._16, color: AppColors.text }}>
 								{date ? moment(date).format('DD-MM-YYYY') : 'DOB'}
@@ -450,7 +438,7 @@ const DriverInformation = (props: any) => {
 							<AppText top={5} left={10} label="JPG, PNG " />
 						</View>
 
-						<AppDriverButtons
+						{/* <AppDriverButtons
 							buttonLabel="Next of Kin"
 							iconTint={AppColors.white}
 							icon={Icons.icnBack}
@@ -459,7 +447,7 @@ const DriverInformation = (props: any) => {
 									driverInfoRes: guarantor ?? {},
 								});
 							}}
-						/>
+						/> */}
 
 						<AppDriverButtons
 							onClick={() => setIsPrefModalVisible(true)}

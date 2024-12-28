@@ -4,13 +4,14 @@ import Modal from 'react-native-modal';
 import DatePicker from 'react-native-date-picker';
 import { useTheme } from '../theme/ThemeProvider';
 
-interface MyModalComponentProps {
+interface AppCalenderProps {
 	isVisible: boolean;
 	onClose: () => void;
 	onDateSelect: (selectedDate: string) => void;
+	title?: string;
 }
 
-const MyModalComponent: React.FC<MyModalComponentProps> = ({ isVisible, onClose, onDateSelect }) => {
+const AppCalender: React.FC<AppCalenderProps> = ({ isVisible, onClose, onDateSelect, title, ...props }) => {
 	const { AppColors } = useTheme();
 	const [selectedDate, setSelectedDate] = useState(new Date('2000-01-01'));
 	const [maxDate, setMaxDate] = useState(new Date());
@@ -38,10 +39,10 @@ const MyModalComponent: React.FC<MyModalComponentProps> = ({ isVisible, onClose,
 	return (
 		<Modal isVisible={isVisible} onBackdropPress={handleClose} style={styles.modal}>
 			<View style={styles.modalContent}>
-				<Text style={styles.modalTitle}>Select a Birth Date</Text>
+				<Text style={styles.modalTitle}>{title ?? 'Select a Birth Date'}</Text>
 				<DatePicker date={selectedDate} onDateChange={onDateChange} mode="date" maximumDate={maxDate} />
 				<View style={styles.buttonContainer}>
-					<Button title="Discard" onPress={handleClose} color={AppColors.error} />
+					<Button title="Close" onPress={handleClose} color={AppColors.error} />
 					<Button title="Save" onPress={() => handleSave(selectedDate)} color={AppColors.textDark} />
 				</View>
 			</View>
@@ -74,4 +75,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default MyModalComponent;
+export default AppCalender;

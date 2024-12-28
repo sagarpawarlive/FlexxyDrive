@@ -31,6 +31,8 @@ import RNFS from 'react-native-fs';
 import { generateUniqueFileName, isIOS } from '../../../../constants/constants';
 import { s3Upload } from '../../../../utils/awsUpload';
 import { _showToast } from '../../../../services/UIs/ToastConfig';
+import AppYearPicker from '../../../../components/AppYearPicker';
+import AppFuelPicker from '../../../../components/AppFuelPicker';
 
 const AddCarDetails = (props: any) => {
 	const dispatch = useDispatch();
@@ -43,6 +45,10 @@ const AddCarDetails = (props: any) => {
 
 	const [selectedCarOption, setSelectedCarOption] = useState(carData?.carBrand);
 	const [selectedCarModel, setSelectedCarModel] = useState(carData?.carModel);
+
+	// const [selectedYear, setSelectedYear] = useState(carData?.firstRegistrationYear);
+	const [otherFuel, setOtherFuel] = useState('');
+
 	const [selectedCarType, setSelectedCarType] = useState('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [imageUri, setImageUri] = useState<string | null>(null);
@@ -53,6 +59,23 @@ const AddCarDetails = (props: any) => {
 	const onBackPress = () => {
 		props.navigation.goBack();
 	};
+
+	const currentYear = new Date().getFullYear();
+	const years = [];
+
+	const fuelType = [
+		'Petrol',
+		'Diesel',
+		'Electric',
+		'Hybrid (Petrol/Electric)',
+		'Hybrid (Diesel/Electric)',
+		'CNG',
+		'Other',
+	];
+
+	for (let year = 1990; year <= currentYear; year++) {
+		years.push(year.toString());
+	}
 
 	const handleImageUpload = async () => {
 		setIsLoading(true);
@@ -104,10 +127,10 @@ const AddCarDetails = (props: any) => {
 				carModel: selectedCarModel?.name ?? '',
 				carBrand: selectedCarOption?.name ?? '',
 				firstRegistrationYear: parseInt(formik.values.firstRegistration),
-				fuel: formik.values.fuel,
+				fuel: formik.values.fuel == 'Other' ? otherFuel : formik.values.fuel,
 				color: formik.values.color,
 				mileage: parseInt(formik.values.mileage),
-				numberOfSeats: parseInt(formik.values.numberOfSeats),
+				// numberOfSeats: parseInt(formik.values.numberOfSeats),
 				// vehicleType: selectedCarType?.name ?? '',
 				licensePlateNumber: formik.values.licensePlate,
 				imageUrl: carImage || imageUri,
@@ -145,20 +168,21 @@ const AddCarDetails = (props: any) => {
 			.required('Registration year is required'),
 		fuel: Yup.string().required('Fuel type is required'),
 		color: Yup.string().required('Color is required'),
-		mileage: Yup.string().required('Mileage is required'),
-		numberOfSeats: Yup.number()
-			.positive('Number of seats must be a positive number')
-			.integer('Number of seats must be an integer')
-			.min(2, 'Minimum 2 seats')
-			.max(10, 'Maximum 10 seats')
-			.required('Number of seats is required'),
+		// mileage: Yup.string().required('Mileage is required'),
+		// numberOfSeats: Yup.number()
+		// 	.positive('Number of seats must be a positive number')
+		// 	.integer('Number of seats must be an integer')
+		// 	.min(2, 'Minimum 2 seats')
+		// 	.max(10, 'Maximum 10 seats')
+		// 	.required('Number of seats is required'),
 		licensePlate: Yup.string()
 			.required('License plate number is required')
 			.matches(/^[A-Z0-9]+$/, 'License plate must be alphanumeric'),
-		otherCarModel: Yup.string().when('selectedCarOption', {
-			is: 'Others',
-			then: Yup.string().required('Please specify car model'),
-		}),
+		// otherCarModel: Yup.string().when('selectedCarOption', {
+		// 	is: 'Others',
+		// 	then: Yup.string().required('Please specify car model'),
+		// }
+
 		// otherVehicleType: Yup.string().when('selectedCarType', {
 		// 	is: 'Others',
 		// 	then: Yup.string().required('Please specify vehicle type'),
@@ -251,7 +275,7 @@ const AddCarDetails = (props: any) => {
 						/>
 
 						{/* First Registration Input */}
-						<AppTextInput
+						{/* <AppTextInput
 							placeholder="First Registration Year"
 							value={formik.values.firstRegistration}
 							onChangeText={formik.handleChange('firstRegistration')}
@@ -260,15 +284,40 @@ const AddCarDetails = (props: any) => {
 								keyboardType: 'number-pad',
 								returnKeyType: 'done',
 							}}
+						/> */}
+
+						<AppYearPicker
+							marginTop={AppMargin._20}
+							selectedItem={formik.values.firstRegistration}
+							setSelectedItem={formik.handleChange('firstRegistration')}
+							unselectedText={'Select Year'}
+							options={years}
 						/>
 
 						{/* Fuel Type Input */}
-						<AppTextInput
+						<AppFuelPicker
+							marginTop={AppMargin._20}
+							selectedItem={formik.values.fuel}
+							setSelectedItem={formik.handleChange('fuel')}
+							unselectedText={'Select Fuel type'}
+							options={fuelType}
+						/>
+
+						{/* <AppTextInput
 							placeholder="Fuel Type"
 							value={formik.values.fuel}
 							onChangeText={formik.handleChange('fuel')}
 							showError={formik.touched.fuel && formik.errors.fuel}
-						/>
+						/> */}
+
+						{formik.values.fuel == 'Other' && (
+							<AppTextInput
+								placeholder="Enter Fuel Type"
+								value={otherFuel}
+								onChangeText={setOtherFuel}
+								// showError={formik.touched.fuel && formik.errors.fuel}
+							/>
+						)}
 
 						{/* Color Input */}
 						<AppTextInput
@@ -279,7 +328,7 @@ const AddCarDetails = (props: any) => {
 						/>
 
 						{/* Mileage Input */}
-						<AppTextInput
+						{/* <AppTextInput
 							placeholder="Mileage"
 							value={formik.values.mileage}
 							onChangeText={formik.handleChange('mileage')}
@@ -287,10 +336,10 @@ const AddCarDetails = (props: any) => {
 							texInputProps={{
 								returnKeyType: 'done',
 							}}
-						/>
+						/> */}
 
 						{/* Number of Seats Input */}
-						<AppTextInput
+						{/* <AppTextInput
 							placeholder="Number of Seats"
 							value={formik.values.numberOfSeats}
 							onChangeText={formik.handleChange('numberOfSeats')}
@@ -299,7 +348,7 @@ const AddCarDetails = (props: any) => {
 								keyboardType: 'number-pad',
 								returnKeyType: 'done',
 							}}
-						/>
+						/> */}
 
 						{/* Vehicle Type Picker */}
 						{/* <AppCustomPicker
@@ -309,14 +358,6 @@ const AddCarDetails = (props: any) => {
 							unselectedText={'Vehicle Type'}
 							options={car_type_options}
 						/> */}
-						{selectedCarType === 'Others' && (
-							<AppTextInput
-								placeholder="Enter Vehicle Type"
-								value={formik.values.otherVehicleType}
-								onChangeText={formik.handleChange('otherVehicleType')}
-								showError={formik.touched.otherVehicleType && formik.errors.otherVehicleType}
-							/>
-						)}
 
 						{/* License Plate Input */}
 						<AppTextInput

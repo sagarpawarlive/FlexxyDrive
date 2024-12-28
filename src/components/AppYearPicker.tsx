@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
 import { AppHeight, AppMargin, borderRadius10 } from '../constants/commonStyle';
 import { Fonts, FontSize } from '../assets/fonts';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icons } from '../assets/Icons';
-import AppTextInput from './AppTextInput';
-import AppText from './AppText';
 
-const AppCustomPicker = ({
+const AppYearPicker = ({
 	options,
 	unselectedText,
 	setSelectedItem,
@@ -15,16 +13,10 @@ const AppCustomPicker = ({
 	marginTop,
 	borderWidth,
 	borderBottomWidth,
-	showSearch,
-	onSearchPress,
-	setSearchItem = () => {},
-	brandModalLoading = false,
 }: any) => {
 	// const [selectedItem, setSelectedItem] = useState('');
 	const [isPickerOpen, setIsPickerOpen] = useState(false);
 	const { AppColors } = useTheme();
-	const [searchText, setSearchText] = useState('');
-
 	// Toggle dropdown visibility
 	const togglePicker = () => {
 		setIsPickerOpen(!isPickerOpen);
@@ -33,9 +25,16 @@ const AppCustomPicker = ({
 	// Handle selecting an option
 	const selectItem = (item, index) => {
 		setSelectedItem(item);
-		setSearchItem(searchText);
 		setIsPickerOpen(false); // Close the picker after selection
 	};
+
+	const renderItem = ({ item, index }) => (
+		<TouchableOpacity
+			style={[styles.option, { borderBottomWidth: index !== options.length - 1 ? 1 : 0 }]}
+			onPress={() => selectItem(item, index)}>
+			<Text style={[styles.optionText, { color: AppColors.white }]}>{item}</Text>
+		</TouchableOpacity>
+	);
 
 	return (
 		<View
@@ -50,66 +49,19 @@ const AppCustomPicker = ({
 			]}>
 			{/* Touchable to open or close the picker */}
 			<TouchableOpacity style={styles.pickerButton} onPress={togglePicker}>
-				<Text style={[styles.pickerText, { color: AppColors.white }]}>
-					{selectedItem?.name || unselectedText}
-				</Text>
+				<Text style={[styles.pickerText, { color: AppColors.white }]}>{selectedItem || unselectedText}</Text>
 				<Image style={{ transform: [{ rotate: isPickerOpen ? '90deg' : '270deg' }] }} source={Icons.icnBack} />
 			</TouchableOpacity>
-
-			{showSearch && isPickerOpen && (
-				<AppTextInput
-					placeholder="Search"
-					value={searchText}
-					marginHorizontal={20}
-					onChangeText={text => {
-						setSearchText(text);
-						onSearchPress(searchText);
-					}}
-					// rightNode={
-					// 	<TouchableOpacity onPress={() => onSearchPress(searchText)}>
-					// 		<AppText
-					// 			textColor={AppColors.primary}
-					// 			fontFamily={Fonts.MEDIUM}
-					// 			fontSize={FontSize._16}
-					// 			title={'Search'}
-					// 		/>
-					// 	</TouchableOpacity>
-					// }
-				/>
-			)}
 
 			{/* Custom dropdown that opens/closes */}
 			{isPickerOpen && (
 				<View style={styles.dropdown}>
-					{brandModalLoading && (
-						<View style={{ marginTop: 10 }}>
-							<ActivityIndicator animating size={'small'} />
-						</View>
-					)}
 					<FlatList
-						style={{ marginTop: 10 }}
-						data={options}
-						renderItem={({ item, index }) => {
-							return (
-								<TouchableOpacity
-									key={index}
-									style={[styles.option, { borderBottomWidth: index !== options.length - 1 ? 1 : 0 }]}
-									onPress={() => selectItem(item, index)}>
-									<Text style={[styles.optionText, { color: AppColors.white }]}>{item?.name}</Text>
-								</TouchableOpacity>
-							);
-						}}
-						keyExtractor={(item, index) => index.toString()}
+						style={{ height: 200 }}
+						data={options.reverse()}
+						keyExtractor={(item, index) => index.toString()} // or use unique IDs if available
+						renderItem={renderItem}
 						nestedScrollEnabled
-						ListEmptyComponent={
-							<View style={{ marginTop: AppMargin._20, justifyContent: 'center', alignItems: 'center' }}>
-								<AppText
-									fontFamily={Fonts.REGULAR}
-									fontSize={FontSize._16}
-									title={showSearch ? 'No Brands found' : 'Select Brand first'}
-								/>
-							</View>
-						}
 					/>
 				</View>
 			)}
@@ -129,6 +81,7 @@ const styles = StyleSheet.create({
 	},
 	pickerButton: {
 		flexDirection: 'row',
+
 		borderRadius: 8,
 		height: AppHeight._70,
 		alignItems: 'center',
@@ -140,7 +93,6 @@ const styles = StyleSheet.create({
 		fontSize: FontSize._16,
 	},
 	dropdown: {
-		height: AppHeight._250,
 		width: '100%',
 	},
 	option: {
@@ -156,4 +108,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default AppCustomPicker;
+export default AppYearPicker;
