@@ -129,7 +129,7 @@ const AddCarDetails = (props: any) => {
 				firstRegistrationYear: parseInt(formik.values.firstRegistration),
 				fuel: formik.values.fuel == 'Other' ? otherFuel : formik.values.fuel,
 				color: formik.values.color,
-				mileage: parseInt(formik.values.mileage),
+				// mileage: parseInt(formik.values.mileage),
 				// numberOfSeats: parseInt(formik.values.numberOfSeats),
 				// vehicleType: selectedCarType?.name ?? '',
 				licensePlateNumber: formik.values.licensePlate,
@@ -139,7 +139,7 @@ const AddCarDetails = (props: any) => {
 
 		try {
 			setIsLoading(true);
-			// const res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
+			const res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
 			dispatch(
 				updateUserState({
 					driverInfo: { ...res?.data },
