@@ -49,7 +49,7 @@ const AddCarDetails = (props: any) => {
 	// const [selectedYear, setSelectedYear] = useState(carData?.firstRegistrationYear);
 	const [otherFuel, setOtherFuel] = useState('');
 
-	const [selectedCarType, setSelectedCarType] = useState('');
+	// const [selectedCarType, setSelectedCarType] = useState('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [imageUri, setImageUri] = useState<string | null>(null);
 	const [brands, setBrands] = useState([]);
@@ -139,7 +139,7 @@ const AddCarDetails = (props: any) => {
 
 		try {
 			setIsLoading(true);
-			const res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
+			// const res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params);
 			dispatch(
 				updateUserState({
 					driverInfo: { ...res?.data },
@@ -209,7 +209,6 @@ const AddCarDetails = (props: any) => {
 		if (carData) {
 			setSelectedCarOption({ name: carData.carBrand });
 			setSelectedCarModel({ name: carData.carModel });
-			setSelectedCarType(carData.vehicleType);
 			formik.setValues({
 				firstRegistration: carData.firstRegistrationYear?.toString() || '',
 				fuel: carData.fuel || '',
@@ -294,6 +293,20 @@ const AddCarDetails = (props: any) => {
 							options={years}
 						/>
 
+						{formik.touched.firstRegistration && formik.errors.firstRegistration && (
+							<View style={styles.errorContainer}>
+								<Image style={[styles.icon, { tintColor: AppColors.error }]} source={Icons.icnError} />
+								<AppText
+									width={'90%'}
+									left={AppMargin._10}
+									textColor={AppColors.error}
+									fontFamily={Fonts.REGULAR}
+									fontSize={FontSize._14}
+									label={formik.errors.firstRegistration}
+								/>
+							</View>
+						)}
+
 						{/* Fuel Type Input */}
 						<AppFuelPicker
 							marginTop={AppMargin._20}
@@ -302,6 +315,20 @@ const AddCarDetails = (props: any) => {
 							unselectedText={'Select Fuel type'}
 							options={fuelType}
 						/>
+
+						{formik.touched.fuel && formik.errors.fuel && (
+							<View style={styles.errorContainer}>
+								<Image style={[styles.icon, { tintColor: AppColors.error }]} source={Icons.icnError} />
+								<AppText
+									width={'90%'}
+									left={AppMargin._10}
+									textColor={AppColors.error}
+									fontFamily={Fonts.REGULAR}
+									fontSize={FontSize._14}
+									label={formik.errors.fuel}
+								/>
+							</View>
+						)}
 
 						{/* <AppTextInput
 							placeholder="Fuel Type"
@@ -315,7 +342,7 @@ const AddCarDetails = (props: any) => {
 								placeholder="Enter Fuel Type"
 								value={otherFuel}
 								onChangeText={setOtherFuel}
-								// showError={formik.touched.fuel && formik.errors.fuel}
+								showError={formik.touched.fuel && formik.errors.fuel}
 							/>
 						)}
 
@@ -433,6 +460,17 @@ const createStyles = (AppColors: Theme) => {
 			backgroundColor: AppColors.background,
 			paddingHorizontal: 20,
 			paddingVertical: 16,
+		},
+		icon: {
+			tintColor: AppColors.secondary,
+			height: 20,
+			width: 20,
+			marginLeft: 10,
+		},
+		errorContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			marginTop: 10,
 		},
 	});
 };
