@@ -92,7 +92,7 @@ const AddEmergencyContacts = (props: any) => {
 				<AppHeader
 					buttonTitle={'Add Emergency Contacts'}
 					tintColor={AppColors.backButton}
-					top={AppMargin._30}
+					top={AppMargin._15}
 					onBack={onBackPress}
 				/>
 
@@ -125,16 +125,11 @@ const AddEmergencyContacts = (props: any) => {
 
 const createStyles = (AppColors: Theme) => {
 	return StyleSheet.create({
-		orContainer: {
-			flexDirection: 'row',
-			justifyContent: 'center',
-			marginTop: AppMargin._20,
-		},
 		innerMainContainer: {
 			flex: 1,
 			backgroundColor: AppColors.background,
 			paddingHorizontal: 20,
-			paddingVertical: 16,
+			paddingBottom: 16,
 		},
 	});
 };

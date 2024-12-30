@@ -69,6 +69,7 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }: any) => {
 
 				{/* Phone number input */}
 				<AppTextInput
+					inputMode="phone-pad"
 					maxLength={15}
 					backgroundColor={AppColors.modalBackground}
 					placeholder="Phone number"
@@ -91,6 +92,7 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }: any) => {
 				{/* Save Button */}
 				<AppButton
 					top={AppMargin._20}
+					bottom={AppMargin._20}
 					textColor={AppColors.textDark}
 					fontSize={FontSize._16}
 					fontFamily={Fonts.MEDIUM}

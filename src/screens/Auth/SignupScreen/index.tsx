@@ -139,7 +139,7 @@ const SignupScreen = (props: any) => {
 		const response: any = await APIMethods.post(ENDPOINT.SIGNUP, values, []);
 		console.log(response, '<== response');
 
-		if (response?.user?.id) {
+		if (response?.data?.user?.id) {
 			const responseOtp: any = await APIMethods.post(ENDPOINT.SEND_SMS_OTP, values, []);
 			if (responseOtp?.statusCode >= 200 && responseOtp?.statusCode <= 299) {
 				props.navigation.navigate(NavigationKeys.OtpScreen, {

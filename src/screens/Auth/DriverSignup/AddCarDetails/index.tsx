@@ -406,7 +406,12 @@ const AddCarDetails = (props: any) => {
 									...borderRadius10,
 								},
 							]}>
-							<View style={{ alignItems: 'center', flexDirection: 'row', width: '80%' }}>
+							<View
+								style={{
+									alignItems: 'center',
+									flexDirection: 'row',
+									width: '90%',
+								}}>
 								<AppText
 									fontFamily={Fonts.REGULAR}
 									fontSize={FontSize._14}
