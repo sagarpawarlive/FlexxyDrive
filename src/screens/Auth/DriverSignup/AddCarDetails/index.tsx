@@ -106,6 +106,8 @@ const AddCarDetails = (props: any) => {
 
 	// API Call to Save Car Details
 	const api_AddDriverInfo = async () => {
+		setIsLoading(true);
+
 		const isValid = await formik.validateForm();
 
 		if (!selectedCarModel?.name || !selectedCarOption?.name) {
@@ -121,7 +123,6 @@ const AddCarDetails = (props: any) => {
 		if (capturedImage?.path !== '') {
 			carImage = await s3Upload(capturedImage);
 		}
-
 		const params = {
 			carDetails: {
 				carModel: selectedCarModel?.name ?? '',
@@ -156,6 +157,7 @@ const AddCarDetails = (props: any) => {
 		} finally {
 			setIsLoading(false);
 		}
+		setIsLoading(false);
 	};
 
 	// Formik Validation Schema
