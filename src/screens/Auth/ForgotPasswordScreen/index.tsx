@@ -27,7 +27,7 @@ const ForgotPasswordScreen = (props: any) => {
 			emailOrPhone: Yup.string()
 				.required('This field is required.')
 				.matches(
-					/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$|^[0-9]{10}$/,
+					/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$|^[0-9]{10,15}$/,
 					'Enter a valid email or phone number',
 				),
 		}),

@@ -31,7 +31,7 @@ const AddMobileNumber = (props: any) => {
 
 	const validationSchema = Yup.object().shape({
 		phone: Yup.string()
-			.matches(/^[0-9]{10}$/, 'Phone number must be 10 digits')
+			.matches(/^[0-9]{10,15}$/, 'Phone number must be 10 and 15 digits')
 			.required('Phone number is required'),
 	});
 
