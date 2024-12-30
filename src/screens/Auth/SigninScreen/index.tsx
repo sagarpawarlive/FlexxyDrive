@@ -57,22 +57,26 @@ const SigninScreen = (props: any) => {
 			await GoogleSignin.hasPlayServices();
 			const userInfo: any = await GoogleSignin.signIn();
 			console.log('[ / userInfo google login ] ------->', userInfo);
-			let googleParams = {
-				token: userInfo.data.idToken,
-			};
-			const response: any = await apiPost(ENDPOINT.GOOGLE_LOGIN, googleParams, []);
-			console.log('[ / {google signin Resss }] ------->', response);
-			if (response?.data?.requirePhoneNumber == true) {
-				props.navigation.navigate(NavigationKeys.AddMobileNumber, {
-					userId: response?.data?.user?.id,
-				});
-			} else {
-				if (response?.data?.token?.length > 0) {
-					props.navigation.navigate(NavigationKeys.FinalUser);
-					dispatch(setUserData(response));
+			if (userInfo?.data?.idToken) {
+				let googleParams = {
+					token: userInfo.data.idToken,
+				};
+				const response: any = await apiPost(ENDPOINT.GOOGLE_LOGIN, googleParams, []);
+				console.log('[ / {google signin Resss }] ------->', response);
+				if (response?.data?.requirePhoneNumber == true) {
+					props.navigation.navigate(NavigationKeys.AddMobileNumber, {
+						userId: response?.data?.user?.id,
+					});
 				} else {
-					_showToast(response?.message, 'error');
+					if (response?.data?.token?.length > 0) {
+						props.navigation.navigate(NavigationKeys.FinalUser);
+						dispatch(setUserData(response));
+					} else {
+						_showToast(response?.message, 'error');
+					}
 				}
+			} else {
+				_showToast(userInfo?.type, 'error');
 			}
 		} catch (error: any) {
 			if (error.code == statusCodes.SIGN_IN_CANCELLED) {

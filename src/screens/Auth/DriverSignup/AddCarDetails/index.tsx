@@ -73,7 +73,7 @@ const AddCarDetails = (props: any) => {
 		'Other',
 	];
 
-	for (let year = 1990; year <= currentYear; year++) {
+	for (let year = currentYear; year >= 1990; year--) {
 		years.push(year.toString());
 	}
 

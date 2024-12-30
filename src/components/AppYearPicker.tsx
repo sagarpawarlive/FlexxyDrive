@@ -58,7 +58,7 @@ const AppYearPicker = ({
 				<View style={styles.dropdown}>
 					<FlatList
 						style={{ height: 200 }}
-						data={options.reverse()}
+						data={options}
 						keyExtractor={(item, index) => index.toString()} // or use unique IDs if available
 						renderItem={renderItem}
 						nestedScrollEnabled
