@@ -5,4 +5,6 @@ export const Images = {
 
 	imDdrivertopbackground: require('./drivertopbackground.png'),
 	imgDriverPlaceholder: require('./driverPlaceholder.png'),
+
+	imgLoader: require('./loader.gif'),
 };
