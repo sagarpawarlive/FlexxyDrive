@@ -40,7 +40,13 @@ const AppCalender: React.FC<AppCalenderProps> = ({ isVisible, onClose, onDateSel
 		<Modal isVisible={isVisible} onBackdropPress={handleClose} style={styles.modal}>
 			<View style={styles.modalContent}>
 				<Text style={styles.modalTitle}>{title ?? 'Select a Birth Date'}</Text>
-				<DatePicker date={selectedDate} onDateChange={onDateChange} mode="date" maximumDate={maxDate} />
+				<DatePicker
+					theme="light"
+					date={selectedDate}
+					onDateChange={onDateChange}
+					mode="date"
+					maximumDate={maxDate}
+				/>
 				<View style={styles.buttonContainer}>
 					<Button title="Close" onPress={handleClose} color={AppColors.error} />
 					<Button title="Save" onPress={() => handleSave(selectedDate)} color={AppColors.textDark} />

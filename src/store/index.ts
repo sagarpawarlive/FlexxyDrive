@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { configureStore } from '@reduxjs/toolkit';
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from 'redux-persist';
 import userDataSlice from './reducers/userdataSlice';
-import reactotron from '../../ReactotronConfig';
 
 const storage = AsyncStorage;
 
@@ -27,11 +26,6 @@ const store = configureStore({
 		//multiple reducers
 		userDataSlice: userData_Slice,
 	},
-	enhancers: defaultEnhancers => [
-		...defaultEnhancers(), // Ensure middleware enhancer is included
-		reactotron.createEnhancer(), // Add Reactotron as an enhancer
-	],
-
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware({
 			serializableCheck: {
