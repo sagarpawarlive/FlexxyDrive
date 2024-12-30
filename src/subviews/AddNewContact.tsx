@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Dimensions, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { Icons } from '../assets/Icons';
@@ -8,24 +8,32 @@ import AppText from '../components/AppText';
 import AppTextInput from '../components/AppTextInput';
 import { AppMargin, borderRadius10 } from '../constants/commonStyle';
 import { useTheme } from '../theme/ThemeProvider';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const { height } = Dimensions.get('window');
 
-const AddNewContact = ({ isVisible, onClose, title, onSaveContact }) => {
+const AddNewContact = ({ isVisible, onClose, title, onSaveContact }: any) => {
 	const { AppColors } = useTheme();
 
-	const [name, setName] = useState('');
-	const [phoneNumber, setPhone] = useState('');
-	const [email, setEmail] = useState('');
-
-	const handleSave = () => {
-		const newContact = { name, phoneNumber, email };
-		onSaveContact(newContact);
-		onClose();
-		setName('');
-		setPhone('');
-		setEmail('');
-	};
+	// Formik initialization
+	const formik = useFormik({
+		initialValues: {
+			name: '',
+			phoneNumber: '',
+			email: '',
+		},
+		validationSchema: Yup.object({
+			name: Yup.string().required('Fullname is required'),
+			phoneNumber: Yup.string().required('Phone number is required'),
+			email: Yup.string().email('Invalid email format').optional(),
+		}),
+		onSubmit: values => {
+			onSaveContact(values);
+			formik.resetForm(); // Reset form after saving
+			onClose(); // Close the modal
+		},
+	});
 
 	return (
 		<Modal
@@ -35,6 +43,7 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }) => {
 			onBackButtonPress={onClose}
 			style={styles.modal}
 			avoidKeyboard
+			onModalHide={() => formik.resetForm()}
 			animationIn="slideInUp"
 			animationOut="slideOutDown">
 			<View style={[styles.modalContent, { backgroundColor: AppColors.modalBackground }]}>
@@ -48,32 +57,45 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }) => {
 					<View style={{ height: 30, width: 30 }} />
 				</View>
 
+				{/* Name input */}
 				<AppTextInput
 					backgroundColor={AppColors.modalBackground}
 					placeholder="Fullname"
-					value={name}
-					onChangeText={setName}
+					value={formik.values.name}
+					onChangeText={formik.handleChange('name')}
+					onBlur={formik.handleBlur('name')}
+					showError={formik.touched.name && formik.errors.name}
 				/>
+
+				{/* Phone number input */}
 				<AppTextInput
 					maxLength={15}
 					backgroundColor={AppColors.modalBackground}
 					placeholder="Phone number"
-					value={phoneNumber}
-					onChangeText={setPhone}
+					value={formik.values.phoneNumber}
+					onChangeText={formik.handleChange('phoneNumber')}
+					onBlur={formik.handleBlur('phoneNumber')}
+					showError={formik.touched.phoneNumber && formik.errors.phoneNumber}
 				/>
+
+				{/* Email input */}
 				<AppTextInput
 					backgroundColor={AppColors.modalBackground}
 					placeholder="Email (optional)"
-					value={email}
-					onChangeText={setEmail}
+					value={formik.values.email}
+					onChangeText={formik.handleChange('email')}
+					onBlur={formik.handleBlur('email')}
+					showError={formik.touched.email && formik.errors.email}
 				/>
+
+				{/* Save Button */}
 				<AppButton
 					top={AppMargin._20}
 					textColor={AppColors.textDark}
 					fontSize={FontSize._16}
 					fontFamily={Fonts.MEDIUM}
 					buttonLabel={'Save'}
-					onClick={handleSave}
+					onClick={formik.handleSubmit}
 				/>
 			</View>
 		</Modal>
@@ -103,7 +125,6 @@ const styles = StyleSheet.create({
 	closeIcon: { height: 30, width: 30 },
 	listItem: {
 		...borderRadius10,
-
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',

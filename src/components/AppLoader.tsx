@@ -40,7 +40,7 @@ const createStyles = (AppColors: Theme) => {
 			backgroundColor: 'rgba(44, 62, 80, .7)', // Overlay background color
 		},
 		overlayContainer: {
-			...AppShadow,
+			// ...AppShadow,
 			// padding: 20,
 			// backgroundColor: AppColors.white,
 			borderRadius: 5,
