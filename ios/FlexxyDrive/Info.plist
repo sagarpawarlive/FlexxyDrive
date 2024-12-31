@@ -28,7 +28,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>fb2703560303160092</string>
-				<string>com.googleusercontent.apps.593736862384-6gt0eu9enlvk5i38kf0m9l10ar4t0phk</string>
+				<string>com.googleusercontent.apps.593736862384-8kfqrjfjhl4bvpmqeg8js69c43kbamn8</string>
 			</array>
 		</dict>
 	</array>
@@ -41,7 +41,7 @@
 	<key>GIDClientID</key>
 	<string>593736862384-6gt0eu9enlvk5i38kf0m9l10ar4t0phk.apps.googleusercontent.com</string>
 	<key>GIDReverseClientID</key>
-	<string>com.googleusercontent.apps.593736862384-6gt0eu9enlvk5i38kf0m9l10ar4t0phk</string>
+	<string>com.googleusercontent.apps.593736862384-8kfqrjfjhl4bvpmqeg8js69c43kbamn8</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
