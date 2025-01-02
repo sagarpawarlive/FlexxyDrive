@@ -17,6 +17,7 @@ import { ENDPOINT } from '../../../services/API/endpoints';
 import { NavigationKeys } from '../../../constants/navigationKeys';
 import { setUserData } from '../../../store/reducers/userdataSlice';
 import { useDispatch } from 'react-redux';
+import { phoneValidation } from '../../../constants/validationSchema';
 
 const AddMobileNumber = (props: any) => {
 	const { AppColors } = useTheme();
@@ -30,9 +31,7 @@ const AddMobileNumber = (props: any) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const validationSchema = Yup.object().shape({
-		phone: Yup.string()
-			.matches(/^[0-9]{10,15}$/, 'Phone number must be 10 and 15 digits')
-			.required('Phone number is required'),
+		phone: phoneValidation,
 	});
 
 	const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({

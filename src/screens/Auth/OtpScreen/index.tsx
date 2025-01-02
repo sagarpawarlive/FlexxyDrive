@@ -75,10 +75,10 @@ const OtpScreen = (props: any) => {
 			<View style={styles.innerMainContainer}>
 				<AppHeader tintColor={AppColors.backButton} top={AppMargin._30} onBack={onBackPress} />
 
-				<View style={{ marginTop: AppMargin._100, alignItems: 'center' }}>
+				<View style={styles.codeContainer}>
 					<AppText fontFamily={Fonts.MEDIUM} fontSize={FontSize._20} label={`Enter verification code`} />
 
-					<View style={{ marginTop: AppMargin._20, flexDirection: 'row' }}>
+					<View style={styles.resendContainer}>
 						<AppText fontFamily={Fonts.REGULAR} label={`A code has been sent to `} />
 						<AppText fontFamily={Fonts.BOLD} label={`Phone Number.`} />
 					</View>
@@ -136,6 +136,8 @@ const createStyles = (AppColors: Theme) => {
 			marginTop: 20,
 			flexDirection: 'row',
 		},
+		codeContainer: { marginTop: AppMargin._100, alignItems: 'center' },
+		resendContainer: { marginTop: AppMargin._20, flexDirection: 'row' },
 	});
 };
 

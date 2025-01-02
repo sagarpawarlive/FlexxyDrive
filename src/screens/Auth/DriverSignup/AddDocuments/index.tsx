@@ -19,13 +19,9 @@ import RNFS from 'react-native-fs';
 import { App_Permission } from '../../../../services/Permissions';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserState } from '../../../../store/reducers/userdataSlice';
+import { AddDocumentsOptions } from '../../../../constants/staticData';
 
 const { height } = Dimensions.get('window');
-
-const AddDocumentsOptions = [
-	{ id: 1, icon: Icons.icnLargePicker, name: 'Driving License', description: 'An official document' },
-	{ id: 2, icon: Icons.icnCamera, name: 'Upload Photo', description: 'Capture a selfie' },
-];
 
 const AddDocuments = props => {
 	const { AppColors } = useTheme();
@@ -57,10 +53,6 @@ const AddDocuments = props => {
 				styles.listItem,
 				{
 					borderColor: AppColors.white,
-					padding: 20,
-					borderWidth: 1,
-					justifyContent: 'space-between',
-					width: '100%',
 				},
 			]}>
 			<View style={{ ...borderRadius10 }}>
@@ -205,7 +197,7 @@ const AddDocuments = props => {
 
 				{isVerified && (
 					<AppText
-						textColor={'#90EE90'}
+						textColor={AppColors.verifiedColor}
 						fontFamily={Fonts.REGULAR}
 						fontSize={FontSize._14}
 						title={'Documents are verified'}
@@ -237,6 +229,10 @@ const styles = StyleSheet.create({
 		...borderRadius10,
 		flexDirection: 'row',
 		alignItems: 'center',
+		padding: 20,
+		borderWidth: 1,
+		justifyContent: 'space-between',
+		width: '100%',
 	},
 	separator: {
 		marginVertical: 10,

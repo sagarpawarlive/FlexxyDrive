@@ -62,15 +62,7 @@ const AddEmergencyContacts = (props: any) => {
 
 	const renderContactItem = ({ item }) => (
 		<View style={{ marginTop: AppMargin._20 }}>
-			<View
-				style={{
-					...borderRadius10,
-					flexDirection: 'row',
-					padding: 20,
-					borderWidth: 1,
-					borderColor: AppColors.white,
-					alignItems: 'center',
-				}}>
+			<View style={styles.renderContact}>
 				<Image source={Icons.icnUserPlaceholder} />
 				<View style={{ marginLeft: AppMargin._20 }}>
 					<AppText fontFamily={Fonts.MEDIUM} fontSize={FontSize._16} title={item.name} />
@@ -130,6 +122,14 @@ const createStyles = (AppColors: Theme) => {
 			backgroundColor: AppColors.background,
 			paddingHorizontal: 20,
 			paddingBottom: 16,
+		},
+		renderContact: {
+			flexDirection: 'row',
+			padding: 20,
+			borderWidth: 1,
+			borderColor: AppColors.white,
+			alignItems: 'center',
+			...borderRadius10,
 		},
 	});
 };

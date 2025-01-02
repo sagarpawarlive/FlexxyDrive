@@ -33,6 +33,13 @@ import { s3Upload } from '../../../../utils/awsUpload';
 import { _showToast } from '../../../../services/UIs/ToastConfig';
 import AppYearPicker from '../../../../components/AppYearPicker';
 import AppFuelPicker from '../../../../components/AppFuelPicker';
+import { fuelType } from '../../../../constants/staticData';
+import {
+	colorValidation,
+	firstRegistrationValidation,
+	fuelValidation,
+	licencePlateValidation,
+} from '../../../../constants/validationSchema';
 
 const AddCarDetails = (props: any) => {
 	const dispatch = useDispatch();
@@ -62,16 +69,6 @@ const AddCarDetails = (props: any) => {
 
 	const currentYear = new Date().getFullYear();
 	const years = [];
-
-	const fuelType = [
-		'Petrol',
-		'Diesel',
-		'Electric',
-		'Hybrid (Petrol/Electric)',
-		'Hybrid (Diesel/Electric)',
-		'CNG',
-		'Other',
-	];
 
 	for (let year = currentYear; year >= 1990; year--) {
 		years.push(year.toString());
@@ -162,14 +159,10 @@ const AddCarDetails = (props: any) => {
 
 	// Formik Validation Schema
 	const validationSchema = Yup.object().shape({
-		firstRegistration: Yup.number()
-			.positive('Registration year must be a positive number')
-			.integer('Registration year must be an integer')
-			.min(1989, 'Registration year must be after 1989')
-			.max(new Date().getFullYear(), 'Registration year cannot be in the future')
-			.required('Registration year is required'),
-		fuel: Yup.string().required('Fuel type is required'),
-		color: Yup.string().required('Color is required'),
+		firstRegistration: firstRegistrationValidation,
+		fuel: fuelValidation,
+		color: colorValidation,
+
 		// mileage: Yup.string().required('Mileage is required'),
 		// numberOfSeats: Yup.number()
 		// 	.positive('Number of seats must be a positive number')
@@ -177,9 +170,9 @@ const AddCarDetails = (props: any) => {
 		// 	.min(2, 'Minimum 2 seats')
 		// 	.max(10, 'Maximum 10 seats')
 		// 	.required('Number of seats is required'),
-		licensePlate: Yup.string()
-			.required('License plate number is required')
-			.matches(/^[A-Z0-9]+$/, 'License plate must be alphanumeric'),
+
+		licensePlate: licencePlateValidation,
+
 		// otherCarModel: Yup.string().when('selectedCarOption', {
 		// 	is: 'Others',
 		// 	then: Yup.string().required('Please specify car model'),
@@ -397,23 +390,8 @@ const AddCarDetails = (props: any) => {
 						/>
 
 						{/* Image Upload */}
-						<Pressable
-							onPress={handleImageUpload}
-							style={[
-								{
-									borderColor: AppColors.white,
-									borderWidth: 1,
-									marginTop: AppMargin._20,
-									padding: 10,
-									...borderRadius10,
-								},
-							]}>
-							<View
-								style={{
-									alignItems: 'center',
-									flexDirection: 'row',
-									width: '90%',
-								}}>
+						<Pressable onPress={handleImageUpload} style={[styles.imageContainer]}>
+							<View style={styles.imageContent}>
 								<AppText
 									fontFamily={Fonts.REGULAR}
 									fontSize={FontSize._14}
@@ -422,12 +400,7 @@ const AddCarDetails = (props: any) => {
 									}
 								/>
 								<Image
-									style={{
-										marginHorizontal: AppMargin._20,
-										height: 50,
-										width: 50,
-										borderRadius: 25,
-									}}
+									style={styles.uploadImage}
 									source={
 										capturedImage?.sourceURL
 											? { uri: capturedImage?.sourceURL }
@@ -478,6 +451,24 @@ const createStyles = (AppColors: Theme) => {
 			flexDirection: 'row',
 			alignItems: 'center',
 			marginTop: 10,
+		},
+		imageContainer: {
+			borderColor: AppColors.white,
+			borderWidth: 1,
+			marginTop: AppMargin._20,
+			padding: 10,
+			...borderRadius10,
+		},
+		imageContent: {
+			alignItems: 'center',
+			flexDirection: 'row',
+			width: '90%',
+		},
+		uploadImage: {
+			marginHorizontal: AppMargin._20,
+			height: 50,
+			width: 50,
+			borderRadius: 25,
 		},
 	});
 };

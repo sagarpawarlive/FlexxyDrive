@@ -29,6 +29,14 @@ import RadioGroup from 'react-native-radio-buttons-group';
 import moment from 'moment';
 import { _showToast } from '../../../../services/UIs/ToastConfig';
 import { updateUserState } from '../../../../store/reducers/userdataSlice';
+import {
+	cityValidation,
+	firstNameValidation,
+	lastNameValidation,
+	postCodeValidation,
+	streetNumberValidation,
+	streetValidation,
+} from '../../../../constants/validationSchema';
 
 let update = false;
 
@@ -168,12 +176,12 @@ const DriverInformation = (props: any) => {
 			streetNumber: streetNumber,
 		},
 		validationSchema: Yup.object({
-			firstName: Yup.string().required('First name is required'),
-			lastName: Yup.string().required('Last name is required'),
-			city: Yup.string().required('City is required'),
-			postCode: Yup.string().required('Post code is required'),
-			street: Yup.string().required('Street is required'),
-			streetNumber: Yup.string().required('Street number is required'),
+			firstName: firstNameValidation,
+			lastName: lastNameValidation,
+			city: cityValidation,
+			postCode: postCodeValidation,
+			street: streetValidation,
+			streetNumber: streetNumberValidation,
 		}),
 		onSubmit: values => {
 			console.log('Form submitted with:', values);
@@ -268,8 +276,8 @@ const DriverInformation = (props: any) => {
 
 	return (
 		<MainContainer hideTop>
-			<View style={[styles.innerMainContainer, { paddingTop: AppMargin._30 }]}>
-				<Image style={{ position: 'absolute' }} source={Images.imDdrivertopbackground} />
+			<View style={[styles.innerMainContainer, {}]}>
+				<Image style={styles.topImage} source={Images.imDdrivertopbackground} />
 
 				<AppHeader
 					tintColor={AppColors.textDark}
@@ -279,7 +287,7 @@ const DriverInformation = (props: any) => {
 				/>
 
 				<AppText
-					left={AppMargin._40}
+					left={AppMargin._35}
 					textColor={AppColors.textDark}
 					label={`Driver information`}
 					width={'95%'}
@@ -293,7 +301,7 @@ const DriverInformation = (props: any) => {
 							source={
 								documents?.driverImage ? { uri: documents?.driverImage } : Images.imgDriverPlaceholder
 							}
-							style={{ height: AppHeight._175, width: AppHeight._175, borderRadius: 100 }}
+							style={styles.profileImage}
 						/>
 						{/* <Pressable onPress={() => {}} style={{ position: 'absolute', bottom: 0, right: 0 }}>
 							<Image source={Icons.icnProfilePicker} style={{}} />
@@ -329,9 +337,7 @@ const DriverInformation = (props: any) => {
 						/>
 
 						<Pressable style={styles.dobContainer} onPress={() => toggleModal()}>
-							<Text style={{ flex: 1, fontSize: FontSize._16, color: AppColors.text }}>
-								{date ? moment(date).format('DD-MM-YYYY') : 'DOB'}
-							</Text>
+							<Text style={styles.dobText}>{date ? moment(date).format('DD-MM-YYYY') : 'DOB'}</Text>
 							<Image source={Icons.icnCalender} style={{ tintColor: AppColors.primary }} />
 						</Pressable>
 
@@ -524,6 +530,7 @@ const createStyles = (AppColors: Theme) => {
 			flex: 1,
 			backgroundColor: AppColors.background,
 			paddingHorizontal: 20,
+			paddingTop: AppMargin._30,
 		},
 		profileContainer: {
 			marginTop: AppMargin._30,
@@ -554,6 +561,9 @@ const createStyles = (AppColors: Theme) => {
 			alignItems: 'center',
 			marginVertical: 10,
 		},
+		topImage: { position: 'absolute' },
+		dobText: { flex: 1, fontSize: FontSize._16, color: AppColors.text },
+		profileImage: { height: AppHeight._175, width: AppHeight._175, borderRadius: 100 },
 	});
 };
 

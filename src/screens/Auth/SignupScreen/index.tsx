@@ -22,6 +22,15 @@ import { ENDPOINT } from '../../../services/API/endpoints';
 import { apiPost } from '../../../services/API/apiServices';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { setUserData } from '../../../store/reducers/userdataSlice';
+import {
+	confirmPasswordValidation,
+	emailValidation,
+	firstNameValidation,
+	lastNameValidation,
+	passwordValidation,
+	phoneValidation,
+	usernameValidation,
+} from '../../../constants/validationSchema';
 
 const SignupScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -81,22 +90,13 @@ const SignupScreen = (props: any) => {
 	};
 
 	const validationSchema = Yup.object().shape({
-		username: Yup.string().required('Username  is required'),
-		firstName: Yup.string().required('First name is required'),
-		lastName: Yup.string().required('Last name is required'),
-		phone: Yup.string()
-			.matches(/^[0-9]{1,15}$/, 'Phone number must be 15 digits')
-			.required('Phone number is required'),
-		email: Yup.string().email('Enter valid Email address').required('Email is required'),
-		password: Yup.string()
-			.min(8, 'Password must be at least 8 characters long')
-			// .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-			// .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-			// .matches(/[^a-zA-Z0-9]/, 'Password must contain at least one special character')
-			.required('Password is required'),
-		confirmPassword: Yup.string()
-			.oneOf([Yup.ref('password'), null], 'Passwords must match')
-			.required('Confirm Password is required'),
+		username: usernameValidation,
+		firstName: firstNameValidation,
+		lastName: lastNameValidation,
+		phone: phoneValidation,
+		email: emailValidation,
+		password: passwordValidation,
+		confirmPassword: confirmPasswordValidation,
 	});
 
 	const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({

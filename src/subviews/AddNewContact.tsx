@@ -10,6 +10,7 @@ import { AppMargin, borderRadius10 } from '../constants/commonStyle';
 import { useTheme } from '../theme/ThemeProvider';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { emailValidation, fullnameValidation, phoneValidation } from '../constants/validationSchema';
 
 const { height } = Dimensions.get('window');
 
@@ -24,9 +25,9 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }: any) => {
 			email: '',
 		},
 		validationSchema: Yup.object({
-			name: Yup.string().required('Fullname is required'),
-			phoneNumber: Yup.string().required('Phone number is required'),
-			email: Yup.string().email('Invalid email format').optional(),
+			name: fullnameValidation,
+			phoneNumber: phoneValidation,
+			email: emailValidation.optional(),
 		}),
 		onSubmit: values => {
 			onSaveContact(values);

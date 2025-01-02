@@ -1,4 +1,5 @@
 export interface Theme {
+	[x: string]: string | undefined;
 	background: string;
 	text: string;
 	textDark: string;
@@ -13,4 +14,5 @@ export interface Theme {
 	success: string;
 	warning: string;
 	modalBackground: string;
+	verifiedColor: string;
 }

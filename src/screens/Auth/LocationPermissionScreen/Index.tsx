@@ -33,7 +33,7 @@ const IntroScreen = (props: any) => {
 
 	return (
 		<MainContainer>
-			<View style={[styles.container, { backgroundColor: AppColors.background, alignItems: 'center' }]}>
+			<View style={[styles.container, {}]}>
 				<View style={styles.imageContainer}>
 					<Image resizeMode="contain" source={Images.imgLocationImage} />
 				</View>
@@ -43,7 +43,7 @@ const IntroScreen = (props: any) => {
 					top={AppMargin._50}
 					label="Don't worry your data is private"
 				/>
-				<View style={{ flex: 1, alignItems: 'center' }}>
+				<View style={styles.permissionContainer}>
 					<AppButton
 						position="end"
 						width={WindowWidth / 1.5}
@@ -62,6 +62,8 @@ const createStyles = (AppColors: Theme) => {
 	return StyleSheet.create({
 		container: {
 			flex: 1,
+			backgroundColor: AppColors.background,
+			alignItems: 'center',
 		},
 		logoContainer: {
 			marginTop: AppMargin._60,
@@ -85,6 +87,7 @@ const createStyles = (AppColors: Theme) => {
 			marginTop: AppMargin._30,
 			flex: 1,
 		},
+		permissionContainer: { flex: 1, alignItems: 'center' },
 	});
 };
 

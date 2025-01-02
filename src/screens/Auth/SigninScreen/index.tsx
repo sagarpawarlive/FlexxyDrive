@@ -27,6 +27,8 @@ import { AppleButton } from '@invertase/react-native-apple-authentication';
 import { appleAuth } from '@invertase/react-native-apple-authentication';
 import auth from '@react-native-firebase/auth';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+import { imagesData, ImagesDataAndroid } from '../../../constants/staticData';
+import { passwordValidation, usernameValidation } from '../../../constants/validationSchema';
 
 const SigninScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -34,17 +36,6 @@ const SigninScreen = (props: any) => {
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-
-	const imagesData = [
-		{ id: 1, src: Icons.icnGoogle, label: 'Google' },
-		{ id: 2, src: Icons.icnApple, label: 'Apple' },
-		{ id: 3, src: Icons.icnFacebook, label: 'Facebook' },
-	];
-
-	const ImagesDataAndroid = [
-		{ id: 1, src: Icons.icnGoogle, label: 'Google' },
-		{ id: 3, src: Icons.icnFacebook, label: 'Facebook' },
-	];
 
 	useEffect(() => {
 		GoogleSignin.configure({
@@ -186,13 +177,8 @@ const SigninScreen = (props: any) => {
 
 	// Formik validation schema with Yup
 	const validationSchema = Yup.object().shape({
-		username: Yup.string().required('Username is required'),
-		password: Yup.string()
-			.min(8, 'Password must be at least 8 characters long')
-			// .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-			// .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-			// .matches(/[^a-zA-Z0-9]/, 'Password must contain at least one special character')
-			.required('Password is required'),
+		username: usernameValidation,
+		password: passwordValidation,
 	});
 
 	// Formik hook initialization
@@ -351,7 +337,7 @@ const createStyles = (AppColors: Theme) => {
 			// marginTop: AppMargin._100,
 			justifyContent: 'center',
 			alignItems: 'center',
-			shadowColor: '#FFFFFF',
+			shadowColor: AppColors.white,
 			shadowOffset: {
 				width: 0,
 				height: 2,

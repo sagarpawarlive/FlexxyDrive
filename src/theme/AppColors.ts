@@ -16,6 +16,7 @@ export const lightTheme = {
 	backButton: 'rgba(217, 217, 217, 1)',
 
 	modalBackground: '#546A80',
+	verifiedColor: '#90EE90',
 
 	// Status Colors
 	error: 'rgba(250, 0, 0, 1)',
@@ -45,4 +46,5 @@ export const darkTheme = {
 	success: 'rgba(92, 184, 92, 1)',
 	warning: 'rgba(249, 200, 50, 1)',
 	modalBackground: '#546A80',
+	verifiedColor: '#90EE90',
 };
