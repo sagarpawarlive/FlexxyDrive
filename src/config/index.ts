@@ -6,6 +6,8 @@ const BASE_URL_PROD = 'http://51.20.189.64:3001';
 
 const DOCS = 'http://51.20.189.64:3001/api-docs#/';
 
+export const MAP_KEY = 'AIzaSyCyb9EBON_y-sYk9WW7C16Z8CWGwojXUiY';
+
 const Config = {
 	REACT_NATIVE_SERVER_API_FULL_URL: isProduction ? BASE_URL_PROD : BASE_URL_DEV,
 	// REACT_NATIVE_SERVER_API_FULL_URL: LOCAL_URL,

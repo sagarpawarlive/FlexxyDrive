@@ -4,11 +4,12 @@
 #import <AuthenticationServices/AuthenticationServices.h>
 #import <SafariServices/SafariServices.h>
 #import <FBSDKCoreKit/FBSDKCoreKit-Swift.h>
+#import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  
+  [GMSServices provideAPIKey:@"AIzaSyCyb9EBON_y-sYk9WW7C16Z8CWGwojXUiY"];
   
   // Firebase initialization
   [FIRApp configure];

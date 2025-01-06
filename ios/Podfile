@@ -16,7 +16,8 @@ end
 node_require('react-native/scripts/react_native_pods.rb')
 node_require('react-native-permissions/scripts/setup.rb')
 
-platform :ios, min_ios_version_supported
+# platform :ios, min_ios_version_supported
+platform :ios, '14.0'
 prepare_react_native_project!
 
 setup_permissions([
@@ -63,6 +64,9 @@ target 'FlexxyDrive' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
 
   target 'FlexxyDriveTests' do
     inherit! :complete
