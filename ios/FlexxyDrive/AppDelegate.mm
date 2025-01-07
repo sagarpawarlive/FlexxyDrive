@@ -9,7 +9,7 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  [GMSServices provideAPIKey:@"AIzaSyCyb9EBON_y-sYk9WW7C16Z8CWGwojXUiY"];
+  [GMSServices provideAPIKey:@"AIzaSyBHWFe3HPZcf9zeis13FRq6b5sOjWqD-tE"];
   
   // Firebase initialization
   [FIRApp configure];

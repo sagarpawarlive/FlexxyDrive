@@ -78,6 +78,7 @@ const MapScreen = (props: MapScreenProps) => {
 						ref={mapRef}
 						style={styles.map}
 						initialRegion={initialRegion}
+						provider="google"
 						showsUserLocation={true}
 						onRegionChangeComplete={region => {
 							console.log('Region changed to:', region);
