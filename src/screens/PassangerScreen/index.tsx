@@ -15,7 +15,7 @@ interface PassangerScreenProps {}
 
 const PassangerScreen = (props: PassangerScreenProps) => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
-	const snapPoints = ['50%', '90%'];
+	const snapPoints = ['40%', '60%'];
 
 	const { AppColors, isDarkMode } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
@@ -84,7 +84,7 @@ const PassangerScreen = (props: PassangerScreenProps) => {
 	};
 
 	return (
-		<MainContainer>
+		<MainContainer hideTop>
 			<View style={styles.container}>
 				<AppMapComponent />
 
@@ -92,12 +92,13 @@ const PassangerScreen = (props: PassangerScreenProps) => {
 					ref={bottomSheetRef}
 					index={1}
 					snapPoints={snapPoints}
-					maxDynamicContentSize={WindowHeight * 0.8}
+					maxDynamicContentSize={WindowHeight * 0.7}
 					onChange={handleSheetChanges}
 					backgroundComponent={(props: any) => <BottomSheetBackground {...props} />}
-					backdropComponent={({ style }) => (
-						<View style={[style, { backgroundColor: 'rgba(0,0,0,0.3)', flex: 1 }]} />
-					)}>
+					// backdropComponent={({ style }) => (
+					// 	<View style={[style, { backgroundColor: 'rgba(0,0,0,0.3)', flex: 1 }]} />
+					// )}
+				>
 					<BottomSheetScrollView nestedScrollEnabled showsVerticalScrollIndicator={false}>
 						<BottomSheetView style={styles.bottomSheetContent}>
 							<FlatList
