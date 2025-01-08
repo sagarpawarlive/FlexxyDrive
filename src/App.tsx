@@ -10,6 +10,7 @@ import { ThemeProvider } from './theme/ThemeProvider';
 
 import 'react-native-gesture-handler';
 import 'react-native-reanimated';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const App: React.FC = () => {
 	useEffect(() => {
@@ -29,14 +30,16 @@ const App: React.FC = () => {
 	}, [state.userDataSlice.localize]);
 
 	return (
-		<Provider store={store}>
-			<PersistGate persistor={persistor} loading={null}>
-				<ThemeProvider isDisabled={true}>
-					<StackNavigator />
-					<Toast config={toastConfig} topOffset={has_Notch ? 0 : 20} position="top" />
-				</ThemeProvider>
-			</PersistGate>
-		</Provider>
+		<GestureHandlerRootView style={{ flex: 1 }}>
+			<Provider store={store}>
+				<PersistGate persistor={persistor} loading={null}>
+					<ThemeProvider isDisabled={true}>
+						<StackNavigator />
+						<Toast config={toastConfig} topOffset={has_Notch ? 0 : 20} position="top" />
+					</ThemeProvider>
+				</PersistGate>
+			</Provider>
+		</GestureHandlerRootView>
 	);
 };
 

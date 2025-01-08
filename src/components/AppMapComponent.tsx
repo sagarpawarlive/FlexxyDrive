@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, PermissionsAndroid, Platform } from 'react-native';
-import MainContainer from '../../components/MainContainer';
-import { Marker } from 'react-native-maps';
+import { PermissionsAndroid, Platform, StyleSheet, View } from 'react-native';
 import MapView from 'react-native-map-clustering';
-import Location from '../../services/locationServices';
+import { Marker } from 'react-native-maps';
+import Location from '../services/locationServices';
 
-interface MapScreenProps {}
+interface AppMapComponentProps {
+	children?: React.ReactNode;
+}
 
-const MapScreen = (props: MapScreenProps) => {
+const AppMapComponent = (props: AppMapComponentProps) => {
 	// State variables
 	const [initialRegion, setInitialRegion] = useState<any>(null);
 	const [coordinateAddress, setCoordinateAddress] = useState<any>(null);
@@ -70,33 +71,33 @@ const MapScreen = (props: MapScreenProps) => {
 	}, []);
 
 	return (
-		<MainContainer>
-			<View style={styles.container}>
-				{/* Render the map only if initialRegion is set */}
-				{initialRegion && (
-					<MapView
-						ref={mapRef}
-						style={styles.map}
-						initialRegion={initialRegion}
-						provider="google"
-						showsUserLocation={true}
-						onRegionChangeComplete={region => {
-							console.log('Region changed to:', region);
-						}}>
-						{/* Static markers */}
-						<Marker coordinate={markerCoordinates} />
-						<Marker coordinate={{ latitude: 52.1, longitude: 18.4 }} />
-						<Marker coordinate={{ latitude: 52.6, longitude: 18.3 }} />
-						<Marker coordinate={{ latitude: 51.6, longitude: 18.0 }} />
-						<Marker coordinate={{ latitude: 53.1, longitude: 18.8 }} />
-						<Marker coordinate={{ latitude: 52.9, longitude: 19.4 }} />
-						<Marker coordinate={{ latitude: 52.2, longitude: 21 }} />
-						<Marker coordinate={{ latitude: 52.4, longitude: 21 }} />
-						<Marker coordinate={{ latitude: 51.8, longitude: 20 }} />
-					</MapView>
-				)}
-			</View>
-		</MainContainer>
+		<View style={styles.container}>
+			{/* Render the map only if initialRegion is set */}
+			{initialRegion && (
+				<MapView
+					ref={mapRef}
+					style={styles.map}
+					initialRegion={initialRegion}
+					provider="google"
+					showsUserLocation={true}
+					onRegionChangeComplete={region => {
+						console.log('Region changed to:', region);
+					}}>
+					{/* Static markers */}
+					<Marker coordinate={markerCoordinates} />
+					<Marker coordinate={{ latitude: 52.1, longitude: 18.4 }} />
+					<Marker coordinate={{ latitude: 52.6, longitude: 18.3 }} />
+					<Marker coordinate={{ latitude: 51.6, longitude: 18.0 }} />
+					<Marker coordinate={{ latitude: 53.1, longitude: 18.8 }} />
+					<Marker coordinate={{ latitude: 52.9, longitude: 19.4 }} />
+					<Marker coordinate={{ latitude: 52.2, longitude: 21 }} />
+					<Marker coordinate={{ latitude: 52.4, longitude: 21 }} />
+					<Marker coordinate={{ latitude: 51.8, longitude: 20 }} />
+
+					{props.children}
+				</MapView>
+			)}
+		</View>
 	);
 };
 
@@ -109,4 +110,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default MapScreen;
+export default AppMapComponent;

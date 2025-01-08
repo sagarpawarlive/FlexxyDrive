@@ -34,4 +34,8 @@ export const Icons = {
 	icnLargePicker: require('./largePicker.png'),
 
 	icnUserPlaceholder: require('./userplaceholder.png'),
+
+	icnBell: require('./bell.png'),
+	icnBaselineLocation: require('./baseLineLocation.png'),
+	icnToArrow: require('./toArrow.png'),
 };

@@ -1,3 +1,5 @@
+import PassangerScreen from '../screens/PassangerScreen';
+
 export const NavigationKeys = {
 	SplashScreen: 'SplashScreen',
 	IntroScreen: 'IntroScreen',
@@ -24,5 +26,5 @@ export const NavigationKeys = {
 	NextOfKin: 'NextOfKin',
 	AddDocuments: 'AddDocuments',
 
-	MapScreen: 'MapScreen',
+	PassangerScreen: 'PassangerScreen',
 };

@@ -10,7 +10,8 @@ import BottomTabNavigation from './BottomTabNavigator';
 import StarterScreen from '../screens/StarterScreen';
 import FinalUser from '../screens/Auth/FinalUser';
 import { navigationRef } from '../utils/navigationUtils';
-import MapScreen from '../screens/MapScreen';
+import MapScreen from '../screens/PassangerScreen';
+import PassangerScreen from '../screens/PassangerScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,13 +23,13 @@ const RootNavigation: React.FC = (props: any) => {
 	return (
 		<NavigationContainer ref={navigationRef}>
 			<Stack.Navigator
-				initialRouteName={NavigationKeys.MapScreen}
+				initialRouteName={NavigationKeys.PassangerScreen}
 				screenOptions={{ headerShown: false, gestureEnabled: false }}>
 				<Stack.Screen name={NavigationKeys.SplashScreen} component={SplashScreen} />
 				<Stack.Screen options={options} name={NavigationKeys.AuthNavigator} component={AuthNavigator} />
 				<Stack.Screen options={options} name={NavigationKeys.BottomTab} component={BottomTabNavigation} />
 				<Stack.Screen options={options} name={NavigationKeys.FinalUser} component={FinalUser} />
-				<Stack.Screen options={options} name={NavigationKeys.MapScreen} component={MapScreen} />
+				<Stack.Screen options={options} name={NavigationKeys.PassangerScreen} component={PassangerScreen} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	);
