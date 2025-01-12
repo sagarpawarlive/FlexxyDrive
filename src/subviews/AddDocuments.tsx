@@ -7,6 +7,7 @@ import { Fonts, FontSize } from '../assets/fonts';
 import AppText from '../components/AppText';
 import { AppMargin, borderRadius10 } from '../constants/commonStyle';
 import AppButton from '../components/AppButton';
+import metrics from '../constants/metrics';
 
 const { height } = Dimensions.get('window');
 
@@ -27,7 +28,7 @@ const AddDocuments = ({ isVisible, onClose, title }) => {
 				styles.listItem,
 				{
 					borderColor: AppColors.white,
-					padding: 20,
+					padding: metrics.moderateScale(20),
 					borderWidth: 1,
 					justifyContent: 'space-between',
 					width: '100%',
@@ -45,13 +46,13 @@ const AddDocuments = ({ isVisible, onClose, title }) => {
 	return (
 		<Modal
 			isVisible={isVisible}
-			backdropColor={'#2C3E50CC'}
+			backdropColor={AppColors.primary}
 			onBackdropPress={onClose}
 			onBackButtonPress={onClose}
 			style={styles.modal}
 			animationIn="slideInUp"
 			animationOut="slideOutDown">
-			<View style={[styles.modalContent, { backgroundColor: AppColors.modalBackground }]}>
+			<View style={[styles.modalContent, { backgroundColor: AppColors.background }]}>
 				<View style={styles.header}>
 					<TouchableOpacity onPress={onClose} style={styles.closeButton}>
 						<Image style={styles.closeIcon} source={Icons.icnClose} />
@@ -59,11 +60,11 @@ const AddDocuments = ({ isVisible, onClose, title }) => {
 					<View style={{ flexGrow: 1, alignItems: 'center' }}>
 						<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._20} title={title} />
 					</View>
-					<View style={{ height: 30, width: 30 }} />
+					<View style={{ height: metrics.moderateScale(30), width: metrics.moderateScale(30) }} />
 				</View>
 
 				<FlatList
-					style={{ marginTop: 20 }}
+					style={{ marginTop: metrics.verticalScale(20) }}
 					scrollEnabled={false}
 					data={AddDocumentsOptions}
 					keyExtractor={item => item.id.toString()}
@@ -72,7 +73,7 @@ const AddDocuments = ({ isVisible, onClose, title }) => {
 				/>
 
 				<AppButton
-					top={AppMargin._20}
+					top={metrics.verticalScale(20)}
 					textColor={AppColors.textDark}
 					fontSize={FontSize._16}
 					fontFamily={Fonts.MEDIUM}

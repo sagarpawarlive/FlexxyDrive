@@ -37,6 +37,8 @@ import {
 	streetNumberValidation,
 	streetValidation,
 } from '../../../../constants/validationSchema';
+import metrics from '../../../../constants/metrics';
+import { t } from '../../../../i18n';
 
 let update = false;
 
@@ -277,23 +279,7 @@ const DriverInformation = (props: any) => {
 	return (
 		<MainContainer hideTop>
 			<View style={[styles.innerMainContainer, {}]}>
-				<Image style={styles.topImage} source={Images.imDdrivertopbackground} />
-
-				<AppHeader
-					tintColor={AppColors.textDark}
-					top={AppMargin._30}
-					onBack={onBackPress}
-					buttonTitle={'Welcome to'}
-				/>
-
-				<AppText
-					left={AppMargin._35}
-					textColor={AppColors.textDark}
-					label={`Driver information`}
-					width={'95%'}
-					fontFamily={Fonts.BOLD}
-					fontSize={FontSize._24}
-				/>
+				<AppHeader top={metrics.verticalScale(30)} onBack={onBackPress} buttonTitle={t('driverInformation')} />
 
 				<View style={styles.profileContainer}>
 					<View style={styles.profileSubContainer}>
@@ -303,19 +289,17 @@ const DriverInformation = (props: any) => {
 							}
 							style={styles.profileImage}
 						/>
-						{/* <Pressable onPress={() => {}} style={{ position: 'absolute', bottom: 0, right: 0 }}>
+						<Pressable onPress={() => {}} style={{ position: 'absolute', bottom: 0, right: 0 }}>
 							<Image source={Icons.icnProfilePicker} style={{}} />
-						</Pressable> */}
+						</Pressable>
 					</View>
 				</View>
 
-				<AppScrollView bounces={false} extraHeight={AppHeight._350}>
-					<View style={{ marginTop: AppMargin._50 }}>
+				<AppScrollView bounces={false} extraHeight={metrics.verticalScale(250)}>
+					<View style={{ marginTop: metrics.verticalScale(50) }}>
 						<AppTextInput
-							// height={AppHeight._50}
 							ref={firstNameRef}
-							borderBottomWidth={1}
-							placeholder={driverInfoRes?.firstName ?? 'First name'}
+							placeholder={t('firstName')}
 							value={values.firstName}
 							onChangeText={handleChange('firstName')}
 							onBlur={handleBlur('firstName')}
@@ -324,10 +308,8 @@ const DriverInformation = (props: any) => {
 							returnKeyType="next"
 						/>
 						<AppTextInput
-							// height={AppHeight._50}
 							ref={lastNameRef}
-							borderBottomWidth={1}
-							placeholder="Last name"
+							placeholder={t('lastName')}
 							value={values.lastName}
 							onChangeText={handleChange('lastName')}
 							onBlur={handleBlur('lastName')}
@@ -342,7 +324,7 @@ const DriverInformation = (props: any) => {
 						</Pressable>
 
 						<View style={styles.radioButtonsContainer}>
-							<AppText fontSize={FontSize._16} title="Gender" />
+							<AppText fontSize={FontSize._16} title={t('gender')} />
 							<RadioGroup
 								radioButtons={radioButtons}
 								onPress={setSelectedId}
@@ -354,7 +336,7 @@ const DriverInformation = (props: any) => {
 						<AppDriverButtons
 							onClick={() => setShowCountryPicker(true)}
 							buttonLabel={countryName}
-							textColor={AppColors.white}
+							textColor={AppColors.text}
 							iconNode={
 								<CountryPicker
 									onClose={() => setShowCountryPicker(false)}
@@ -372,7 +354,7 @@ const DriverInformation = (props: any) => {
 									containerButtonStyle={{}}
 									theme={{
 										backgroundColor: AppColors.background,
-										onBackgroundTextColor: AppColors.white,
+										onBackgroundTextColor: AppColors.text,
 									}}
 								/>
 							}
@@ -380,9 +362,7 @@ const DriverInformation = (props: any) => {
 
 						<AppTextInput
 							ref={cityRef}
-							// height={AppHeight._50}
-							borderBottomWidth={1}
-							placeholder="City"
+							placeholder={t('city')}
 							value={values.city}
 							onChangeText={handleChange('city')}
 							onBlur={handleBlur('city')}
@@ -392,9 +372,7 @@ const DriverInformation = (props: any) => {
 						/>
 						<AppTextInput
 							ref={postCodeRef}
-							// height={AppHeight._50}
-							borderBottomWidth={1}
-							placeholder="Post code"
+							placeholder={t('postCode')}
 							value={values.postCode}
 							onChangeText={handleChange('postCode')}
 							onBlur={handleBlur('postCode')}
@@ -405,9 +383,7 @@ const DriverInformation = (props: any) => {
 						/>
 						<AppTextInput
 							ref={streetRef}
-							// height={AppHeight._50}
-							borderBottomWidth={1}
-							placeholder="Street"
+							placeholder={t('street')}
 							value={values.street}
 							onChangeText={handleChange('street')}
 							onBlur={handleBlur('street')}
@@ -417,9 +393,7 @@ const DriverInformation = (props: any) => {
 						/>
 						<AppTextInput
 							ref={streetNumberRef}
-							// height={AppHeight._50}
-							borderBottomWidth={1}
-							placeholder="Street Number"
+							placeholder={t('streetNumber')}
 							value={values.streetNumber}
 							onChangeText={handleChange('streetNumber')}
 							onBlur={handleBlur('streetNumber')}
@@ -435,13 +409,17 @@ const DriverInformation = (props: any) => {
 									})
 								}
 								rotate={'0deg'}
-								buttonLabel="Add Document"
+								buttonLabel={t('addDocuments')}
 								iconTint={AppColors.primary}
 								icon={Icons.icnUpload}
-								height={24}
-								width={24}
+								height={metrics.moderateScale(24)}
+								width={metrics.moderateScale(24)}
 							/>
-							<AppText top={5} left={10} label="JPG, PNG " />
+							<AppText
+								top={metrics.verticalScale(5)}
+								left={metrics.horizontalScale(10)}
+								label="JPG, PNG "
+							/>
 						</View>
 
 						{/* <AppDriverButtons
@@ -457,8 +435,7 @@ const DriverInformation = (props: any) => {
 
 						<AppDriverButtons
 							onClick={() => setIsPrefModalVisible(true)}
-							buttonLabel="Preferences"
-							iconTint={AppColors.white}
+							buttonLabel={t('preferences')}
 							icon={Icons.icnBack}
 						/>
 						<AppDriverButtons
@@ -467,14 +444,12 @@ const DriverInformation = (props: any) => {
 									AllCarDetails: carDetails ?? {},
 								})
 							}
-							buttonLabel="Add Car"
-							iconTint={AppColors.white}
+							buttonLabel={t('addCar')}
 							icon={Icons.icnBack}
 						/>
 						<AppDriverButtons
 							onClick={() => props.navigation.navigate(NavigationKeys.AddPayments)}
-							buttonLabel="Add Payment Details"
-							iconTint={AppColors.white}
+							buttonLabel={t('addPaymentDetails')}
 							icon={Icons.icnBack}
 						/>
 						<AppDriverButtons
@@ -483,14 +458,13 @@ const DriverInformation = (props: any) => {
 									driverInfos: driverInfoRes?.driverInfo,
 								})
 							}
-							buttonLabel="Emergency Contacts"
-							iconTint={AppColors.white}
+							buttonLabel={t('emergencyContacts')}
 							icon={Icons.icnBack}
 						/>
 					</View>
-					<View style={{ marginBottom: 10 }}>
+					<View style={{ marginBottom: metrics.verticalScale(20) }}>
 						<AppButton
-							top={AppMargin._20}
+							top={metrics.verticalScale(20)}
 							textColor={AppColors.textDark}
 							fontSize={FontSize._16}
 							fontFamily={Fonts.MEDIUM}
@@ -510,10 +484,10 @@ const DriverInformation = (props: any) => {
 					// api_getDriverInfo();
 				}}
 				isVisible={isPrefModalVisible}
-				title={'Select Preferences'}
+				title={t('preferences')}
 			/>
 			<ImagePicker isVisible={isImagePickerVisible} onClose={toggleImageModal} title={'Select upload option'} />
-			<AddDocuments isVisible={isDocumentModalVisible} title={'Add Document'} onClose={toggleDocumentModal} />
+			<AddDocuments isVisible={isDocumentModalVisible} title={t('addDocuments')} onClose={toggleDocumentModal} />
 			<AppLoader isLoading={isLoading} />
 		</MainContainer>
 	);
@@ -524,46 +498,47 @@ const createStyles = (AppColors: Theme) => {
 		orContainer: {
 			flexDirection: 'row',
 			justifyContent: 'center',
-			marginTop: AppMargin._20,
+			marginTop: metrics.verticalScale(20),
 		},
 		innerMainContainer: {
 			flex: 1,
 			backgroundColor: AppColors.background,
-			paddingHorizontal: 20,
-			paddingTop: AppMargin._30,
+			paddingHorizontal: metrics.verticalScale(20),
+			paddingTop: metrics.verticalScale(30),
 		},
 		profileContainer: {
-			marginTop: AppMargin._30,
+			marginTop: metrics.verticalScale(30),
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
 		profileSubContainer: {
 			borderRadius: 100,
-			height: AppHeight._175,
-			width: AppHeight._175,
+			height: metrics.moderateScale(100),
+			width: metrics.moderateScale(100),
 		},
 		radioButtonsContainer: {
 			borderColor: AppColors.white,
 			borderBottomWidth: 1,
-			paddingVertical: AppMargin._20,
-			marginHorizontal: AppMargin._10,
+			paddingVertical: metrics.verticalScale(20),
+			marginHorizontal: metrics.verticalScale(10),
 			flexDirection: 'row',
 			justifyContent: 'space-between', // Ensure equal spacing between buttons
 			alignItems: 'center',
 		},
 		dobContainer: {
 			// backgroundColor: 'red',
-			borderBottomWidth: 1,
-			borderBottomColor: AppColors.white,
-			paddingVertical: 15,
-			marginHorizontal: 10,
+			borderWidth: 1,
+			borderColor: AppColors.textInputBorderColor,
+			paddingVertical: metrics.verticalScale(15),
+			paddingHorizontal: metrics.horizontalScale(20),
 			flexDirection: 'row',
 			alignItems: 'center',
-			marginVertical: 10,
+			marginVertical: metrics.verticalScale(10),
+			borderRadius: 10,
 		},
 		topImage: { position: 'absolute' },
 		dobText: { flex: 1, fontSize: FontSize._16, color: AppColors.text },
-		profileImage: { height: AppHeight._175, width: AppHeight._175, borderRadius: 100 },
+		profileImage: { height: metrics.moderateScale(100), width: metrics.moderateScale(100), borderRadius: 100 },
 	});
 };
 

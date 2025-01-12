@@ -2,6 +2,7 @@ import PassangerScreen from '../screens/PassangerScreen';
 
 export const NavigationKeys = {
 	SplashScreen: 'SplashScreen',
+	OnboardingScreen: 'OnboardingScreen',
 	IntroScreen: 'IntroScreen',
 	LocationPermission: 'LocationPermission',
 	AuthNavigator: 'AuthNavigator',

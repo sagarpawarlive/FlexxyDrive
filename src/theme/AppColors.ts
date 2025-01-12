@@ -1,13 +1,13 @@
 export const lightTheme = {
 	// Background and Text Colors
-	background: 'rgba(44, 62, 80, 1)',
-	text: 'rgba(217, 217, 217, 1)',
-	textDark: 'rgba(44, 62, 80, 1)',
+	background: 'rgba(255, 255, 255, 1)',
+	text: 'rgba(17, 17, 17,  1)',
+	textDark: 'rgba(255, 255, 255, 1)',
 	white: 'rgba(255, 255, 255, 1)',
 
 	// Primary and Secondary Colors
-	primary: 'rgba(251, 192, 45, 1)',
-	primaryTransparent: 'rgba(251, 192, 45, 0.1)',
+	primary: 'rgba(102, 0, 204, 1)',
+	primaryTransparent: 'rgba(102, 0, 204, 0.1)',
 	secondary: 'rgba(217, 217, 217, 1)',
 	secondaryTransparent: 'rgba(217, 217, 217, 0.3)',
 
@@ -22,18 +22,20 @@ export const lightTheme = {
 	error: 'rgba(250, 0, 0, 1)',
 	success: 'rgba(92, 184, 92, 1)',
 	warning: 'rgba(249, 200, 50, 1)',
+
+	textInputBorderColor: 'rgba(218, 218, 218, 1)',
 };
 
 export const darkTheme = {
 	// Background and Text Colors
-	background: 'rgba(44, 62, 80, 1)',
+	background: 'rgba(0, 0, 0, 1)',
 	text: 'rgba(217, 217, 217, 1)',
-	textDark: 'rgba(44, 62, 80, 1)',
+	textDark: 'rgba(255, 255, 255, 1)',
 	white: 'rgba(255, 255, 255, 1)',
 
 	// Primary and Secondary Colors
-	primary: 'rgba(80, 104, 219, 1)',
-	primaryTransparent: 'rgba(80, 104, 219, 0.1)',
+	primary: 'rgba(102, 0, 204, 1)',
+	primaryTransparent: 'rgba(102, 0, 204, 0.1)',
 	secondary: 'rgba(150, 150, 150, 1)',
 	secondaryTransparent: 'rgba(150, 150, 150, 0.3)',
 
@@ -41,8 +43,10 @@ export const darkTheme = {
 	placeholder: 'rgba(150, 150, 150, 0.7)',
 	backButton: 'rgba(255, 255, 255, 1)',
 
+	textInputBorderColor: 'rgba(218, 218, 218, 1)',
+
 	// Status Colors
-	error: 'rgba(229, 115, 115, 1)',
+	error: 'rgba(250, 0, 0, 1)',
 	success: 'rgba(92, 184, 92, 1)',
 	warning: 'rgba(249, 200, 50, 1)',
 	modalBackground: '#546A80',

@@ -49,7 +49,7 @@ const AppCalender: React.FC<AppCalenderProps> = ({ isVisible, onClose, onDateSel
 				/>
 				<View style={styles.buttonContainer}>
 					<Button title="Close" onPress={handleClose} color={AppColors.error} />
-					<Button title="Save" onPress={() => handleSave(selectedDate)} color={AppColors.textDark} />
+					<Button title="Save" onPress={() => handleSave(selectedDate)} color={AppColors.primary} />
 				</View>
 			</View>
 		</Modal>

@@ -22,6 +22,7 @@ import { ENDPOINT } from '../../../services/API/endpoints';
 import { apiPost } from '../../../services/API/apiServices';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { setUserData } from '../../../store/reducers/userdataSlice';
+import auth from '@react-native-firebase/auth';
 import {
 	confirmPasswordValidation,
 	emailValidation,
@@ -31,6 +32,11 @@ import {
 	phoneValidation,
 	usernameValidation,
 } from '../../../constants/validationSchema';
+import { t } from '../../../i18n';
+import { imagesData } from '../../../constants/staticData';
+import appleAuth from '@invertase/react-native-apple-authentication';
+import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
+import metrics from '../../../constants/metrics';
 
 const SignupScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -63,29 +69,130 @@ const SignupScreen = (props: any) => {
 			await GoogleSignin.hasPlayServices();
 			const userInfo: any = await GoogleSignin.signIn();
 			console.log('[ / userInfo google login ] ------->', userInfo);
-			let googleParams = {
-				token: userInfo.data.idToken,
-			};
-			const response: any = await apiPost(ENDPOINT.GOOGLE_LOGIN, googleParams, []);
-			console.log('[ / {google signin Resss }] ------->', response);
-
-			if (response?.requirePhoneNumber == true) {
-				props.navigation.navigate(NavigationKeys.AddMobileNumber, {
-					userId: response?.user?.id,
-				});
+			if (userInfo?.data?.idToken) {
+				let googleParams = {
+					token: userInfo.data.idToken,
+				};
+				const response: any = await apiPost(ENDPOINT.GOOGLE_LOGIN, googleParams, []);
+				console.log('[ / {google signin Resss }] ------->', response);
+				if (response?.data?.requirePhoneNumber == true) {
+					props.navigation.navigate(NavigationKeys.AddMobileNumber, {
+						userId: response?.data?.user?.id,
+					});
+				} else {
+					if (response?.data?.token?.length > 0) {
+						props.navigation.navigate(NavigationKeys.FinalUser);
+						dispatch(setUserData(response));
+					} else {
+						_showToast(response?.message, 'error');
+					}
+				}
 			} else {
-				props.navigation.navigate(NavigationKeys.FinalUser);
-				dispatch(setUserData(response));
+				_showToast(userInfo?.type, 'error');
 			}
 		} catch (error: any) {
 			if (error.code == statusCodes.SIGN_IN_CANCELLED) {
-				console.log(error);
-			} else if (error.code == statusCodes.IN_PROGRESS) {
-				console.log(error);
-			} else if (error.code == statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-				console.log(error);
+				_showToast(error?.message, 'error');
+			} else if (error?.code == statusCodes.IN_PROGRESS) {
+				_showToast(error?.message, 'error');
+			} else if (error?.code == statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+				_showToast(error?.message, 'error');
 			} else {
+				_showToast(error?.message, 'error');
 			}
+		}
+	};
+
+	async function onFacebookButtonPress() {
+		// Attempt login with permissions
+		const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+		if (result.isCancelled) {
+			throw 'User cancelled the login process';
+		}
+
+		// Once signed in, get the users AccessToken
+		const data = await AccessToken.getCurrentAccessToken();
+
+		console.log(data, '<=== data');
+
+		if (!data) {
+			_showToast('Something went wrong obtaining access token', 'success');
+		}
+
+		// const facebookParams = {
+		// 	token: 'appleCredential?.token',
+		// 	secret: 'appleCredential?.secret',
+		// 	providerId: 'appleCredential?.providerId',
+		// };
+
+		// const response: any = await apiPost(ENDPOINT.GOOGLE_LOGIN, facebookParams, []);
+		// console.log('[ / {google signin Resss }] ------->', response);
+		// if (response?.requirePhoneNumber == true) {
+		// 	props.navigation.navigate(NavigationKeys.AddMobileNumber, {
+		// 		userId: response?.user?.id,
+		// 	});
+		// } else {
+		// 	props.navigation.navigate(NavigationKeys.FinalUser);
+		// 	dispatch(setUserData(response));
+		// }
+	}
+
+	async function onAppleButtonPress() {
+		// Start the sign-in request
+		const appleAuthRequestResponse = await appleAuth.performRequest({
+			requestedOperation: appleAuth.Operation.LOGIN,
+			// As per the FAQ of react-native-apple-authentication, the name should come first in the following array.
+			// See: https://github.com/invertase/react-native-apple-authentication#faqs
+			requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+		});
+
+		console.log(appleAuthRequestResponse, '<=== appleAuthRequestResponse');
+
+		// Ensure Apple returned a user identityToken
+		if (!appleAuthRequestResponse.identityToken) {
+			throw new Error('Apple Sign-In failed - no identify token returned');
+		}
+
+		// Create a Firebase credential from the response
+		const { identityToken, nonce } = appleAuthRequestResponse;
+		const appleCredential = await auth.AppleAuthProvider.credential(identityToken, nonce);
+
+		console.log(appleCredential, '<==== appleCredential');
+
+		const appleParams = {
+			token: appleCredential?.token,
+			secret: appleCredential?.secret,
+			providerId: appleCredential?.providerId,
+		};
+
+		const response: any = await apiPost(ENDPOINT.APPLE_LOGIN, appleParams, []);
+		console.log('[ / {apple signin Resss }] ------->', response);
+
+		if (response?.data?.requirePhoneNumber == true) {
+			props.navigation.navigate(NavigationKeys.AddMobileNumber, {
+				userId: response?.data?.user?.id,
+			});
+		} else {
+			props.navigation.navigate(NavigationKeys.FinalUser);
+			dispatch(setUserData(response));
+		}
+	}
+
+	// Handle press event for each icon
+	const handlePress = (id: number) => {
+		switch (id) {
+			case 1:
+				googleLogin();
+				break;
+			case 2:
+				onAppleButtonPress();
+				break;
+			case 3:
+				onFacebookButtonPress();
+				break;
+			default:
+				break;
 		}
 	};
 
@@ -162,8 +269,8 @@ const SignupScreen = (props: any) => {
 		fieldName: string,
 		isPassword: boolean = false,
 		isCountry = false,
-		ref,
-		nextRef,
+		ref?,
+		nextRef?,
 	) => (
 		<View style={{ marginTop: AppMargin._20 }}>
 			<AppTextInput
@@ -204,24 +311,29 @@ const SignupScreen = (props: any) => {
 				<AppScrollView bounces={false} extraHeight={AppHeight._350}>
 					<View style={[AppContainer]}>
 						<View style={styles.logoContainer}>
+							<Image
+								source={Icons.icnFlexxyLogoIcon}
+								resizeMode="contain"
+								style={{ height: metrics.verticalScale(28) }}
+							/>
 							{/* <AppText fontSize={FontSize._40} fontFamily={Fonts.BOLD} title={'LOGO'} /> */}
 						</View>
 
-						<View style={styles.logoContainer}>
-							<AppText fontSize={FontSize._36} fontFamily={Fonts.REGULAR} title={'Sign Up'} />
+						<View style={[styles.logoContainer, { marginTop: metrics.verticalScale(30) }]}>
+							<AppText fontSize={FontSize._36} fontFamily={Fonts.MEDIUM} title={t('signup')} />
 						</View>
 
 						{/* Render Form Fields */}
-						{renderFormField('Username', 'username', false, false, userNameRef, firstNameRef)}
-						{renderFormField('First Name', 'firstName', false, false, firstNameRef, lastNameRef)}
-						{renderFormField('Last Name', 'lastName', false, false, lastNameRef, phoneNumberRef)}
-						{renderFormField('Phone Number', 'phone', false, true, phoneNumberRef, emailRef)}
-						{renderFormField('Email Id', 'email', false, false, emailRef, passwordRef)}
+						{renderFormField(t('username'), 'username', false, false, userNameRef, firstNameRef)}
+						{renderFormField(t('firstName'), 'firstName', false, false, firstNameRef, lastNameRef)}
+						{renderFormField(t('lastName'), 'lastName', false, false, lastNameRef, phoneNumberRef)}
+						{renderFormField(t('phoneNumber'), 'phone', false, true, phoneNumberRef, emailRef)}
+						{renderFormField(t('emailId'), 'email', false, false, emailRef, passwordRef)}
 						{renderFormField('Password', 'password', true, false, passwordRef, confirmPasswordRef)}
 						{renderFormField('Confirm Password', 'confirmPassword', true, false, confirmPasswordRef)}
 
-						<View style={{ marginTop: AppMargin._40 }}>
-							{/* <View style={styles.socialLoginContainer}>
+						<View style={{ marginTop: metrics.verticalScale(30) }}>
+							<View style={styles.socialLoginContainer}>
 								<FlatList
 									bounces={false}
 									scrollEnabled={false}
@@ -236,30 +348,31 @@ const SignupScreen = (props: any) => {
 										</TouchableOpacity>
 									)}
 								/>
-							</View> */}
+							</View>
 							<AppButton
 								top={AppMargin._40}
 								fontSize={FontSize._16}
 								textColor={AppColors.textDark}
 								fontFamily={Fonts.MEDIUM}
-								buttonLabel={'Sign Up'}
+								buttonLabel={t('signup')}
 								onClick={handleSubmit}
 							/>
 						</View>
 
 						<View style={styles.bottomContainer}>
 							<AppText
-								fontSize={FontSize._16}
+								fontSize={FontSize._12}
 								fontFamily={Fonts.MEDIUM}
-								label={`Already have an account?`}
+								label={t('alreadyHaveAnAccount')}
 							/>
 							<Pressable onPress={() => props.navigation.navigate(NavigationKeys.SigninScreen)}>
 								<AppText
 									left={5}
-									textColor={AppColors.primary}
-									fontSize={FontSize._16}
-									fontFamily={Fonts.MEDIUM}
-									label={`Sign in`}
+									textColor={AppColors.text}
+									fontSize={FontSize._12}
+									fontFamily={Fonts.BOLD}
+									label={t('login')}
+									underLine
 								/>
 							</Pressable>
 						</View>
@@ -295,13 +408,13 @@ const SignupScreen = (props: any) => {
 const createStyles = (AppColors: Theme) => {
 	return StyleSheet.create({
 		logoContainer: {
-			marginTop: AppMargin._50,
+			marginTop: metrics.verticalScale(50),
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
 		iconContainer: {
 			alignItems: 'center',
-			marginHorizontal: 20,
+			marginHorizontal: metrics.horizontalScale(20),
 		},
 		socialLoginContainer: {
 			justifyContent: 'center',
@@ -315,15 +428,15 @@ const createStyles = (AppColors: Theme) => {
 			shadowRadius: 10.84,
 			elevation: 5,
 		},
-		primaryContainer: { flex: 1, backgroundColor: AppColors.background, paddingBottom: 20 },
+		primaryContainer: { flex: 1, backgroundColor: AppColors.background, paddingBottom: metrics.verticalScale(20) },
 		signupLinkContainer: {
 			justifyContent: 'center',
-			marginTop: 20,
+			marginTop: metrics.verticalScale(20),
 			flexDirection: 'row',
 		},
 		bottomContainer: {
 			justifyContent: 'center',
-			marginTop: 20,
+			marginTop: metrics.verticalScale(20),
 			flexDirection: 'row',
 		},
 	});

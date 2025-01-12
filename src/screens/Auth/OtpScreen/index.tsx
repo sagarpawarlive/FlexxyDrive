@@ -16,13 +16,15 @@ import { APIMethods } from '../../../services/API/methods';
 import { ENDPOINT } from '../../../services/API/endpoints';
 import { _showToast } from '../../../services/UIs/ToastConfig';
 import { setUserData } from '../../../store/reducers/userdataSlice';
+import metrics from '../../../constants/metrics';
+import { t } from '../../../i18n';
 
 const OtpScreen = (props: any) => {
 	const dispatch = useDispatch();
 	const { isDarkMode, toggleTheme, AppColors } = useTheme();
 	const otpNumber = props?.route?.params?.phone;
 	const newUser = props?.route?.params?.newUser;
-	console.log('[ / { newUser }] ------->', newUser);
+
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 	const [otpValue, setOtpValue] = useState('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -73,14 +75,14 @@ const OtpScreen = (props: any) => {
 	return (
 		<MainContainer>
 			<View style={styles.innerMainContainer}>
-				<AppHeader tintColor={AppColors.backButton} top={AppMargin._30} onBack={onBackPress} />
+				<AppHeader top={metrics.verticalScale(20)} onBack={onBackPress} />
 
 				<View style={styles.codeContainer}>
-					<AppText fontFamily={Fonts.MEDIUM} fontSize={FontSize._20} label={`Enter verification code`} />
+					<AppText fontFamily={Fonts.MEDIUM} fontSize={FontSize._20} label={t('enterVerificationCode')} />
 
 					<View style={styles.resendContainer}>
-						<AppText fontFamily={Fonts.REGULAR} label={`A code has been sent to `} />
-						<AppText fontFamily={Fonts.BOLD} label={`Phone Number.`} />
+						<AppText fontFamily={Fonts.REGULAR} label={t('aCodeHasBeenSent')} />
+						<AppText fontFamily={Fonts.BOLD} label={t('phoneNumber')} />
 					</View>
 
 					<AppOtpView
@@ -90,14 +92,15 @@ const OtpScreen = (props: any) => {
 					/>
 
 					<View style={styles.bottomContainer}>
-						<AppText fontSize={FontSize._16} fontFamily={Fonts.REGULAR} label={`Don't receive a code?`} />
+						<AppText fontSize={FontSize._16} fontFamily={Fonts.REGULAR} label={t('dontReceiveACode')} />
 						<Pressable onPress={resentOtp}>
 							<AppText
 								left={5}
 								textColor={enableResend ? AppColors.primary : 'gray'}
 								fontSize={FontSize._16}
-								fontFamily={Fonts.MEDIUM}
-								label={`Resend`}
+								fontFamily={Fonts.BOLD}
+								underLine
+								label={t('resend')}
 							/>
 						</Pressable>
 					</View>
@@ -108,7 +111,7 @@ const OtpScreen = (props: any) => {
 					fontSize={FontSize._16}
 					fontFamily={Fonts.MEDIUM}
 					position="end"
-					buttonLabel={'Verify Now'}
+					buttonLabel={t('verifyNow')}
 					onClick={api_verifyOtp}
 				/>
 			</View>

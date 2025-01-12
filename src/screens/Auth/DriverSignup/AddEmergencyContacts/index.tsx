@@ -81,12 +81,7 @@ const AddEmergencyContacts = (props: any) => {
 	return (
 		<MainContainer>
 			<View style={styles.innerMainContainer}>
-				<AppHeader
-					buttonTitle={'Add Emergency Contacts'}
-					tintColor={AppColors.backButton}
-					top={AppMargin._15}
-					onBack={onBackPress}
-				/>
+				<AppHeader buttonTitle={'Add Emergency Contacts'} top={AppMargin._15} onBack={onBackPress} />
 
 				{/* FlatList to render the contact list */}
 				<FlatList

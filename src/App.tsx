@@ -33,7 +33,7 @@ const App: React.FC = () => {
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<Provider store={store}>
 				<PersistGate persistor={persistor} loading={null}>
-					<ThemeProvider isDisabled={true}>
+					<ThemeProvider isDisabled={false}>
 						<StackNavigator />
 						<Toast config={toastConfig} topOffset={has_Notch ? 0 : 20} position="top" />
 					</ThemeProvider>

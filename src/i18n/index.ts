@@ -7,8 +7,6 @@ import Spanish from './labels/spanish.json';
 I18n.fallbacks = true;
 I18n.translations = {
 	en: English,
-	jp: Japanese,
-	sp: Spanish,
 };
 
 // You can set the initial locale here if needed

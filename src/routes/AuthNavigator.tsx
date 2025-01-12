@@ -16,12 +16,14 @@ import AddEmergencyContacts from '../screens/Auth/DriverSignup/AddEmergencyConta
 import NextOfKin from '../screens/Auth/DriverSignup/NextOfKin';
 import AddMobileNumber from '../screens/Auth/AddMobileNumber';
 import AddDocuments from '../screens/Auth/DriverSignup/AddDocuments';
+import OnboardingScreen from '../screens/Auth/OnboardingScreen';
 
 const Stack = createNativeStackNavigator();
 
 const AuthNavigator: React.FC = () => {
 	return (
-		<Stack.Navigator initialRouteName={NavigationKeys.IntroScreen} screenOptions={{ headerShown: false }}>
+		<Stack.Navigator initialRouteName={NavigationKeys.OnboardingScreen} screenOptions={{ headerShown: false }}>
+			<Stack.Screen name={NavigationKeys.OnboardingScreen} component={OnboardingScreen} />
 			<Stack.Screen name={NavigationKeys.IntroScreen} component={IntroScreen} />
 			<Stack.Screen name={NavigationKeys.LocationPermission} component={LocationPermission} />
 			<Stack.Screen name={NavigationKeys.SigninScreen} component={SigninScreen} />

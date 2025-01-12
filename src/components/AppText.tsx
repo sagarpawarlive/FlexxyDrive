@@ -17,6 +17,8 @@ interface AppTextProps {
 	align?: 'auto' | 'flex-start' | 'flex-end' | 'center';
 	textAlign?: 'auto' | 'left' | 'right' | 'center' | 'justify';
 	width?: any;
+	styleProps?: any;
+	underLine?: boolean;
 }
 
 const AppText: React.FC<AppTextProps> = props => {
@@ -25,10 +27,10 @@ const AppText: React.FC<AppTextProps> = props => {
 
 	return (
 		<Fragment>
-			{props.title && <Text style={styles.titleText}>{props.title}</Text>}
+			{props.title && <Text style={[styles.titleText, props.styleProps]}>{props.title}</Text>}
 
 			{props.label && (
-				<Text numberOfLines={props.numberOfLines} style={styles.labelText}>
+				<Text numberOfLines={props.numberOfLines} style={[styles.labelText, props.styleProps]}>
 					{props.label}
 				</Text>
 			)}
@@ -47,6 +49,7 @@ const createStyles = (AppColors: Theme, props: AppTextProps) => {
 			marginBottom: bottom,
 			fontFamily: fontFamily ?? '',
 			fontSize: fontSize ?? 22,
+			textDecorationLine: props.underLine ? 'underline' : 'none',
 		},
 
 		labelText: {
@@ -60,6 +63,7 @@ const createStyles = (AppColors: Theme, props: AppTextProps) => {
 			fontSize: fontSize ?? 12,
 			fontFamily: fontFamily ?? '',
 			letterSpacing: spacing,
+			textDecorationLine: props.underLine ? 'underline' : 'none',
 		},
 	});
 };

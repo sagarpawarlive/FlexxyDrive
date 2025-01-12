@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Icons } from '../assets/Icons';
-import { Fonts } from '../assets/fonts';
+import { Fonts, FontSize } from '../assets/fonts';
 import { useTheme } from '../theme/ThemeProvider';
 import { Theme } from '../types';
 
@@ -18,18 +18,16 @@ const AppHeader = (props: AppHeaderProps) => {
 	const styles = React.useMemo(() => createStyles(AppColors), [AppColors]);
 
 	return (
-		<View style={[styles.container, { marginTop: props.top ?? 0 }]}>
+		<View style={[styles.container, { marginTop: props.top ?? 0, justifyContent: 'space-between' }]}>
 			<TouchableOpacity onPress={props.onBack} style={styles.container}>
 				<Image
-					style={{ tintColor: props.tintColor ?? AppColors.backButton }}
+					style={{ tintColor: props.tintColor ?? AppColors.text }}
 					resizeMode="contain"
 					source={Icons.icnBack}
 				/>
-				<Text style={[styles.buttonTitle, { color: props.tintColor ?? AppColors.backButton }]}>
-					{props.buttonTitle}
-				</Text>
 			</TouchableOpacity>
-			<View style={{ flexGrow: 1 }} />
+			<Text style={[styles.buttonTitle, { color: props.tintColor ?? AppColors.text }]}>{props.buttonTitle}</Text>
+			<View style={styles.container} />
 			{props.rightIcon && (
 				<TouchableOpacity onPress={props.onBack} style={styles.container}>
 					<Image
@@ -52,9 +50,9 @@ const createStyles = (AppColors: Theme) => {
 		buttonTitle: {
 			includeFontPadding: false,
 			color: AppColors.backButton,
-			marginLeft: 20,
-			fontSize: 16,
-			fontFamily: Fonts.REGULAR,
+			marginLeft: -4,
+			fontSize: FontSize._20,
+			fontFamily: Fonts.BOLD,
 		},
 	});
 };

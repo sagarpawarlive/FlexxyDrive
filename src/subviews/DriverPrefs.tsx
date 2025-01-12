@@ -13,6 +13,8 @@ import { ENDPOINT } from '../services/API/endpoints';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserState } from '../store/reducers/userdataSlice';
 import { _showToast } from '../services/UIs/ToastConfig';
+import { t } from '../i18n';
+import metrics from '../constants/metrics';
 
 const { height } = Dimensions.get('window');
 
@@ -78,9 +80,13 @@ const DriverPrefs = ({ isVisible, onClose, title, data }: any) => {
 	const renderItem = ({ item }) => {
 		const { label, key, icon } = item;
 		return (
-			<View style={[styles.listItem, { borderColor: AppColors.white }]}>
+			<View style={[styles.listItem, { borderColor: AppColors.text }]}>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-					<Image style={{ marginHorizontal: AppMargin._30 }} source={icon} />
+					<Image
+						tintColor={AppColors.text}
+						style={{ marginHorizontal: metrics.horizontalScale(30) }}
+						source={icon}
+					/>
 					<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._16} title={label} />
 				</View>
 				<Switch
@@ -102,48 +108,47 @@ const DriverPrefs = ({ isVisible, onClose, title, data }: any) => {
 
 	// Switch data with key for easy state management
 	const switchData = [
-		{ label: 'Smoking', key: 'smoking', icon: Icons.icnSmoking },
-		{ label: 'Pets', key: 'pets', icon: Icons.icnPets },
-		{ label: 'Music', key: 'music', icon: Icons.icnMusic },
+		{ label: t('smoking'), key: 'smoking', icon: Icons.icnSmoking },
+		{ label: t('pets'), key: 'pets', icon: Icons.icnPets },
+		{ label: t('music'), key: 'music', icon: Icons.icnMusic },
 	];
 
 	return (
 		<Modal
 			isVisible={isVisible}
-			backdropColor={'#2C3E50CC'}
+			backdropColor={AppColors.primary}
 			onBackdropPress={onClose}
 			onBackButtonPress={onClose}
 			style={styles.modal}
 			animationIn="slideInUp"
 			animationOut="slideOutDown">
-			<View style={[styles.modalContent, { backgroundColor: AppColors.modalBackground }]}>
+			<View style={[styles.modalContent, { backgroundColor: AppColors.background }]}>
 				<View style={styles.header}>
 					<TouchableOpacity onPress={onClose} style={styles.closeButton}>
-						<Image style={styles.closeIcon} source={Icons.icnClose} />
+						<Image tintColor={AppColors.text} style={styles.closeIcon} source={Icons.icnClose} />
 					</TouchableOpacity>
 					<View style={{ flexGrow: 1, alignItems: 'center' }}>
 						<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._20} title={title} />
 					</View>
-					<View style={{ height: 30, width: 30 }} />
+					<View style={{ height: metrics.moderateScale(30), width: metrics.moderateScale(30) }} />
 				</View>
 
 				<FlatList
-					style={{ marginTop: 20 }}
+					style={{ marginTop: metrics.verticalScale(20) }}
 					scrollEnabled={false}
 					data={switchData}
 					keyExtractor={item => item.key}
 					renderItem={renderItem}
-					ItemSeparatorComponent={() => <View style={{ marginTop: 10 }} />}
+					ItemSeparatorComponent={() => <View style={{ marginTop: metrics.verticalScale(10) }} />}
 				/>
 
 				<AppButton
-					top={AppMargin._20}
+					top={metrics.verticalScale(20)}
 					textColor={AppColors.textDark}
 					fontSize={FontSize._16}
 					fontFamily={Fonts.MEDIUM}
-					buttonLabel={'Save'}
+					buttonLabel={t('save')}
 					onClick={api_AddDriverInfo}
-					loading={isLoading} // Optionally add loading state to the button
 				/>
 			</View>
 		</Modal>
@@ -158,7 +163,7 @@ const styles = StyleSheet.create({
 	modalContent: {
 		backgroundColor: 'white',
 		width: '100%',
-		padding: 16,
+		padding: metrics.moderateScale(15),
 		borderTopLeftRadius: 20,
 		borderTopRightRadius: 20,
 	},
@@ -167,14 +172,14 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	closeButton: {
-		padding: 8,
+		padding: metrics.moderateScale(10),
 		borderRadius: 15,
 	},
-	closeIcon: { height: 30, width: 30 },
+	closeIcon: { height: metrics.moderateScale(30), width: metrics.moderateScale(30) },
 	listItem: {
 		...borderRadius10,
 		borderWidth: 1,
-		padding: 10,
+		padding: metrics.moderateScale(10),
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',

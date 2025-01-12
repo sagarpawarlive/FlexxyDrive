@@ -38,7 +38,7 @@ const AppDriverButtons: React.FC<AppDriverButtonsProps> = (props: AppDriverButto
 					// top={AppMargin._10}
 					fontSize={props.fontSize ?? FontSize._16}
 					fontFamily={props.fontFamily}
-					textColor={props.textColor ?? AppColors.placeholder}
+					textColor={props.textColor ?? AppColors.text}
 					label={props.buttonLabel}
 				/>
 				{props.icon && (
@@ -51,7 +51,7 @@ const AppDriverButtons: React.FC<AppDriverButtonsProps> = (props: AppDriverButto
 								// left: 20,
 								transform: [{ rotate: props.rotate ?? '180deg' }],
 							}}
-							tintColor={props.iconTint ?? AppColors.background}
+							tintColor={props.iconTint ?? AppColors.text}
 							source={props.icon}
 						/>
 					</TouchableOpacity>
@@ -71,7 +71,7 @@ const createStyles = (AppColors: Theme) => {
 			// backgroundColor: 'red',
 			height: AppHeight._50,
 			borderBottomWidth: 1,
-			borderColor: AppColors.white,
+			borderColor: AppColors.textInputBorderColor,
 			alignItems: 'center',
 			justifyContent: 'space-between',
 			// alignItems: 'center',

@@ -20,6 +20,8 @@ import { App_Permission } from '../../../../services/Permissions';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserState } from '../../../../store/reducers/userdataSlice';
 import { AddDocumentsOptions } from '../../../../constants/staticData';
+import metrics from '../../../../constants/metrics';
+import { t } from '../../../../i18n';
 
 const { height } = Dimensions.get('window');
 
@@ -52,7 +54,7 @@ const AddDocuments = props => {
 			style={[
 				styles.listItem,
 				{
-					borderColor: AppColors.white,
+					borderColor: AppColors.textInputBorderColor,
 				},
 			]}>
 			<View style={{ ...borderRadius10 }}>
@@ -166,11 +168,11 @@ const AddDocuments = props => {
 	return (
 		<MainContainer>
 			<View style={[styles.container, { backgroundColor: AppColors.background }]}>
-				<AppHeader buttonTitle={'Add Documents'} tintColor={AppColors.backButton} onBack={() => onclose()} />
+				<AppHeader buttonTitle={t('addDocuments')} onBack={() => onclose()} />
 
 				{/* List Section */}
 				<FlatList
-					style={{ marginTop: 20 }}
+					style={{ marginTop: metrics.verticalScale(20) }}
 					scrollEnabled={false}
 					data={AddDocumentsOptions}
 					keyExtractor={item => item.id.toString()}
@@ -182,14 +184,14 @@ const AddDocuments = props => {
 				<View style={styles.selectedFilesContainer}>
 					{selectedDrivingLicence && (
 						<View style={styles.selectedFileItem}>
-							<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._14} title={' Driving License'} />
+							<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._14} title={t('drivingLicence')} />
 							<Image source={{ uri: selectedDrivingLicence?.path }} style={styles.selectedFileImage} />
 						</View>
 					)}
 
 					{capturedImage && (
 						<View style={styles.selectedFileItem}>
-							<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._14} title={'Selfie Image'} />
+							<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._14} title={t('selfieImage')} />
 							<Image source={{ uri: capturedImage?.path }} style={styles.selectedFileImage} />
 						</View>
 					)}
@@ -200,7 +202,7 @@ const AddDocuments = props => {
 						textColor={AppColors.verifiedColor}
 						fontFamily={Fonts.REGULAR}
 						fontSize={FontSize._14}
-						title={'Documents are verified'}
+						title={t('documentsVerified')}
 					/>
 				)}
 				{/* Save Button */}
@@ -223,32 +225,32 @@ const AddDocuments = props => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		padding: 16,
+		padding: metrics.moderateScale(20),
 	},
 	listItem: {
 		...borderRadius10,
 		flexDirection: 'row',
 		alignItems: 'center',
-		padding: 20,
+		padding: metrics.moderateScale(20),
 		borderWidth: 1,
 		justifyContent: 'space-between',
 		width: '100%',
 	},
 	separator: {
-		marginVertical: 10,
+		marginVertical: metrics.horizontalScale(10),
 		height: 1,
-		marginHorizontal: 20,
+		marginHorizontal: metrics.horizontalScale(20),
 	},
 	selectedFilesContainer: {
-		marginTop: 20,
+		marginTop: metrics.horizontalScale(20),
 	},
 	selectedFileItem: {
-		marginBottom: 10,
+		marginBottom: metrics.horizontalScale(10),
 	},
 	selectedFileImage: {
-		width: 100,
-		height: 100,
-		marginTop: 5,
+		width: metrics.moderateScale(100),
+		height: metrics.moderateScale(100),
+		marginTop: metrics.horizontalScale(5),
 		borderRadius: 8,
 	},
 });

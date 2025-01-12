@@ -11,6 +11,7 @@ import { useTheme } from '../theme/ThemeProvider';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { emailValidation, fullnameValidation, phoneValidation } from '../constants/validationSchema';
+import { t } from '../i18n';
 
 const { height } = Dimensions.get('window');
 
@@ -39,7 +40,7 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }: any) => {
 	return (
 		<Modal
 			isVisible={isVisible}
-			backdropColor={'#2C3E50CC'}
+			backdropColor={AppColors.primary}
 			onBackdropPress={onClose}
 			onBackButtonPress={onClose}
 			style={styles.modal}
@@ -47,10 +48,10 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }: any) => {
 			onModalHide={() => formik.resetForm()}
 			animationIn="slideInUp"
 			animationOut="slideOutDown">
-			<View style={[styles.modalContent, { backgroundColor: AppColors.modalBackground }]}>
+			<View style={[styles.modalContent, { backgroundColor: AppColors.background }]}>
 				<View style={styles.header}>
 					<TouchableOpacity onPress={onClose} style={styles.closeButton}>
-						<Image style={styles.closeIcon} source={Icons.icnClose} />
+						<Image tintColor={AppColors.text} style={styles.closeIcon} source={Icons.icnClose} />
 					</TouchableOpacity>
 					<View style={{ flexGrow: 1, alignItems: 'center' }}>
 						<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._20} title={title} />
@@ -60,8 +61,7 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }: any) => {
 
 				{/* Name input */}
 				<AppTextInput
-					backgroundColor={AppColors.modalBackground}
-					placeholder="Fullname"
+					placeholder={t('fullname')}
 					value={formik.values.name}
 					onChangeText={formik.handleChange('name')}
 					onBlur={formik.handleBlur('name')}
@@ -72,8 +72,7 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }: any) => {
 				<AppTextInput
 					inputMode="phone-pad"
 					maxLength={15}
-					backgroundColor={AppColors.modalBackground}
-					placeholder="Phone number"
+					placeholder={t('phoneNumber')}
 					value={formik.values.phoneNumber}
 					onChangeText={formik.handleChange('phoneNumber')}
 					onBlur={formik.handleBlur('phoneNumber')}
@@ -82,8 +81,7 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }: any) => {
 
 				{/* Email input */}
 				<AppTextInput
-					backgroundColor={AppColors.modalBackground}
-					placeholder="Email (optional)"
+					placeholder={t('emailOptional')}
 					value={formik.values.email}
 					onChangeText={formik.handleChange('email')}
 					onBlur={formik.handleBlur('email')}

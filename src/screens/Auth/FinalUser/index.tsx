@@ -1,7 +1,7 @@
 import { uploadData } from 'aws-amplify/storage';
 import { useFormik } from 'formik';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Image, Keyboard, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Keyboard, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -20,6 +20,8 @@ import { Theme } from '../../../types';
 import { logout } from '../../../store/reducers/userdataSlice';
 import { Images } from '../../../assets/images';
 import { nativeAlertwithAction } from '../../../constants/constants';
+import metrics from '../../../constants/metrics';
+import { t } from '../../../i18n';
 
 const FinalUser = (props: any) => {
 	const dispatch = useDispatch();
@@ -28,7 +30,7 @@ const FinalUser = (props: any) => {
 
 	const handleLogout = () => {
 		dispatch(logout());
-		props.navigation.navigate(NavigationKeys.IntroScreen);
+		props.navigation.navigate(NavigationKeys.SigninScreen);
 	};
 
 	const onPressLogout = () => {
@@ -39,56 +41,59 @@ const FinalUser = (props: any) => {
 		});
 	};
 
+	// onClick={() => {
+	// 	props.navigation.navigate(NavigationKeys.AuthNavigator, {
+	// 		screen: NavigationKeys.DriverInformation,
+	// 	});
+	// }}
+
+	const onPressOffer = () => {
+		props.navigation.navigate(NavigationKeys.AuthNavigator, {
+			screen: NavigationKeys.DriverInformation,
+		});
+	};
+
+	const onPressBook = () => {
+		alert('Book aride');
+	};
+
 	return (
 		<MainContainer>
 			<View style={styles.primaryContainer}>
-				<AppScrollView bounces={false} extraHeight={AppHeight._350}>
+				<AppScrollView bounces={false} extraHeight={metrics.verticalScale(250)}>
 					<View style={[AppContainer]}>
-						<View style={styles.imageContainer}>
-							<Image resizeMode="contain" source={Images.imgSplash} />
-						</View>
-
 						<View style={[styles.logoContainer]}>
-							<AppText fontSize={FontSize._24} fontFamily={Fonts.BOLD} title={'Welcome to FlexxyDrive'} />
-						</View>
-
-						<View style={{ marginTop: AppMargin._50 }}>
-							<AppButton
-								top={AppMargin._40}
-								fontSize={FontSize._16}
-								textColor={AppColors.primary}
+							<AppText
+								fontSize={FontSize._36}
 								fontFamily={Fonts.MEDIUM}
-								buttonLabel={'Book A Ride'}
-								bgColor={AppColors.background}
-								borderWidth={1}
-								onClick={() => alert('under development')} // Optimized image picker call
+								title={t('welcomeToFlexxyDrive')}
 							/>
 
-							<AppButton
-								top={AppMargin._40}
-								fontSize={FontSize._16}
-								textColor={AppColors.primary}
-								fontFamily={Fonts.MEDIUM}
-								buttonLabel={'Offer A Ride'}
-								bgColor={AppColors.background}
-								borderWidth={1}
-								onClick={() => {
-									props.navigation.navigate(NavigationKeys.AuthNavigator, {
-										screen: NavigationKeys.DriverInformation,
-									});
-								}}
-							/>
+							<View style={styles.buttonsMainContainer}>
+								<Pressable onPress={onPressBook} style={styles.buttonsContainer}>
+									<Image source={Images.imgBookride1} />
+									<AppText
+										fontSize={FontSize._14}
+										fontFamily={Fonts.BOLD}
+										textColor={AppColors.text}
+										top={metrics.verticalScale(10)}
+										title={'Book a Ride'}
+									/>
+								</Pressable>
 
-							{/* <AppButton
-								top={AppMargin._40}
-								fontSize={FontSize._16}
-								textColor={AppColors.primary}
-								fontFamily={Fonts.MEDIUM}
-								buttonLabel={'Logout'}
-								bgColor={AppColors.background}
-								borderWidth={1}
-								onClick={onPressLogout}
-							/> */}
+								<Pressable
+									onPress={onPressOffer}
+									style={[styles.buttonsContainer, { marginLeft: metrics.horizontalScale(20) }]}>
+									<Image source={Images.imgBookride2} />
+									<AppText
+										fontSize={FontSize._14}
+										fontFamily={Fonts.BOLD}
+										textColor={AppColors.text}
+										top={metrics.verticalScale(10)}
+										title={'Offer a Ride'}
+									/>
+								</Pressable>
+							</View>
 						</View>
 					</View>
 
@@ -96,7 +101,7 @@ const FinalUser = (props: any) => {
 						<AppText
 							fontSize={FontSize._14}
 							fontFamily={Fonts.BOLD}
-							textColor={AppColors.primary}
+							textColor={AppColors.text}
 							title={'Logout'}
 						/>
 					</TouchableOpacity>
@@ -109,15 +114,12 @@ const FinalUser = (props: any) => {
 const createStyles = (AppColors: Theme) => {
 	return StyleSheet.create({
 		logoContainer: {
-			marginTop: AppMargin._50,
+			flex: 1,
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
 		primaryContainer: { flex: 1, backgroundColor: AppColors.background },
 		imageContainer: {
-			// height: 100,
-			// width: '100%',
-			// marginTop: AppMargin._90,
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
@@ -130,6 +132,18 @@ const createStyles = (AppColors: Theme) => {
 			padding: 10,
 			alignSelf: 'center',
 			marginVertical: 20,
+		},
+		buttonsContainer: {
+			padding: metrics.horizontalScale(30),
+			borderRadius: 10,
+			borderWidth: 1,
+			borderColor: AppColors.textInputBorderColor,
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		buttonsMainContainer: {
+			flexDirection: 'row',
+			padding: metrics.verticalScale(70),
 		},
 	});
 };

@@ -23,7 +23,7 @@ const RootNavigation: React.FC = (props: any) => {
 	return (
 		<NavigationContainer ref={navigationRef}>
 			<Stack.Navigator
-				initialRouteName={NavigationKeys.PassangerScreen}
+				initialRouteName={NavigationKeys.IntroScreen}
 				screenOptions={{ headerShown: false, gestureEnabled: false }}>
 				<Stack.Screen name={NavigationKeys.SplashScreen} component={SplashScreen} />
 				<Stack.Screen options={options} name={NavigationKeys.AuthNavigator} component={AuthNavigator} />

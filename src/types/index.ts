@@ -15,4 +15,5 @@ export interface Theme {
 	warning: string;
 	modalBackground: string;
 	verifiedColor: string;
+	textInputBorderColor?: string;
 }

@@ -25,12 +25,7 @@ const AddPayments = (props: any) => {
 	return (
 		<MainContainer>
 			<View style={styles.innerMainContainer}>
-				<AppHeader
-					buttonTitle={'Add Payment Details'}
-					tintColor={AppColors.backButton}
-					top={AppMargin._30}
-					onBack={onBackPress}
-				/>
+				<AppHeader buttonTitle={'Add Payment Details'} top={AppMargin._30} onBack={onBackPress} />
 
 				<View style={{ marginTop: AppMargin._30 }}>
 					<AppTextInput

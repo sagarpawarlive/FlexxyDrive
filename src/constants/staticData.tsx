@@ -1,4 +1,5 @@
 import { Icons } from '../assets/Icons';
+import { t } from '../i18n';
 
 export const imagesData = [
 	{ id: 1, src: Icons.icnGoogle, label: 'Google' },
@@ -22,6 +23,6 @@ export const fuelType = [
 ];
 
 export const AddDocumentsOptions = [
-	{ id: 1, icon: Icons.icnLargePicker, name: 'Driving License', description: 'An official document' },
-	{ id: 2, icon: Icons.icnCamera, name: 'Upload Photo', description: 'Capture a selfie' },
+	{ id: 1, icon: Icons.icnLargePicker, name: t('drivingLicence'), description: t('anOfficialDocument') },
+	{ id: 2, icon: Icons.icnCamera, name: t('uploadPhoto'), description: t('captureSelfie') },
 ];

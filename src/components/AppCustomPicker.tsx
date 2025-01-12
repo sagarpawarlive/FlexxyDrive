@@ -6,6 +6,8 @@ import { useTheme } from '../theme/ThemeProvider';
 import { Icons } from '../assets/Icons';
 import AppTextInput from './AppTextInput';
 import AppText from './AppText';
+import metrics from '../constants/metrics';
+import { t } from '../i18n';
 
 const AppCustomPicker = ({
 	options,
@@ -42,7 +44,7 @@ const AppCustomPicker = ({
 			style={[
 				styles.container,
 				{
-					borderColor: AppColors.white,
+					borderColor: AppColors.textInputBorderColor,
 					marginTop: marginTop,
 					borderWidth: borderWidth ?? 1,
 					borderBottomWidth: borderBottomWidth ?? 1,
@@ -50,15 +52,19 @@ const AppCustomPicker = ({
 			]}>
 			{/* Touchable to open or close the picker */}
 			<TouchableOpacity style={styles.pickerButton} onPress={togglePicker}>
-				<Text style={[styles.pickerText, { color: AppColors.white }]}>
+				<Text style={[styles.pickerText, { color: AppColors.text }]}>
 					{selectedItem?.name || unselectedText}
 				</Text>
-				<Image style={{ transform: [{ rotate: isPickerOpen ? '90deg' : '270deg' }] }} source={Icons.icnBack} />
+				<Image
+					tintColor={AppColors.text}
+					style={{ transform: [{ rotate: isPickerOpen ? '90deg' : '270deg' }] }}
+					source={Icons.icnBack}
+				/>
 			</TouchableOpacity>
 
 			{showSearch && isPickerOpen && (
 				<AppTextInput
-					placeholder="Search"
+					placeholder={t('search')}
 					value={searchText}
 					marginHorizontal={20}
 					onChangeText={text => {
@@ -82,12 +88,15 @@ const AppCustomPicker = ({
 			{isPickerOpen && (
 				<View style={styles.dropdown}>
 					{brandModalLoading && (
-						<View style={{ marginTop: 10 }}>
+						<View
+							style={{
+								marginTop: metrics.moderateScale(10),
+							}}>
 							<ActivityIndicator animating size={'small'} />
 						</View>
 					)}
 					<FlatList
-						style={{ marginTop: 10 }}
+						style={{ marginTop: metrics.moderateScale(10) }}
 						data={options}
 						renderItem={({ item, index }) => {
 							return (
@@ -95,18 +104,23 @@ const AppCustomPicker = ({
 									key={index}
 									style={[styles.option, { borderBottomWidth: index !== options.length - 1 ? 1 : 0 }]}
 									onPress={() => selectItem(item, index)}>
-									<Text style={[styles.optionText, { color: AppColors.white }]}>{item?.name}</Text>
+									<Text style={[styles.optionText, { color: AppColors.text }]}>{item?.name}</Text>
 								</TouchableOpacity>
 							);
 						}}
 						keyExtractor={(item, index) => index.toString()}
 						nestedScrollEnabled
 						ListEmptyComponent={
-							<View style={{ marginTop: AppMargin._20, justifyContent: 'center', alignItems: 'center' }}>
+							<View
+								style={{
+									marginTop: metrics.moderateScale(20),
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}>
 								<AppText
 									fontFamily={Fonts.REGULAR}
 									fontSize={FontSize._16}
-									title={showSearch ? 'No Brands found' : 'Select Brand first'}
+									title={showSearch ? t('noBrandsFound') : t('selectBrandFirst')}
 								/>
 							</View>
 						}
@@ -133,7 +147,7 @@ const styles = StyleSheet.create({
 		height: AppHeight._70,
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginHorizontal: AppMargin._20,
+		marginHorizontal: metrics.horizontalScale(20),
 	},
 	pickerText: {
 		fontFamily: Fonts.REGULAR,
@@ -145,7 +159,7 @@ const styles = StyleSheet.create({
 	},
 	option: {
 		justifyContent: 'center',
-		marginHorizontal: AppMargin._20,
+		marginHorizontal: metrics.horizontalScale(20),
 		height: AppHeight._50,
 		borderBottomColor: '#ccc',
 	},

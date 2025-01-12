@@ -80,9 +80,9 @@
 	<string>Your app needs access to the photo library to select images.</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Poppins-Bold.ttf</string>
-		<string>Poppins-Medium.ttf</string>
-		<string>Poppins-Regular.ttf</string>
+		<string>Onest-Bold.ttf</string>
+		<string>Onest-Medium.ttf</string>
+		<string>Onest-Regular.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

@@ -40,6 +40,8 @@ import {
 	fuelValidation,
 	licencePlateValidation,
 } from '../../../../constants/validationSchema';
+import { t } from '../../../../i18n';
+import metrics from '../../../../constants/metrics';
 
 const AddCarDetails = (props: any) => {
 	const dispatch = useDispatch();
@@ -238,10 +240,10 @@ const AddCarDetails = (props: any) => {
 	return (
 		<MainContainer>
 			<View style={styles.innerMainContainer}>
-				<AppHeader tintColor={AppColors.white} onBack={onBackPress} buttonTitle={'Add Car Details'} />
+				<AppHeader onBack={onBackPress} buttonTitle={t('addCarDetails')} />
 
 				<AppScrollView bounces={false} extraHeight={AppHeight._350}>
-					<View style={{ marginTop: AppMargin._50 }}>
+					<View style={{ marginTop: metrics.verticalScale(35) }}>
 						<AppCustomPicker
 							brandModalLoading={brandModalLoading}
 							showSearch
@@ -251,7 +253,7 @@ const AddCarDetails = (props: any) => {
 								getModal(item);
 								setSelectedCarOption(item);
 							}}
-							unselectedText={'Select Brand'}
+							unselectedText={t('selectBrand')}
 							options={brands}
 							setSearchItem={item => {
 								// console.log(item, '<== item');
@@ -261,10 +263,10 @@ const AddCarDetails = (props: any) => {
 
 						<AppCustomPicker
 							brandModalLoading={brandModalLoading}
-							marginTop={AppMargin._20}
+							marginTop={metrics.verticalScale(20)}
 							selectedItem={selectedCarModel}
 							setSelectedItem={setSelectedCarModel}
-							unselectedText={'Select Make/Model'}
+							unselectedText={t('selectMakeModel')}
 							options={models ?? []}
 						/>
 
@@ -281,10 +283,10 @@ const AddCarDetails = (props: any) => {
 						/> */}
 
 						<AppYearPicker
-							marginTop={AppMargin._20}
+							marginTop={metrics.verticalScale(20)}
 							selectedItem={formik.values.firstRegistration}
 							setSelectedItem={formik.handleChange('firstRegistration')}
-							unselectedText={'Select Year'}
+							unselectedText={t('selectYear')}
 							options={years}
 						/>
 
@@ -293,7 +295,7 @@ const AddCarDetails = (props: any) => {
 								<Image style={[styles.icon, { tintColor: AppColors.error }]} source={Icons.icnError} />
 								<AppText
 									width={'90%'}
-									left={AppMargin._10}
+									left={metrics.horizontalScale(10)}
 									textColor={AppColors.error}
 									fontFamily={Fonts.REGULAR}
 									fontSize={FontSize._14}
@@ -304,10 +306,10 @@ const AddCarDetails = (props: any) => {
 
 						{/* Fuel Type Input */}
 						<AppFuelPicker
-							marginTop={AppMargin._20}
+							marginTop={metrics.verticalScale(20)}
 							selectedItem={formik.values.fuel}
 							setSelectedItem={formik.handleChange('fuel')}
-							unselectedText={'Select Fuel type'}
+							unselectedText={t('selectFuel')}
 							options={fuelType}
 						/>
 
@@ -343,7 +345,7 @@ const AddCarDetails = (props: any) => {
 
 						{/* Color Input */}
 						<AppTextInput
-							placeholder="Car Color"
+							placeholder={t('carColor')}
 							value={formik.values.color}
 							onChangeText={formik.handleChange('color')}
 							showError={formik.touched.color && formik.errors.color}
@@ -383,7 +385,8 @@ const AddCarDetails = (props: any) => {
 
 						{/* License Plate Input */}
 						<AppTextInput
-							placeholder="License Plate Number"
+							marginTop={metrics.verticalScale(20)}
+							placeholder={t('licensePlate')}
 							value={formik.values.licensePlate}
 							onChangeText={formik.handleChange('licensePlate')}
 							showError={formik.touched.licensePlate && formik.errors.licensePlate}
@@ -395,9 +398,7 @@ const AddCarDetails = (props: any) => {
 								<AppText
 									fontFamily={Fonts.REGULAR}
 									fontSize={FontSize._14}
-									title={
-										'Upload Car Images (image should\nbe Front of Car with License plate visible)'
-									}
+									title={t('carUploadMessage')}
 								/>
 								<Image
 									style={styles.uploadImage}
@@ -416,12 +417,12 @@ const AddCarDetails = (props: any) => {
 					{/* Save Button */}
 					<AppButton
 						onClick={formik.handleSubmit}
-						top={AppMargin._20}
+						top={metrics.verticalScale(20)}
 						textColor={AppColors.textDark}
 						fontSize={FontSize._16}
 						fontFamily={Fonts.MEDIUM}
 						position="end"
-						buttonLabel={'Save'}
+						buttonLabel={t('save')}
 					/>
 				</AppScrollView>
 			</View>
@@ -438,25 +439,25 @@ const createStyles = (AppColors: Theme) => {
 		innerMainContainer: {
 			flex: 1,
 			backgroundColor: AppColors.background,
-			paddingHorizontal: 20,
-			paddingVertical: 16,
+			paddingHorizontal: metrics.horizontalScale(20),
+			paddingVertical: metrics.verticalScale(16),
 		},
 		icon: {
 			tintColor: AppColors.secondary,
 			height: 20,
 			width: 20,
-			marginLeft: 10,
+			marginLeft: metrics.horizontalScale(10),
 		},
 		errorContainer: {
 			flexDirection: 'row',
 			alignItems: 'center',
-			marginTop: 10,
+			marginTop: metrics.verticalScale(10),
 		},
 		imageContainer: {
-			borderColor: AppColors.white,
+			borderColor: AppColors.textInputBorderColor,
 			borderWidth: 1,
-			marginTop: AppMargin._20,
-			padding: 10,
+			marginTop: metrics.verticalScale(20),
+			padding: metrics.moderateScale(10),
 			...borderRadius10,
 		},
 		imageContent: {
@@ -466,8 +467,8 @@ const createStyles = (AppColors: Theme) => {
 		},
 		uploadImage: {
 			marginHorizontal: AppMargin._20,
-			height: 50,
-			width: 50,
+			height: metrics.verticalScale(50),
+			width: metrics.verticalScale(50),
 			borderRadius: 25,
 		},
 	});

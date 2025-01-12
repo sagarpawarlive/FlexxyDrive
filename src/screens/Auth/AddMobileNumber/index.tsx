@@ -18,6 +18,8 @@ import { NavigationKeys } from '../../../constants/navigationKeys';
 import { setUserData } from '../../../store/reducers/userdataSlice';
 import { useDispatch } from 'react-redux';
 import { phoneValidation } from '../../../constants/validationSchema';
+import { t } from '../../../i18n';
+import metrics from '../../../constants/metrics';
 
 const AddMobileNumber = (props: any) => {
 	const { AppColors } = useTheme();
@@ -89,17 +91,17 @@ const AddMobileNumber = (props: any) => {
 				<View style={AppContainer}>
 					<AppText
 						fontSize={FontSize._24}
-						top={AppMargin._40}
-						fontFamily={Fonts.REGULAR}
-						title={'Add Phone Number '}
+						top={metrics.verticalScale(40)}
+						fontFamily={Fonts.MEDIUM}
+						title={t('addPhoneNumber')}
 					/>
 
 					<AppTextInput
 						returnKeyLabel="Done"
 						returnKeyType="done"
-						marginTop={AppMargin._40}
+						marginTop={metrics.verticalScale(40)}
 						maxLength={15}
-						placeholder={'Phone Number'}
+						placeholder={t('phoneNumber')}
 						value={values.phone}
 						inputMode={'numeric'}
 						onChangeText={handleChange('phone')}
@@ -114,18 +116,18 @@ const AddMobileNumber = (props: any) => {
 
 					<AppText
 						fontSize={FontSize._16}
-						top={AppMargin._40}
-						fontFamily={Fonts.REGULAR}
-						title={'To continue your signin process using Google, Add your mobile number!'}
+						top={metrics.verticalScale(40)}
+						fontFamily={Fonts.MEDIUM}
+						title={t('requirePhoneToContinue')}
 					/>
 
 					<AppButton
 						// position="end"
-						top={AppMargin._40}
+						top={metrics.verticalScale(20)}
 						fontSize={FontSize._16}
 						textColor={AppColors.textDark}
 						fontFamily={Fonts.MEDIUM}
-						buttonLabel={'Continue'}
+						buttonLabel={t('continue')}
 						onClick={handleSubmit}
 					/>
 				</View>
@@ -134,7 +136,7 @@ const AddMobileNumber = (props: any) => {
 			<CountryPicker
 				theme={{
 					backgroundColor: AppColors.background,
-					onBackgroundTextColor: AppColors.white,
+					onBackgroundTextColor: AppColors.text,
 				}}
 				visible={showCountryPicker}
 				countryCode={selectedCountry}

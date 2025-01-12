@@ -5,6 +5,7 @@ import { useTheme } from '../theme/ThemeProvider';
 import AppText from './AppText';
 import { Theme } from '../types';
 import { AppHeight } from '../constants/commonStyle';
+import metrics from '../constants/metrics';
 
 interface AppOtpViewProps {
 	defaultValue?: string;
@@ -107,16 +108,16 @@ const createStyles = (AppColors: Theme) => {
 	return StyleSheet.create({
 		container: {
 			flexDirection: 'row',
-			paddingTop: 20,
+			paddingTop: metrics.verticalScale(20),
 		},
 
 		textInput: {
-			width: AppHeight._60,
-			height: AppHeight._60,
+			width: metrics.moderateScale(50),
+			height: metrics.moderateScale(50),
 			marginRight: 10,
 			includeFontPadding: false,
-			color: AppColors.textDark,
-			backgroundColor: AppColors.white,
+			color: AppColors.text,
+			backgroundColor: AppColors.textInputBorderColor,
 			borderRadius: 10,
 			textAlign: 'center',
 			fontFamily: Fonts.MEDIUM,

@@ -29,6 +29,10 @@ import auth from '@react-native-firebase/auth';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import { imagesData, ImagesDataAndroid } from '../../../constants/staticData';
 import { passwordValidation, usernameValidation } from '../../../constants/validationSchema';
+import Metrics from '../../../constants/metrics';
+import { t } from '../../../i18n';
+import { Images } from '../../../assets/images';
+import metrics from '../../../constants/metrics';
 
 const SigninScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -221,21 +225,26 @@ const SigninScreen = (props: any) => {
 	return (
 		<MainContainer>
 			<View style={styles.primaryContainer}>
-				<AppScrollView bounces={false} extraHeight={AppHeight._350}>
+				<AppScrollView bounces={false} extraHeight={Metrics.verticalScale(350)}>
 					<View style={[AppContainer]}>
-						<View style={styles.logoContainer}>
+						<View style={[styles.logoContainer]}>
+							<Image
+								source={Icons.icnFlexxyLogoIcon}
+								resizeMode="contain"
+								style={{ height: metrics.verticalScale(28) }}
+							/>
 							{/* <AppText fontSize={FontSize._40} fontFamily={Fonts.BOLD} title={'LOGO'} /> */}
 						</View>
 
-						<View style={styles.logoContainer}>
-							<AppText fontSize={FontSize._36} fontFamily={Fonts.REGULAR} title={'Login'} />
+						<View style={[styles.logoContainer, { marginTop: Metrics.verticalScale(30) }]}>
+							<AppText fontSize={FontSize._36} fontFamily={Fonts.MEDIUM} title={t('welcomeBack')} />
 						</View>
 
 						{/* Email Field */}
 						<View style={{ marginTop: AppMargin._40 }}>
 							<AppTextInput
-								marginTop={5}
-								placeholder={'Username'}
+								marginTop={Metrics.verticalScale(5)}
+								placeholder={t('username')}
 								value={values.username} // Use Formik's value
 								onChangeText={text => handleChange('username')(text)}
 								onBlur={() => handleBlur('username')}
@@ -245,12 +254,12 @@ const SigninScreen = (props: any) => {
 						</View>
 
 						{/* Password Field */}
-						<View style={{ marginTop: AppMargin._20 }}>
+						<View style={{ marginTop: Metrics.verticalScale(15) }}>
 							<AppTextInput
 								marginTop={AppMargin._5}
 								iconRight={showPassword ? Icons.icnShowPass : Icons.icnHidePass}
 								iconRightClick={() => setShowPassword(!showPassword)}
-								placeholder={'Password'}
+								placeholder={t('password')}
 								value={values.password} // Use Formik's value
 								onChangeText={text => handleChange('password')(text)}
 								onBlur={() => handleBlur('password')}
@@ -266,52 +275,52 @@ const SigninScreen = (props: any) => {
 									textColor={AppColors.primary}
 									fontSize={FontSize._14}
 									fontFamily={Fonts.MEDIUM}
-									label="Forgot password ?"
+									label={t('forgotPassword')}
 								/>
 							</Pressable>
 						</View>
 
 						<View style={{ flex: 1, justifyContent: 'flex-end' }}>
-							<View style={styles.socialLoginContainer}>
-								<FlatList
-									bounces={false}
-									scrollEnabled={false}
-									data={isIOS ? imagesData : ImagesDataAndroid}
-									horizontal
-									keyExtractor={item => item.id.toString()}
-									renderItem={({ item }) => (
-										<TouchableOpacity
-											style={styles.iconContainer}
-											onPress={() => handlePress(item.id)}>
-											<Image source={item.src} />
-										</TouchableOpacity>
-									)}
-								/>
-							</View>
 							<AppButton
-								top={AppMargin._40}
-								fontSize={FontSize._16}
+								top={Metrics.verticalScale(40)}
+								fontSize={FontSize._18}
 								textColor={AppColors.textDark}
 								fontFamily={Fonts.MEDIUM}
-								buttonLabel={'Confirm'}
+								buttonLabel={t('login')}
 								onClick={handleSubmit} // Use Formik's handleSubmit
 							/>
 						</View>
 						<View style={styles.bottomContainer}>
 							<AppText
-								fontSize={FontSize._16}
-								fontFamily={Fonts.MEDIUM}
-								label={`Don't have an account?`}
+								fontSize={FontSize._12}
+								fontFamily={Fonts.REGULAR}
+								label={t('dontHaveAnAccount')}
 							/>
 							<Pressable onPress={() => props.navigation.navigate(NavigationKeys.SignupScreen)}>
 								<AppText
-									left={5}
-									textColor={AppColors.primary}
-									fontSize={FontSize._16}
-									fontFamily={Fonts.MEDIUM}
-									label={`Sign up`}
+									left={Metrics.horizontalScale(5)}
+									textColor={AppColors.text}
+									fontSize={FontSize._12}
+									fontFamily={Fonts.BOLD}
+									label={t('signup')}
+									underLine
 								/>
 							</Pressable>
+						</View>
+
+						<View style={styles.socialLoginContainer}>
+							<FlatList
+								bounces={false}
+								scrollEnabled={false}
+								data={isIOS ? imagesData : ImagesDataAndroid}
+								horizontal
+								keyExtractor={item => item.id.toString()}
+								renderItem={({ item }) => (
+									<TouchableOpacity style={styles.iconContainer} onPress={() => handlePress(item.id)}>
+										<Image source={item.src} />
+									</TouchableOpacity>
+								)}
+							/>
 						</View>
 					</View>
 				</AppScrollView>
@@ -325,16 +334,16 @@ const SigninScreen = (props: any) => {
 const createStyles = (AppColors: Theme) => {
 	return StyleSheet.create({
 		logoContainer: {
-			marginTop: AppMargin._50,
+			marginTop: Metrics.verticalScale(50),
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
 		iconContainer: {
 			alignItems: 'center',
-			marginHorizontal: 20,
+			marginHorizontal: Metrics.horizontalScale(20),
 		},
 		socialLoginContainer: {
-			// marginTop: AppMargin._100,
+			marginTop: metrics.verticalScale(70),
 			justifyContent: 'center',
 			alignItems: 'center',
 			shadowColor: AppColors.white,
@@ -346,14 +355,14 @@ const createStyles = (AppColors: Theme) => {
 			shadowRadius: 10.84,
 			elevation: 5,
 		},
-		primaryContainer: { flex: 1, backgroundColor: AppColors.background, paddingBottom: 20 },
+		primaryContainer: { flex: 1, backgroundColor: AppColors.background, paddingBottom: Metrics.verticalScale(20) },
 		forgotPasswordContainer: {
-			marginVertical: AppMargin._10,
+			marginVertical: Metrics.verticalScale(10),
 			alignItems: 'flex-end',
 		},
 		bottomContainer: {
 			justifyContent: 'center',
-			marginTop: 20,
+			marginTop: Metrics.verticalScale(20),
 			flexDirection: 'row',
 		},
 	});

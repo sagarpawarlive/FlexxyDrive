@@ -4,6 +4,7 @@ import { AppHeight, AppMargin, borderRadius10 } from '../constants/commonStyle';
 import { Fonts, FontSize } from '../assets/fonts';
 import { useTheme } from '../theme/ThemeProvider';
 import { Icons } from '../assets/Icons';
+import metrics from '../constants/metrics';
 
 const AppYearPicker = ({
 	options,
@@ -32,7 +33,7 @@ const AppYearPicker = ({
 		<TouchableOpacity
 			style={[styles.option, { borderBottomWidth: index !== options.length - 1 ? 1 : 0 }]}
 			onPress={() => selectItem(item, index)}>
-			<Text style={[styles.optionText, { color: AppColors.white }]}>{item}</Text>
+			<Text style={[styles.optionText, { color: AppColors.text }]}>{item}</Text>
 		</TouchableOpacity>
 	);
 
@@ -41,7 +42,7 @@ const AppYearPicker = ({
 			style={[
 				styles.container,
 				{
-					borderColor: AppColors.white,
+					borderColor: AppColors.textInputBorderColor,
 					marginTop: marginTop,
 					borderWidth: borderWidth ?? 1,
 					borderBottomWidth: borderBottomWidth ?? 1,
@@ -49,7 +50,7 @@ const AppYearPicker = ({
 			]}>
 			{/* Touchable to open or close the picker */}
 			<TouchableOpacity style={styles.pickerButton} onPress={togglePicker}>
-				<Text style={[styles.pickerText, { color: AppColors.white }]}>{selectedItem || unselectedText}</Text>
+				<Text style={[styles.pickerText, { color: AppColors.text }]}>{selectedItem || unselectedText}</Text>
 				<Image style={{ transform: [{ rotate: isPickerOpen ? '90deg' : '270deg' }] }} source={Icons.icnBack} />
 			</TouchableOpacity>
 
@@ -57,7 +58,7 @@ const AppYearPicker = ({
 			{isPickerOpen && (
 				<View style={styles.dropdown}>
 					<FlatList
-						style={{ height: 200 }}
+						style={{ height: metrics.moderateScale(200) }}
 						data={options}
 						keyExtractor={(item, index) => index.toString()} // or use unique IDs if available
 						renderItem={renderItem}
@@ -73,7 +74,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: 'center',
-
 		...borderRadius10,
 	},
 	label: {
@@ -81,12 +81,11 @@ const styles = StyleSheet.create({
 	},
 	pickerButton: {
 		flexDirection: 'row',
-
 		borderRadius: 8,
 		height: AppHeight._70,
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginHorizontal: AppMargin._20,
+		marginHorizontal: metrics.horizontalScale(20),
 	},
 	pickerText: {
 		fontFamily: Fonts.REGULAR,
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
 	},
 	option: {
 		justifyContent: 'center',
-		marginHorizontal: AppMargin._20,
+		marginHorizontal: metrics.horizontalScale(20),
 		height: AppHeight._50,
 		borderBottomColor: '#ccc',
 	},

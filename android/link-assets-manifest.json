@@ -2,20 +2,20 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "src/assets/fonts/Poppins-Bold.ttf",
-      "sha1": "875cf0cecd647bcf22e79d633d868c1b1ec98dfa"
+      "path": "src/assets/fonts/Onest-Bold.ttf",
+      "sha1": "215d4dec49d03d1ce20dcec7681747f09abaffbb"
     },
     {
-      "path": "src/assets/fonts/Poppins-Medium.ttf",
-      "sha1": "283f21b44efbdbf276ba802be2d949a36bbc4233"
+      "path": "src/assets/fonts/Onest-Medium.ttf",
+      "sha1": "853cc272c53ec9299cbcc39b439d192ccf4b029f"
     },
     {
-      "path": "src/assets/fonts/Poppins-Regular.ttf",
-      "sha1": "fdd3002e7d814ee47c1c1b8487c72c6bbb3a2d00"
+      "path": "src/assets/fonts/Onest-Regular.ttf",
+      "sha1": "7fd6bbad039ed1a565cb85f31679a7e4bc4fcfe3"
     },
     {
       "path": "src/assets/fonts/index.ts",
-      "sha1": "a6b9bbbf11317259574e68a031712929a8a85515"
+      "sha1": "751426d49f0329f68f250e4225627831d540b313"
     }
   ]
 }

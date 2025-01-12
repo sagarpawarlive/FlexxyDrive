@@ -1,29 +1,16 @@
-import { Dimensions, Platform, PixelRatio } from 'react-native';
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-
-// based on iphone 5s's scale
-const scale = SCREEN_WIDTH / 375;
-
-function normalize(size: number): number {
-	const newSize = size * scale;
-	const roundedSize =
-		Platform.OS === 'ios'
-			? Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
-			: Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
-	return roundedSize;
-}
+import { Platform } from 'react-native';
+import metrics from '../../../../../../src/constants/metrics';
 
 const iosFonts = {
-	REGULAR: 'Poppins-Regular',
-	MEDIUM: 'Poppins-Medium',
-	BOLD: 'Poppins-Bold',
+	REGULAR: 'Onest-Regular',
+	MEDIUM: 'Onest-Medium',
+	BOLD: 'Onest-Bold',
 };
 
 const androidFonts = {
-	REGULAR: 'Poppins-Regular',
-	MEDIUM: 'Poppins-Medium',
-	BOLD: 'Poppins-Bold',
+	REGULAR: 'Onest-Regular',
+	MEDIUM: 'Onest-Medium',
+	BOLD: 'Onest-Bold',
 };
 
 export const Fonts = {
@@ -31,30 +18,30 @@ export const Fonts = {
 };
 
 export const FontSize = {
-	_40: normalize(40),
-	_39: normalize(39),
-	_38: normalize(38),
-	_37: normalize(37),
-	_36: normalize(36),
-	_35: normalize(35),
-	_34: normalize(34),
-	_33: normalize(33),
-	_32: normalize(32),
-	_30: normalize(30),
-	_28: normalize(28),
-	_26: normalize(26),
-	_25: normalize(25),
-	_24: normalize(24),
-	_23: normalize(23),
-	_22: normalize(22),
-	_21: normalize(21),
-	_20: normalize(20),
-	_18: normalize(18),
-	_16: normalize(16),
-	_15: normalize(15),
-	_14: normalize(14),
-	_13: normalize(13),
-	_12: normalize(12),
-	_11: normalize(11),
-	_10: normalize(10),
+	_40: metrics.moderateScale(40),
+	_39: metrics.moderateScale(39),
+	_38: metrics.moderateScale(38),
+	_37: metrics.moderateScale(37),
+	_36: metrics.moderateScale(36),
+	_35: metrics.moderateScale(35),
+	_34: metrics.moderateScale(34),
+	_33: metrics.moderateScale(33),
+	_32: metrics.moderateScale(32),
+	_30: metrics.moderateScale(30),
+	_28: metrics.moderateScale(28),
+	_26: metrics.moderateScale(26),
+	_25: metrics.moderateScale(25),
+	_24: metrics.moderateScale(24),
+	_23: metrics.moderateScale(23),
+	_22: metrics.moderateScale(22),
+	_21: metrics.moderateScale(21),
+	_20: metrics.moderateScale(20),
+	_18: metrics.moderateScale(18),
+	_16: metrics.moderateScale(16),
+	_15: metrics.moderateScale(15),
+	_14: metrics.moderateScale(14),
+	_13: metrics.moderateScale(13),
+	_12: metrics.moderateScale(12),
+	_11: metrics.moderateScale(11),
+	_10: metrics.moderateScale(10),
 };

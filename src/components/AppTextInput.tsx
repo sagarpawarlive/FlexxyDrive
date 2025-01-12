@@ -3,11 +3,15 @@ import {
 	Image,
 	ImageProps,
 	KeyboardTypeOptions,
+	Platform,
 	Pressable,
 	StyleSheet,
+	Text,
 	TextInput,
 	TextInputProps,
 	TouchableOpacity,
+	UIManager,
+	LayoutAnimation,
 	View,
 } from 'react-native';
 import { useTheme } from '../theme/ThemeProvider';
@@ -16,6 +20,7 @@ import { Theme } from '../types';
 import { Fonts, FontSize } from '../assets/fonts';
 import AppText from './AppText';
 import { Icons } from '../assets/Icons';
+import metrics from '../constants/metrics';
 
 interface AppTextInputProps {
 	value?: string;
@@ -85,16 +90,34 @@ const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
 		const { AppColors, isDarkMode } = useTheme();
 		const styles = createStyles(AppColors);
 
+		if (Platform.OS === 'android') {
+			if (UIManager.setLayoutAnimationEnabledExperimental) {
+				UIManager.setLayoutAnimationEnabledExperimental(true);
+			}
+		}
+
+		LayoutAnimation.easeInEaseOut();
+		// if (value && value.length > 0) {
+		// }
+
 		return (
 			<View>
-				<TouchableOpacity disabled={!wholePress} onPress={wholePress}>
+				<TouchableOpacity style={{ marginTop: marginTop }} disabled={!wholePress} onPress={wholePress}>
+					{value && (
+						<View style={{ position: 'absolute', zIndex: 99, left: 20, top: metrics.verticalScale(-8) }}>
+							<AppText
+								fontSize={FontSize._14}
+								label={placeholder}
+								styleProps={{ backgroundColor: AppColors.background, paddingHorizontal: 5 }}
+							/>
+						</View>
+					)}
 					<View
 						style={[
 							styles.container,
 							{
 								height: height ?? AppHeight._70,
-								marginTop,
-								borderColor: borderColor ?? AppColors.white,
+								borderColor: borderColor ?? AppColors.textInputBorderColor,
 								borderWidth: borderBottomWidth ? 0 : 1,
 								borderBottomWidth: borderWidth ? 0 : 1,
 								paddingHorizontal: borderBottomWidth ? 0 : 10,
@@ -110,6 +133,7 @@ const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
 							}}>
 							{icon && <Image style={styles.icon} source={icon} />}
 							{leftNode}
+
 							<TextInput
 								ref={ref}
 								secureTextEntry={secureTextEntry}

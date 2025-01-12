@@ -7,6 +7,8 @@ import { NavigationKeys } from '../../constants/navigationKeys';
 import { AppDispatch } from '../../store';
 import { useTheme } from '../../theme/ThemeProvider';
 import { Theme } from '../../types';
+import { windowWidth } from '../../constants/metrics';
+import { App_Permission } from '../../services/Permissions';
 
 interface SplashScreenProps {
 	navigation: any;
@@ -25,7 +27,8 @@ const SplashScreen: React.FC<SplashScreenProps> = props => {
 
 	console.log('[ / userData ] ------->', userData);
 	useEffect(() => {
-		const unsubscribe = props.navigation.addListener('focus', () => {
+		const unsubscribe = props.navigation.addListener('focus', async () => {
+			await App_Permission._askLocationPermission();
 			setTimeout(() => {
 				switch (true) {
 					case userData?.userData && userData?.userData?.data?.token?.length > 0:
@@ -38,7 +41,7 @@ const SplashScreen: React.FC<SplashScreenProps> = props => {
 						break;
 					default:
 				}
-			}, 2000);
+			}, 4000); //4000 gif duration
 		});
 
 		return () => {
@@ -63,7 +66,9 @@ const SplashScreen: React.FC<SplashScreenProps> = props => {
 
 	return (
 		<View style={styles.container}>
-			<Image source={Images.imgSplash} />
+			<View>
+				<Image resizeMode="contain" style={{ width: windowWidth }} source={Images.imgLoader} />
+			</View>
 		</View>
 	);
 };
@@ -72,7 +77,7 @@ const createStyles = (AppColors: Theme, colourScheme: string) => {
 	return StyleSheet.create({
 		container: {
 			flex: 1,
-			backgroundColor: AppColors.background,
+			backgroundColor: 'rgba(8, 0, 24, 1)',
 			alignItems: 'center',
 			justifyContent: 'center',
 		},

@@ -37,7 +37,7 @@ const createStyles = (AppColors: Theme) => {
 			flex: 1,
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: 'rgba(44, 62, 80, .7)', // Overlay background color
+			backgroundColor: AppColors.primaryTransparent, // Overlay background color
 		},
 		overlayContainer: {
 			// ...AppShadow,
