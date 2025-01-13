@@ -22,6 +22,7 @@ import { updateUserState } from '../../../../store/reducers/userdataSlice';
 import { AddDocumentsOptions } from '../../../../constants/staticData';
 import metrics from '../../../../constants/metrics';
 import { t } from '../../../../i18n';
+import { NavigationKeys } from '../../../../constants/navigationKeys';
 
 const { height } = Dimensions.get('window');
 
@@ -30,6 +31,10 @@ const AddDocuments = props => {
 	const { documents = {}, isVerified } = props?.route?.params?.driverDocuments ?? null;
 	const dispatch = useDispatch();
 	const userData = useSelector(state => state.userDataSlice.userData.user);
+
+	const userDataSlice = useSelector(state => state?.userDataSlice ?? {});
+	const checkData = userDataSlice.userData ?? {};
+
 	// State to handle selected driving license and captured image
 	const [selectedDrivingLicence, setSelectedDrivingLicence] = useState(
 		{ path: documents?.drivingLicense, isFile: false } ?? null,
@@ -122,6 +127,12 @@ const AddDocuments = props => {
 	const handleSave = async () => {
 		setIsLoading(true);
 		try {
+			if (!checkData?.preferences || !checkData.guarantor || !checkData.carDetails) {
+				setIsLoading(false);
+				props.navigation.navigate(NavigationKeys.PendingVerification);
+				return;
+			}
+
 			let updateDocuments = documents;
 
 			if (selectedDrivingLicence && selectedDrivingLicence.isFile) {
@@ -206,7 +217,7 @@ const AddDocuments = props => {
 					/>
 				)}
 				{/* Save Button */}
-				{!isVerified && (
+				{isVerified && (
 					<AppButton
 						top={AppMargin._20}
 						textColor={AppColors.textDark}

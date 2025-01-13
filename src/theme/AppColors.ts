@@ -8,6 +8,7 @@ export const lightTheme = {
 	// Primary and Secondary Colors
 	primary: 'rgba(102, 0, 204, 1)',
 	primaryTransparent: 'rgba(102, 0, 204, 0.1)',
+	primaryTransparent8: 'rgba(102, 0, 204, 0.8)',
 	secondary: 'rgba(217, 217, 217, 1)',
 	secondaryTransparent: 'rgba(217, 217, 217, 0.3)',
 
@@ -24,6 +25,7 @@ export const lightTheme = {
 	warning: 'rgba(249, 200, 50, 1)',
 
 	textInputBorderColor: 'rgba(218, 218, 218, 1)',
+	verified: '#00C72E',
 };
 
 export const darkTheme = {
@@ -36,6 +38,7 @@ export const darkTheme = {
 	// Primary and Secondary Colors
 	primary: 'rgba(102, 0, 204, 1)',
 	primaryTransparent: 'rgba(102, 0, 204, 0.1)',
+	primaryTransparent8: 'rgba(102, 0, 204, 0.8)',
 	secondary: 'rgba(150, 150, 150, 1)',
 	secondaryTransparent: 'rgba(150, 150, 150, 0.3)',
 
@@ -51,4 +54,6 @@ export const darkTheme = {
 	warning: 'rgba(249, 200, 50, 1)',
 	modalBackground: '#546A80',
 	verifiedColor: '#90EE90',
+
+	verified: '#00C72E',
 };

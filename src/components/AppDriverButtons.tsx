@@ -5,6 +5,8 @@ import { useTheme } from '../theme/ThemeProvider';
 import AppText from './AppText';
 import { FontSize } from '../../android/app/src/main/assets/custom';
 import { Theme } from '../types';
+import metrics from '../constants/metrics';
+import { Icons } from '../assets/Icons';
 
 interface AppDriverButtonsProps {
 	buttonLabel?: string;
@@ -25,6 +27,8 @@ interface AppDriverButtonsProps {
 	rotate?: any;
 	iconNode?: any;
 	height?: any;
+	styleProps?: any;
+	isVerify?: boolean;
 }
 
 const AppDriverButtons: React.FC<AppDriverButtonsProps> = (props: AppDriverButtonsProps) => {
@@ -33,7 +37,7 @@ const AppDriverButtons: React.FC<AppDriverButtonsProps> = (props: AppDriverButto
 
 	return (
 		<View style={{ ...((props.position as any) && ButtonEnd) }}>
-			<TouchableOpacity onPress={props.onClick} style={[styles.container, {}]}>
+			<TouchableOpacity onPress={props.onClick} style={[styles.container, { ...props.styleProps }]}>
 				<AppText
 					// top={AppMargin._10}
 					fontSize={props.fontSize ?? FontSize._16}
@@ -41,7 +45,7 @@ const AppDriverButtons: React.FC<AppDriverButtonsProps> = (props: AppDriverButto
 					textColor={props.textColor ?? AppColors.text}
 					label={props.buttonLabel}
 				/>
-				{props.icon && (
+				{props.icon && !props.isVerify && (
 					<TouchableOpacity onPress={props.onRightClick}>
 						<Image
 							resizeMode="contain"
@@ -56,6 +60,18 @@ const AppDriverButtons: React.FC<AppDriverButtonsProps> = (props: AppDriverButto
 						/>
 					</TouchableOpacity>
 				)}
+				{props.icon && props.isVerify && (
+					<TouchableOpacity onPress={props.onRightClick}>
+						<Image
+							resizeMode="contain"
+							style={{
+								height: metrics.moderateScale(24),
+								width: metrics.moderateScale(24),
+							}}
+							source={Icons.icnValidated}
+						/>
+					</TouchableOpacity>
+				)}
 				{props.iconNode}
 			</TouchableOpacity>
 		</View>
@@ -66,7 +82,7 @@ const createStyles = (AppColors: Theme) => {
 	return StyleSheet.create({
 		container: {
 			flexDirection: 'row',
-			marginHorizontal: 10,
+			// marginHorizontal: 10,
 			marginTop: AppMargin._15,
 			// backgroundColor: 'red',
 			height: AppHeight._50,

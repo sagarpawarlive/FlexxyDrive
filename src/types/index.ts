@@ -6,6 +6,7 @@ export interface Theme {
 	white: string;
 	primary: string;
 	primaryTransparent: string;
+	primaryTransparent8: string;
 	secondary: string;
 	secondaryTransparent: string;
 	placeholder: string;
@@ -16,4 +17,5 @@ export interface Theme {
 	modalBackground: string;
 	verifiedColor: string;
 	textInputBorderColor?: string;
+	verified?: string;
 }

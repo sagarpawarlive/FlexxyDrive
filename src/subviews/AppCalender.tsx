@@ -37,7 +37,13 @@ const AppCalender: React.FC<AppCalenderProps> = ({ isVisible, onClose, onDateSel
 	};
 
 	return (
-		<Modal isVisible={isVisible} onBackdropPress={handleClose} style={styles.modal}>
+		<Modal
+			backdropTransitionInTiming={500}
+			backdropTransitionOutTiming={500}
+			isVisible={isVisible}
+			onBackdropPress={handleClose}
+			backdropColor={AppColors.primaryTransparent8}
+			style={styles.modal}>
 			<View style={styles.modalContent}>
 				<Text style={styles.modalTitle}>{title ?? 'Select a Birth Date'}</Text>
 				<DatePicker

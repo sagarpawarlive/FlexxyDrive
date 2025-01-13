@@ -1,5 +1,3 @@
-import PassangerScreen from '../screens/PassangerScreen';
-
 export const NavigationKeys = {
 	SplashScreen: 'SplashScreen',
 	OnboardingScreen: 'OnboardingScreen',
@@ -28,4 +26,8 @@ export const NavigationKeys = {
 	AddDocuments: 'AddDocuments',
 
 	PassangerScreen: 'PassangerScreen',
+	OtherInformation: 'OtherInformation',
+
+	PendingVerification: 'PendingVerification',
+	VerifyStatusScreen: 'VerifyStatusScreen',
 };

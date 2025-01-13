@@ -39,8 +39,10 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }: any) => {
 
 	return (
 		<Modal
+			backdropTransitionInTiming={500}
+			backdropTransitionOutTiming={500}
 			isVisible={isVisible}
-			backdropColor={AppColors.primary}
+			backdropColor={AppColors.primaryTransparent8}
 			onBackdropPress={onClose}
 			onBackButtonPress={onClose}
 			style={[styles.modal, { backgroundColor: AppColors.primary }]}

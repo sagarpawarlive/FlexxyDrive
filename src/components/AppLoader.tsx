@@ -22,7 +22,7 @@ const AppLoader: React.FC<AppLoaderProps> = ({ isLoading }) => {
 							isVisible={isLoading}
 							size={AppHeight._60}
 							type="ThreeBounce"
-							color={AppColors.primary}
+							color={AppColors.white}
 						/>
 					</View>
 				)}
@@ -37,12 +37,11 @@ const createStyles = (AppColors: Theme) => {
 			flex: 1,
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: AppColors.primaryTransparent, // Overlay background color
+			backgroundColor: AppColors.primaryTransparent8, // Overlay background color
 		},
 		overlayContainer: {
 			// ...AppShadow,
 			// padding: 20,
-			// backgroundColor: AppColors.white,
 			borderRadius: 5,
 			alignItems: 'center', // Centers the spinner inside the modal
 		},

@@ -39,4 +39,7 @@ export const Icons = {
 	icnBaselineLocation: require('./baseLineLocation.png'),
 	icnToArrow: require('./toArrow.png'),
 	icnFlexxyLogoIcon: require('./flexxyLogoIcon.png'),
+
+	icnValidated: require('./validated.png'),
+	icnPendingVerification: require('./pendingVerification.png'),
 };

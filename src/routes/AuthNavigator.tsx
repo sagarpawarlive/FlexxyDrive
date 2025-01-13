@@ -17,6 +17,9 @@ import NextOfKin from '../screens/Auth/DriverSignup/NextOfKin';
 import AddMobileNumber from '../screens/Auth/AddMobileNumber';
 import AddDocuments from '../screens/Auth/DriverSignup/AddDocuments';
 import OnboardingScreen from '../screens/Auth/OnboardingScreen';
+import OtherInformation from '../screens/Auth/DriverSignup/OtherInformation';
+import PendingVerification from '../screens/Auth/DriverSignup/PendingVerification';
+import VerifyStatusScreen from '../screens/Auth/DriverSignup/VerifyStatusScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +44,9 @@ const AuthNavigator: React.FC = () => {
 			<Stack.Screen name={NavigationKeys.NextOfKin} component={NextOfKin} />
 			<Stack.Screen name={NavigationKeys.AddEmergencyContacts} component={AddEmergencyContacts} />
 			<Stack.Screen name={NavigationKeys.AddDocuments} component={AddDocuments} />
+			<Stack.Screen name={NavigationKeys.OtherInformation} component={OtherInformation} />
+			<Stack.Screen name={NavigationKeys.PendingVerification} component={PendingVerification} />
+			<Stack.Screen name={NavigationKeys.VerifyStatusScreen} component={VerifyStatusScreen} />
 		</Stack.Navigator>
 	);
 };

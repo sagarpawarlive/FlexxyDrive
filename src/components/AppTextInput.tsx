@@ -51,6 +51,7 @@ interface AppTextInputProps {
 	onSubmitEditing?: () => void;
 	wholePress?: () => void;
 	marginHorizontal?: number;
+	width?: any;
 }
 
 const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
@@ -84,6 +85,7 @@ const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
 			returnKeyLabel,
 			wholePress,
 			marginHorizontal,
+			width,
 		},
 		ref,
 	) => {
@@ -117,6 +119,7 @@ const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
 							styles.container,
 							{
 								height: height ?? AppHeight._70,
+								width: width ?? '100%',
 								borderColor: borderColor ?? AppColors.textInputBorderColor,
 								borderWidth: borderBottomWidth ? 0 : 1,
 								borderBottomWidth: borderWidth ? 0 : 1,
@@ -130,6 +133,7 @@ const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
 								flexDirection: 'row',
 								alignItems: 'center',
 								flex: 1,
+								width: width ?? '100%',
 							}}>
 							{icon && <Image style={styles.icon} source={icon} />}
 							{leftNode}

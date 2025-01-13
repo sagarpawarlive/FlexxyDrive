@@ -6,7 +6,7 @@ import AppButton from '../../../../components/AppButton';
 import AppHeader from '../../../../components/AppHeader';
 import AppText from '../../../../components/AppText';
 import MainContainer from '../../../../components/MainContainer';
-import { AppHeight, AppMargin } from '../../../../constants/commonStyle';
+import { AppHeight, AppMargin, borderRadius10 } from '../../../../constants/commonStyle';
 import { useTheme } from '../../../../theme/ThemeProvider';
 import { Theme } from '../../../../types';
 import AppTextInput from '../../../../components/AppTextInput';
@@ -60,7 +60,7 @@ const DriverInformation = (props: any) => {
 		city,
 		postCode,
 		street,
-		streetNumber,
+
 		dob = '',
 		country,
 		countryCode,
@@ -98,7 +98,7 @@ const DriverInformation = (props: any) => {
 	const radioDesigns = {
 		borderColor: AppColors.primary,
 		color: AppColors.primary,
-		labelStyle: { color: AppColors.white },
+		labelStyle: { color: AppColors.text },
 	};
 
 	const radioButtons = useMemo(
@@ -113,6 +113,18 @@ const DriverInformation = (props: any) => {
 				id: '2',
 				label: 'Female',
 				value: 'female',
+				...radioDesigns,
+			},
+			{
+				id: '3',
+				label: 'Non-Binary',
+				value: 'nonbinary',
+				...radioDesigns,
+			},
+			{
+				id: '4',
+				label: 'Prefer not to say',
+				value: 'prefernottosay',
 				...radioDesigns,
 			},
 		],
@@ -135,7 +147,7 @@ const DriverInformation = (props: any) => {
 				city: driverInfoRes?.driverInfo?.city ?? '',
 				postCode: driverInfoRes?.driverInfo?.postCode ?? '',
 				street: driverInfoRes?.driverInfo?.street ?? '',
-				streetNumber: driverInfoRes?.driverInfo?.streetNumber ?? '',
+
 				dob: driverInfoRes?.driverInfo?.dob ?? '',
 			});
 
@@ -175,7 +187,7 @@ const DriverInformation = (props: any) => {
 			dob: date,
 			postCode: postCode,
 			street: street,
-			streetNumber: streetNumber,
+			// streetNumber: streetNumber,
 		},
 		validationSchema: Yup.object({
 			firstName: firstNameValidation,
@@ -183,7 +195,7 @@ const DriverInformation = (props: any) => {
 			city: cityValidation,
 			postCode: postCodeValidation,
 			street: streetValidation,
-			streetNumber: streetNumberValidation,
+			// streetNumber: streetNumberValidation,
 		}),
 		onSubmit: values => {
 			console.log('Form submitted with:', values);
@@ -236,7 +248,7 @@ const DriverInformation = (props: any) => {
 		}
 		setIsLoading(false);
 		_showToast(res?.message, 'success');
-
+		props.navigation.navigate(NavigationKeys.OtherInformation);
 		/*
 				const verifyDocument = {
 
@@ -296,27 +308,89 @@ const DriverInformation = (props: any) => {
 				</View>
 
 				<AppScrollView bounces={false} extraHeight={metrics.verticalScale(250)}>
-					<View style={{ marginTop: metrics.verticalScale(50) }}>
-						<AppTextInput
-							ref={firstNameRef}
-							placeholder={t('firstName')}
-							value={values.firstName}
-							onChangeText={handleChange('firstName')}
-							onBlur={handleBlur('firstName')}
-							showError={touched.firstName && errors.firstName}
-							onSubmitEditing={() => lastNameRef?.current?.focus()}
-							returnKeyType="next"
-						/>
-						<AppTextInput
-							ref={lastNameRef}
-							placeholder={t('lastName')}
-							value={values.lastName}
-							onChangeText={handleChange('lastName')}
-							onBlur={handleBlur('lastName')}
-							showError={touched.lastName && errors.lastName}
-							onSubmitEditing={toggleModal}
-							returnKeyType="next"
-						/>
+					<View style={{ marginTop: metrics.verticalScale(30) }}>
+						<View
+							style={{
+								flexDirection: 'row',
+								flex: 1,
+								justifyContent: 'space-between',
+							}}>
+							<View
+								style={{
+									flex: 0.48,
+									marginBottom: metrics.verticalScale(10),
+								}}>
+								<AppTextInput
+									ref={firstNameRef}
+									placeholder={t('firstName')}
+									value={values.firstName}
+									onChangeText={handleChange('firstName')}
+									onBlur={handleBlur('firstName')}
+									// showError={touched.firstName && errors.firstName}
+									onSubmitEditing={() => lastNameRef?.current?.focus()}
+									returnKeyType="next"
+								/>
+								{touched.firstName && errors.firstName && (
+									<View style={styles.errorContainer}>
+										<Image
+											style={[styles.icon, { tintColor: AppColors.error }]}
+											source={Icons.icnError}
+										/>
+										<AppText
+											width={'50%'}
+											left={metrics.horizontalScale(10)}
+											textColor={AppColors.error}
+											fontFamily={Fonts.REGULAR}
+											fontSize={FontSize._14}
+											label={errors.firstName}
+										/>
+									</View>
+								)}
+							</View>
+
+							<View style={{ flex: 0.48, marginBottom: metrics.verticalScale(10) }}>
+								<AppTextInput
+									ref={lastNameRef}
+									placeholder={t('lastName')}
+									value={values.lastName}
+									onChangeText={handleChange('lastName')}
+									onBlur={handleBlur('lastName')}
+									// showError={touched.lastName && errors.lastName}
+									onSubmitEditing={toggleModal}
+									returnKeyType="next"
+								/>
+								{touched.lastName && errors.lastName && (
+									<View style={[styles.errorContainer]}>
+										<Image
+											style={[styles.icon, { tintColor: AppColors.error }]}
+											source={Icons.icnError}
+										/>
+										<AppText
+											width={'50%'}
+											left={metrics.horizontalScale(10)}
+											textColor={AppColors.error}
+											fontFamily={Fonts.REGULAR}
+											fontSize={FontSize._14}
+											label={errors.lastName}
+										/>
+									</View>
+								)}
+							</View>
+						</View>
+
+						{/* {touched.firstName && errors.firstName && (
+							<View style={styles.errorContainer}>
+								<Image style={[styles.icon, { tintColor: AppColors.error }]} source={Icons.icnError} />
+								<AppText
+									width={'90%'}
+									left={metrics.horizontalScale(10)}
+									textColor={AppColors.error}
+									fontFamily={Fonts.REGULAR}
+									fontSize={FontSize._14}
+									label={errors.firstName}
+								/>
+							</View>
+						)} */}
 
 						<Pressable style={styles.dobContainer} onPress={() => toggleModal()}>
 							<Text style={styles.dobText}>{date ? moment(date).format('DD-MM-YYYY') : 'DOB'}</Text>
@@ -324,66 +398,140 @@ const DriverInformation = (props: any) => {
 						</Pressable>
 
 						<View style={styles.radioButtonsContainer}>
-							<AppText fontSize={FontSize._16} title={t('gender')} />
+							<View
+								style={{ position: 'absolute', zIndex: 99, left: 20, top: metrics.verticalScale(-8) }}>
+								<AppText
+									fontSize={FontSize._14}
+									label={t('gender')}
+									styleProps={{ backgroundColor: AppColors.background, paddingHorizontal: 5 }}
+								/>
+							</View>
+							{/* <AppText fontSize={FontSize._16} title={t('gender')} /> */}
 							<RadioGroup
 								radioButtons={radioButtons}
 								onPress={setSelectedId}
 								selectedId={selectedId}
-								containerStyle={{ flexDirection: 'row' }} // Horizontal layout
+								containerStyle={{ flexDirection: 'column' }} // Horizontal layout
 							/>
 						</View>
 
-						<AppDriverButtons
-							onClick={() => setShowCountryPicker(true)}
-							buttonLabel={countryName}
-							textColor={AppColors.text}
-							iconNode={
-								<CountryPicker
-									onClose={() => setShowCountryPicker(false)}
-									visible={showCountryPicker}
-									countryCode={selectedCountry}
-									withFlag={true}
-									withCallingCodeButton={false}
-									withFlagButton={true}
-									countryCodes={[]}
-									withCallingCode={true}
-									withAlphaFilter={true}
-									withFilter={true}
-									withCountryNameButton={false}
-									onSelect={onSelectCountry}
-									containerButtonStyle={{}}
-									theme={{
-										backgroundColor: AppColors.background,
-										onBackgroundTextColor: AppColors.text,
-									}}
+						<View style={{ marginTop: metrics.verticalScale(10) }}>
+							<View style={{ position: 'absolute', zIndex: 99, left: 20, top: metrics.verticalScale(4) }}>
+								<AppText
+									fontSize={FontSize._14}
+									label={t('country')}
+									styleProps={{ backgroundColor: AppColors.background, paddingHorizontal: 5 }}
 								/>
-							}
-						/>
+							</View>
+							<AppDriverButtons
+								styleProps={{
+									borderWidth: 1,
+									paddingHorizontal: metrics.verticalScale(20),
+									height: AppHeight._70,
+									...borderRadius10,
+								}}
+								onClick={() => setShowCountryPicker(true)}
+								buttonLabel={countryName}
+								textColor={AppColors.text}
+								iconNode={
+									<CountryPicker
+										onClose={() => setShowCountryPicker(false)}
+										visible={showCountryPicker}
+										countryCode={selectedCountry}
+										withFlag={true}
+										withCallingCodeButton={false}
+										withFlagButton={true}
+										countryCodes={[]}
+										withCallingCode={true}
+										withAlphaFilter={true}
+										withFilter={true}
+										withCountryNameButton={false}
+										onSelect={onSelectCountry}
+										containerButtonStyle={{}}
+										theme={{
+											backgroundColor: AppColors.background,
+											onBackgroundTextColor: AppColors.text,
+										}}
+									/>
+								}
+							/>
+						</View>
+						<View
+							style={{
+								flexDirection: 'row',
+								flex: 1,
+								justifyContent: 'space-between',
+							}}>
+							<View
+								style={{
+									flex: 0.48,
+									marginBottom: metrics.verticalScale(10),
+								}}>
+								<AppTextInput
+									ref={cityRef}
+									placeholder={t('city')}
+									value={values.city}
+									onChangeText={handleChange('city')}
+									onBlur={handleBlur('city')}
+									// showError={touched.city && errors.city}
+									onSubmitEditing={() => postCodeRef?.current?.focus()}
+									returnKeyType="next"
+								/>
+								{touched.city && errors.city && (
+									<View style={styles.errorContainer}>
+										<Image
+											style={[styles.icon, { tintColor: AppColors.error }]}
+											source={Icons.icnError}
+										/>
+										<AppText
+											width={'50%'}
+											left={metrics.horizontalScale(10)}
+											textColor={AppColors.error}
+											fontFamily={Fonts.REGULAR}
+											fontSize={FontSize._14}
+											label={errors.city}
+										/>
+									</View>
+								)}
+							</View>
+							<View
+								style={{
+									flex: 0.48,
+									marginBottom: metrics.verticalScale(10),
+								}}>
+								<AppTextInput
+									ref={postCodeRef}
+									placeholder={t('postCode')}
+									value={values.postCode}
+									onChangeText={handleChange('postCode')}
+									onBlur={handleBlur('postCode')}
+									// showError={touched.postCode && errors.postCode}
+									onSubmitEditing={() => streetRef?.current?.focus()}
+									returnKeyType="done"
+									inputMode="number-pad"
+								/>
+								{touched.postCode && errors.postCode && (
+									<View style={styles.errorContainer}>
+										<Image
+											style={[styles.icon, { tintColor: AppColors.error }]}
+											source={Icons.icnError}
+										/>
+										<AppText
+											width={'50%'}
+											left={metrics.horizontalScale(10)}
+											textColor={AppColors.error}
+											fontFamily={Fonts.REGULAR}
+											fontSize={FontSize._14}
+											label={errors.postCode}
+										/>
+									</View>
+								)}
+							</View>
+						</View>
 
 						<AppTextInput
-							ref={cityRef}
-							placeholder={t('city')}
-							value={values.city}
-							onChangeText={handleChange('city')}
-							onBlur={handleBlur('city')}
-							showError={touched.city && errors.city}
-							onSubmitEditing={() => postCodeRef?.current?.focus()}
-							returnKeyType="next"
-						/>
-						<AppTextInput
-							ref={postCodeRef}
-							placeholder={t('postCode')}
-							value={values.postCode}
-							onChangeText={handleChange('postCode')}
-							onBlur={handleBlur('postCode')}
-							showError={touched.postCode && errors.postCode}
-							onSubmitEditing={() => streetRef?.current?.focus()}
-							returnKeyType="done"
-							inputMode="number-pad"
-						/>
-						<AppTextInput
 							ref={streetRef}
-							placeholder={t('street')}
+							placeholder={t('address')}
 							value={values.street}
 							onChangeText={handleChange('street')}
 							onBlur={handleBlur('street')}
@@ -391,7 +539,7 @@ const DriverInformation = (props: any) => {
 							onSubmitEditing={() => streetNumberRef?.current?.focus()}
 							returnKeyType="next"
 						/>
-						<AppTextInput
+						{/* <AppTextInput
 							ref={streetNumberRef}
 							placeholder={t('streetNumber')}
 							value={values.streetNumber}
@@ -399,9 +547,9 @@ const DriverInformation = (props: any) => {
 							onBlur={handleBlur('streetNumber')}
 							showError={touched.streetNumber && errors.streetNumber}
 							returnKeyType="done"
-						/>
+						/> */}
 
-						<View>
+						{/* <View>
 							<AppDriverButtons
 								onClick={() =>
 									props.navigation.navigate(NavigationKeys.AddDocuments, {
@@ -420,7 +568,7 @@ const DriverInformation = (props: any) => {
 								left={metrics.horizontalScale(10)}
 								label="JPG, PNG "
 							/>
-						</View>
+						</View> */}
 
 						{/* <AppDriverButtons
 							buttonLabel="Next of Kin"
@@ -432,7 +580,7 @@ const DriverInformation = (props: any) => {
 								});
 							}}
 						/> */}
-
+						{/*
 						<AppDriverButtons
 							onClick={() => setIsPrefModalVisible(true)}
 							buttonLabel={t('preferences')}
@@ -460,7 +608,7 @@ const DriverInformation = (props: any) => {
 							}
 							buttonLabel={t('emergencyContacts')}
 							icon={Icons.icnBack}
-						/>
+						/> */}
 					</View>
 					<View style={{ marginBottom: metrics.verticalScale(20) }}>
 						<AppButton
@@ -469,7 +617,7 @@ const DriverInformation = (props: any) => {
 							fontSize={FontSize._16}
 							fontFamily={Fonts.MEDIUM}
 							position="end"
-							buttonLabel={'Verify'}
+							buttonLabel={t('submit')}
 							onClick={handleSubmit}
 						/>
 					</View>
@@ -521,13 +669,15 @@ const createStyles = (AppColors: Theme) => {
 			width: metrics.moderateScale(100),
 		},
 		radioButtonsContainer: {
-			borderColor: AppColors.white,
-			borderBottomWidth: 1,
-			paddingVertical: metrics.verticalScale(20),
-			marginHorizontal: metrics.verticalScale(10),
+			borderColor: AppColors.textInputBorderColor,
+			borderWidth: 1,
+			padding: metrics.verticalScale(10),
+			paddingHorizontal: metrics.verticalScale(20),
+			marginTop: metrics.verticalScale(10),
 			flexDirection: 'row',
 			justifyContent: 'space-between', // Ensure equal spacing between buttons
 			alignItems: 'center',
+			borderRadius: 10,
 		},
 		dobContainer: {
 			// backgroundColor: 'red',
@@ -543,6 +693,17 @@ const createStyles = (AppColors: Theme) => {
 		topImage: { position: 'absolute' },
 		dobText: { flex: 1, fontSize: FontSize._16, color: AppColors.text },
 		profileImage: { height: metrics.moderateScale(100), width: metrics.moderateScale(100), borderRadius: 100 },
+		errorContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			marginTop: metrics.verticalScale(10),
+		},
+		icon: {
+			tintColor: AppColors.secondary,
+			height: 20,
+			width: 20,
+			marginLeft: metrics.horizontalScale(10),
+		},
 	});
 };
 

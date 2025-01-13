@@ -29,8 +29,10 @@ const ImagePicker = ({ isVisible, onClose, title }) => {
 
 	return (
 		<Modal
+			backdropTransitionInTiming={500}
+			backdropTransitionOutTiming={500}
 			isVisible={isVisible}
-			backdropColor={'#2C3E50CC'}
+			backdropColor={AppColors.primaryTransparent8}
 			onBackdropPress={onClose}
 			onBackButtonPress={onClose}
 			style={styles.modal}

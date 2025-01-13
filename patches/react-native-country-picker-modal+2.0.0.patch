@@ -1,0 +1,27 @@
+diff --git a/node_modules/react-native-country-picker-modal/lib/Flag.js b/node_modules/react-native-country-picker-modal/lib/Flag.js
+index b974950..803508f 100644
+--- a/node_modules/react-native-country-picker-modal/lib/Flag.js
++++ b/node_modules/react-native-country-picker-modal/lib/Flag.js
+@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
+         borderWidth: 1 / PixelRatio.get(),
+         borderColor: 'transparent',
+         backgroundColor: 'transparent',
++        color: '#fff'
+     },
+     imageFlag: {
+         resizeMode: 'contain',
+@@ -31,10 +32,12 @@ const ImageFlag = memo(({ countryCode, flagSize }) => {
+     if (asyncResult.loading) {
+         return React.createElement(ActivityIndicator, { size: 'small' });
+     }
+-    return (React.createElement(Image, { resizeMode: 'contain', style: [
++    return (React.createElement(Image, {
++        resizeMode: 'contain', style: [
+             styles.imageFlag,
+             { borderColor: 'transparent', height: flagSize },
+-        ], source: { uri: asyncResult.result } }));
++        ], source: { uri: asyncResult.result }
++    }));
+ });
+ const EmojiFlag = memo(({ countryCode, flagSize }) => {
+     const { getEmojiFlagAsync } = useContext();

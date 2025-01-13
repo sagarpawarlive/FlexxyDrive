@@ -20,6 +20,7 @@ interface AppButtonProps {
 	bgColor?: string;
 	borderWidth?: number;
 	borderColor?: string;
+	disabled?: boolean;
 }
 
 const AppButton: React.FC<AppButtonProps> = (props: AppButtonProps) => {
@@ -29,6 +30,7 @@ const AppButton: React.FC<AppButtonProps> = (props: AppButtonProps) => {
 	return (
 		<View style={{ ...((props.position as any) && ButtonEnd) }}>
 			<TouchableOpacity
+				disabled={props.disabled}
 				onPress={props.onClick}
 				style={[
 					styles.container,
@@ -38,7 +40,7 @@ const AppButton: React.FC<AppButtonProps> = (props: AppButtonProps) => {
 						flexDirection: 'row',
 						alignItems: 'center',
 						width: props.width,
-						backgroundColor: props.bgColor ?? AppColors.primary,
+						backgroundColor: props.disabled ? AppColors.secondary : props.bgColor ?? AppColors.primary,
 						borderWidth: props.borderWidth,
 						borderColor: props.borderColor ?? AppColors.white,
 					},

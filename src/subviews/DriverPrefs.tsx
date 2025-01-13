@@ -115,11 +115,13 @@ const DriverPrefs = ({ isVisible, onClose, title, data }: any) => {
 
 	return (
 		<Modal
+			backdropTransitionInTiming={500}
+			backdropTransitionOutTiming={500}
 			isVisible={isVisible}
-			backdropColor={AppColors.primary}
+			backdropColor={AppColors.primaryTransparent8}
 			onBackdropPress={onClose}
 			onBackButtonPress={onClose}
-			style={[styles.modal, { backgroundColor: AppColors.primary }]}
+			style={[styles.modal, {}]}
 			animationIn="slideInUp"
 			animationOut="slideOutDown">
 			<View style={[styles.modalContent, { backgroundColor: AppColors.background }]}>
