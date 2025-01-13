@@ -34,7 +34,7 @@ const FinalUser = (props: any) => {
 	};
 
 	const onPressLogout = () => {
-		nativeAlertwithAction('Logout', 'Are you sure you want to logout?', status => {
+		nativeAlertwithAction(t('logout'), t('logoutConfirm'), status => {
 			if (status) {
 				handleLogout();
 			}
@@ -54,7 +54,7 @@ const FinalUser = (props: any) => {
 	};
 
 	const onPressBook = () => {
-		alert('Book aride');
+		// alert('Book aride');
 	};
 
 	return (
@@ -77,7 +77,7 @@ const FinalUser = (props: any) => {
 										fontFamily={Fonts.BOLD}
 										textColor={AppColors.text}
 										top={metrics.verticalScale(10)}
-										title={'Book a Ride'}
+										title={t('bookRide')}
 									/>
 								</Pressable>
 
@@ -90,7 +90,7 @@ const FinalUser = (props: any) => {
 										fontFamily={Fonts.BOLD}
 										textColor={AppColors.text}
 										top={metrics.verticalScale(10)}
-										title={'Offer a Ride'}
+										title={t('offerRide')}
 									/>
 								</Pressable>
 							</View>
@@ -102,7 +102,7 @@ const FinalUser = (props: any) => {
 							fontSize={FontSize._14}
 							fontFamily={Fonts.BOLD}
 							textColor={AppColors.text}
-							title={'Logout'}
+							title={t('logout')}
 						/>
 					</TouchableOpacity>
 				</AppScrollView>

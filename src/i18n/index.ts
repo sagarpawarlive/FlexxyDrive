@@ -1,5 +1,6 @@
 import I18n from 'react-native-i18n';
 import English from './labels/english.json';
+import German from './labels/german.json';
 import Japanese from './labels/japanese.json';
 import Spanish from './labels/spanish.json';
 
@@ -7,6 +8,7 @@ import Spanish from './labels/spanish.json';
 I18n.fallbacks = true;
 I18n.translations = {
 	en: English,
+	de: German,
 };
 
 // You can set the initial locale here if needed

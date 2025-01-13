@@ -15,6 +15,7 @@ import { apiPost } from '../../../../services/API/apiServices';
 import { ENDPOINT } from '../../../../services/API/endpoints';
 import { updateUserState } from '../../../../store/reducers/userdataSlice';
 import { _showToast } from '../../../../services/UIs/ToastConfig';
+import { t } from '../../../../i18n';
 
 const AddEmergencyContacts = (props: any) => {
 	const dispatch = useDispatch();
@@ -81,7 +82,7 @@ const AddEmergencyContacts = (props: any) => {
 	return (
 		<MainContainer>
 			<View style={styles.innerMainContainer}>
-				<AppHeader buttonTitle={'Add Emergency Contacts'} top={AppMargin._15} onBack={onBackPress} />
+				<AppHeader buttonTitle={t('addEmergencyContact')} top={AppMargin._15} onBack={onBackPress} />
 
 				{/* FlatList to render the contact list */}
 				<FlatList
@@ -101,7 +102,7 @@ const AddEmergencyContacts = (props: any) => {
 
 				<AddNewContact
 					isVisible={newContact}
-					title={'Your trusted contact'}
+					title={t('yourTrustedContact')}
 					onSaveContact={handleSaveContact}
 					onClose={toggleContactAdd}
 				/>

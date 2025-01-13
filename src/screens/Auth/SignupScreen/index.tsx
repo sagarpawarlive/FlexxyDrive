@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, Image, Keyboard, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -33,12 +33,17 @@ import {
 	usernameValidation,
 } from '../../../constants/validationSchema';
 import { t } from '../../../i18n';
-import { imagesData } from '../../../constants/staticData';
+import { imagesData, ImagesDataAndroid } from '../../../constants/staticData';
 import appleAuth from '@invertase/react-native-apple-authentication';
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
 import metrics from '../../../constants/metrics';
+import { isIOS } from '../../../constants/constants';
+import { getLocales } from 'react-native-localize';
+import { getPhoneCode } from '../../../utils/phoneNumberUtils';
 
 const SignupScreen = (props: any) => {
+	const locales = getLocales();
+	// const germanLocale = locales.find(locale => locale.languageTag === 'de-DE');
 	const dispatch = useDispatch();
 	const { AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
@@ -63,6 +68,19 @@ const SignupScreen = (props: any) => {
 		setCountryCallingCode(country.callingCode[0]);
 		console.log('[  country ] ----------------------->> ', country);
 	};
+
+	useEffect(() => {
+		const germanLocale = locales.find(locale => locale?.languageTag === 'de-DE');
+		if (germanLocale) {
+			const dialingCode = getPhoneCode(germanLocale.countryCode);
+			setCountryCallingCode(dialingCode);
+			setSelectedCountry(germanLocale?.countryCode);
+		} else {
+			const dialingCode = getPhoneCode(locales?.[0]?.countryCode);
+			setCountryCallingCode(dialingCode);
+			setSelectedCountry(locales?.[0]?.countryCode);
+		}
+	}, [locales]);
 
 	const googleLogin = async () => {
 		try {
@@ -139,7 +157,6 @@ const SignupScreen = (props: any) => {
 	}
 
 	async function onAppleButtonPress() {
-		// Start the sign-in request
 		const appleAuthRequestResponse = await appleAuth.performRequest({
 			requestedOperation: appleAuth.Operation.LOGIN,
 			// As per the FAQ of react-native-apple-authentication, the name should come first in the following array.
@@ -337,7 +354,7 @@ const SignupScreen = (props: any) => {
 								<FlatList
 									bounces={false}
 									scrollEnabled={false}
-									data={imagesData}
+									data={isIOS ? imagesData : ImagesDataAndroid}
 									horizontal
 									keyExtractor={item => item.id.toString()}
 									renderItem={({ item }) => (
@@ -383,7 +400,7 @@ const SignupScreen = (props: any) => {
 			<CountryPicker
 				theme={{
 					backgroundColor: AppColors.background,
-					onBackgroundTextColor: AppColors.white,
+					onBackgroundTextColor: AppColors.text,
 				}}
 				visible={showCountryPicker}
 				countryCode={selectedCountry}

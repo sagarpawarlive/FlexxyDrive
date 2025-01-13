@@ -21,6 +21,7 @@ import AppLoader from '../../../../components/AppLoader';
 import { _showToast } from '../../../../services/UIs/ToastConfig';
 import { updateUserState } from '../../../../store/reducers/userdataSlice';
 import moment from 'moment';
+import { t } from '../../../../i18n';
 
 const NextOfKin = (props: any) => {
 	const dispatch = useDispatch();
@@ -138,7 +139,7 @@ const NextOfKin = (props: any) => {
 		<MainContainer>
 			<View style={styles.innerMainContainer}>
 				<AppHeader
-					buttonTitle={'Next of Kin'}
+					buttonTitle={t('nextOfKin')}
 					tintColor={AppColors.backButton}
 					top={AppMargin._30}
 					onBack={onBackPress}

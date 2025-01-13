@@ -486,7 +486,11 @@ const DriverInformation = (props: any) => {
 				isVisible={isPrefModalVisible}
 				title={t('preferences')}
 			/>
-			<ImagePicker isVisible={isImagePickerVisible} onClose={toggleImageModal} title={'Select upload option'} />
+			<ImagePicker
+				isVisible={isImagePickerVisible}
+				onClose={toggleImageModal}
+				title={t('selectedUploadOption')}
+			/>
 			<AddDocuments isVisible={isDocumentModalVisible} title={t('addDocuments')} onClose={toggleDocumentModal} />
 			<AppLoader isLoading={isLoading} />
 		</MainContainer>

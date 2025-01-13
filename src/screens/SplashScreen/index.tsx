@@ -26,6 +26,7 @@ const SplashScreen: React.FC<SplashScreenProps> = props => {
 	const userData = useSelector((state: any) => state.userDataSlice);
 
 	console.log('[ / userData ] ------->', userData);
+	console.log('[ / colourScheme ] ------->', colourScheme);
 	useEffect(() => {
 		const unsubscribe = props.navigation.addListener('focus', async () => {
 			await App_Permission._askLocationPermission();
@@ -67,7 +68,11 @@ const SplashScreen: React.FC<SplashScreenProps> = props => {
 	return (
 		<View style={styles.container}>
 			<View>
-				<Image resizeMode="contain" style={{ width: windowWidth }} source={Images.imgLoader} />
+				<Image
+					resizeMode="contain"
+					style={{ width: windowWidth }}
+					source={colourScheme === 'dark' ? Images.imgLoader : Images.lightThemeSplash}
+				/>
 			</View>
 		</View>
 	);
@@ -77,7 +82,7 @@ const createStyles = (AppColors: Theme, colourScheme: string) => {
 	return StyleSheet.create({
 		container: {
 			flex: 1,
-			backgroundColor: 'rgba(8, 0, 24, 1)',
+			backgroundColor: colourScheme === 'light' ? 'rgba(255,255,255,1)' : 'rgba(8, 0, 24, 1)',
 			alignItems: 'center',
 			justifyContent: 'center',
 		},

@@ -89,4 +89,14 @@
 	"fullname": "Full Name",
 	"emailOptional": "Email (optional)",
 	"fullNameRequired": "Full name is required",
+	"addEmergencyContact": "Add Emergency Contacts",
+	"yourTrustedContact": "Your trusted contact",
+	"selectedUploadOption": "Select upload option",
+	"nextOfKin": "Next of Kin",
+	"bookRide": "Book a Ride",
+	"offerRide": "Offer a Ride",
+	"onboardingTitleOne": "Affordable Rides,\nAnytime, Anywhere",
+	"onboardingTitleTwo": "More Rides. More\nEarnings. More Freedom",
+	"onboardingTitleThree": "Schedule your Rides\nAhead of Time",
+	"logoutConfirm": "Are you sure you want to logout?"
 }

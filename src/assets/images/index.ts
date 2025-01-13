@@ -7,6 +7,7 @@ export const Images = {
 	imgDriverPlaceholder: require('./driverPlaceholder.png'),
 
 	imgLoader: require('./loader.gif'),
+	lightThemeSplash: require('./whiteSplash.gif'),
 	imgBookride1: require('./bookride1.png'),
 	imgBookride2: require('./bookride2.png'),
 

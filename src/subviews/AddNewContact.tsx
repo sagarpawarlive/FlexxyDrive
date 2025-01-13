@@ -43,7 +43,7 @@ const AddNewContact = ({ isVisible, onClose, title, onSaveContact }: any) => {
 			backdropColor={AppColors.primary}
 			onBackdropPress={onClose}
 			onBackButtonPress={onClose}
-			style={styles.modal}
+			style={[styles.modal, { backgroundColor: AppColors.primary }]}
 			avoidKeyboard
 			onModalHide={() => formik.resetForm()}
 			animationIn="slideInUp"
@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
 		margin: 0,
 	},
 	modalContent: {
-		backgroundColor: 'white',
 		width: '100%',
 		padding: 16,
 		borderTopLeftRadius: 20,

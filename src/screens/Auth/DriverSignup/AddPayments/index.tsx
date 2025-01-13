@@ -12,6 +12,7 @@ import { Theme } from '../../../../types';
 import AppTextInput from '../../../../components/AppTextInput';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'; // For form validation
+import { t } from '../../../../i18n';
 
 const AddPayments = (props: any) => {
 	const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const AddPayments = (props: any) => {
 	return (
 		<MainContainer>
 			<View style={styles.innerMainContainer}>
-				<AppHeader buttonTitle={'Add Payment Details'} top={AppMargin._30} onBack={onBackPress} />
+				<AppHeader buttonTitle={t('addPaymentDetails')} top={AppMargin._30} onBack={onBackPress} />
 
 				<View style={{ marginTop: AppMargin._30 }}>
 					<AppTextInput

@@ -12,13 +12,20 @@ import FinalUser from '../screens/Auth/FinalUser';
 import { navigationRef } from '../utils/navigationUtils';
 import MapScreen from '../screens/PassangerScreen';
 import PassangerScreen from '../screens/PassangerScreen';
+import { getCurrencies, getLocales } from 'react-native-localize';
 
 const Stack = createNativeStackNavigator();
 
 const RootNavigation: React.FC = (props: any) => {
 	const options: NativeStackNavigationOptions = { animation: 'none' };
 	const commonData = useSelector((state: any) => state.userDataSlice);
-	I18n.locale = commonData.localize;
+	const locales = getLocales();
+	const germanLocale = locales.find(locale => locale.languageTag === 'de-DE');
+
+	I18n.locale = germanLocale ? germanLocale.languageCode : commonData.localize;
+
+	console.log(getLocales(), '<=== getLocales');
+	console.log(getCurrencies(), 'getCurrencies');
 
 	return (
 		<NavigationContainer ref={navigationRef}>
