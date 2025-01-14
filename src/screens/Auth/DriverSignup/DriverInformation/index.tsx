@@ -393,7 +393,15 @@ const DriverInformation = (props: any) => {
 						)} */}
 
 						<Pressable style={styles.dobContainer} onPress={() => toggleModal()}>
-							<Text style={styles.dobText}>{date ? moment(date).format('DD-MM-YYYY') : 'DOB'}</Text>
+							<View
+								style={{ position: 'absolute', zIndex: 99, left: 20, top: metrics.verticalScale(-8) }}>
+								<AppText
+									fontSize={FontSize._14}
+									label={t('dob')}
+									styleProps={{ backgroundColor: AppColors.background, paddingHorizontal: 5 }}
+								/>
+							</View>
+							<Text style={styles.dobText}>{date ? moment(date).format('DD-MM-YYYY') : t('dob')}</Text>
 							<Image source={Icons.icnCalender} style={{ tintColor: AppColors.primary }} />
 						</Pressable>
 
