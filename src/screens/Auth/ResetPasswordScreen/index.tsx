@@ -13,6 +13,7 @@ import { Theme } from '../../../types';
 import AppTextInput from '../../../components/AppTextInput';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'; // For form validation
+import { t } from '../../../i18n';
 
 const ResetPasswordScreen = (props: any) => {
 	const dispatch = useDispatch();
@@ -30,16 +31,16 @@ const ResetPasswordScreen = (props: any) => {
 		},
 		validationSchema: Yup.object({
 			password: Yup.string()
-				.required('Password is required.')
-				.min(8, 'Password must be at least 8 characters.')
-				.matches(/[a-zA-Z0-9]/, 'Password must contain alphanumeric characters only.'),
+				.required(t('passwordRequired'))
+				.min(8, t('passwordLength8'))
+				.matches(/[a-zA-Z0-9]/, t('passwordCharacter')),
 			confirmPassword: Yup.string()
-				.required('Confirm password is required.')
-				.oneOf([Yup.ref('password'), null], 'Passwords must match.'),
+				.required(t('confirmPasswordRequired'))
+				.oneOf([Yup.ref('password'), null], t('passwordMustMatch')),
 		}),
 		onSubmit: values => {
 			// Handle the form submission logic here
-			alert(`Password reset successful for: ${values.password}`);
+			// alert(`Password reset successful for: ${values.password}`);
 		},
 	});
 
@@ -54,7 +55,14 @@ const ResetPasswordScreen = (props: any) => {
 
 				<View style={{ marginTop: AppMargin._100, alignItems: 'center' }}>
 					<AppText
-						label={`Please enter a new password`}
+						label={t('resetPasswordTitle')}
+						textAlign={'center'}
+						width={'95%'}
+						fontFamily={Fonts.MEDIUM}
+						fontSize={FontSize._26}
+					/>
+					<AppText
+						label={t('resetPasswordSubTitle')}
 						textAlign={'center'}
 						width={'95%'}
 						fontFamily={Fonts.MEDIUM}

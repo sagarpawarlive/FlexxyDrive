@@ -11,6 +11,8 @@ export const ENDPOINT = {
 	ADD_PHONE_NUMBER: '/auth/add-phone-number', //post
 	SEND_SMS_OTP: '/auth/send-sms-otp', //post
 	SEND_EMAIL_OTP: '/auth/send-email-otp', //post
+	FORGOT_PASSWORD_SEND_OTP: '/auth/forgot-password/send-otp', //post
+	FORGOT_PASSWORD_VERIFY_OTP: '/auth/forgot-password/verify-otp', //post
 
 	VERIFY_OTP: '/auth/verify-otp', //post
 

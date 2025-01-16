@@ -117,11 +117,13 @@ const createStyles = (AppColors: Theme) => {
 			marginRight: 10,
 			includeFontPadding: false,
 			color: AppColors.text,
-			backgroundColor: AppColors.textInputBorderColor,
+			backgroundColor: AppColors.background,
 			borderRadius: 10,
 			textAlign: 'center',
 			fontFamily: Fonts.MEDIUM,
 			fontSize: FontSize._18,
+			borderWidth: 1,
+			borderColor: AppColors.textInputBorderColor,
 		},
 	});
 };
