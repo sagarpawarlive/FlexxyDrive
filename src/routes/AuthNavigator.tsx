@@ -20,6 +20,8 @@ import OnboardingScreen from '../screens/Auth/OnboardingScreen';
 import OtherInformation from '../screens/Auth/DriverSignup/OtherInformation';
 import PendingVerification from '../screens/Auth/DriverSignup/PendingVerification';
 import VerifyStatusScreen from '../screens/Auth/DriverSignup/VerifyStatusScreen';
+import PassengerInformation from '../screens/Auth/PassengerSignup/PassengerInformation';
+import PassengerVerification from '../screens/Auth/PassengerSignup/PassengerVerification';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +49,10 @@ const AuthNavigator: React.FC = () => {
 			<Stack.Screen name={NavigationKeys.OtherInformation} component={OtherInformation} />
 			<Stack.Screen name={NavigationKeys.PendingVerification} component={PendingVerification} />
 			<Stack.Screen name={NavigationKeys.VerifyStatusScreen} component={VerifyStatusScreen} />
+
+			{/* Passenger Information */}
+			<Stack.Screen name={NavigationKeys.PassengerInformation} component={PassengerInformation} />
+			<Stack.Screen name={NavigationKeys.PassengerVerification} component={PassengerVerification} />
 		</Stack.Navigator>
 	);
 };

@@ -13,6 +13,8 @@ import { navigationRef } from '../utils/navigationUtils';
 import MapScreen from '../screens/PassangerScreen';
 import PassangerScreen from '../screens/PassangerScreen';
 import { getCurrencies, getLocales } from 'react-native-localize';
+import AddPassengerDocuments from '../screens/Auth/PassengerSignup/PassengerVerification';
+import PassengerVerification from '../screens/Auth/PassengerSignup/PassengerVerification';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,13 +32,18 @@ const RootNavigation: React.FC = (props: any) => {
 	return (
 		<NavigationContainer ref={navigationRef}>
 			<Stack.Navigator
-				initialRouteName={NavigationKeys.IntroScreen}
+				initialRouteName={NavigationKeys.PassengerVerification}
 				screenOptions={{ headerShown: false, gestureEnabled: false }}>
 				<Stack.Screen name={NavigationKeys.SplashScreen} component={SplashScreen} />
 				<Stack.Screen options={options} name={NavigationKeys.AuthNavigator} component={AuthNavigator} />
 				<Stack.Screen options={options} name={NavigationKeys.BottomTab} component={BottomTabNavigation} />
 				<Stack.Screen options={options} name={NavigationKeys.FinalUser} component={FinalUser} />
 				<Stack.Screen options={options} name={NavigationKeys.PassangerScreen} component={PassangerScreen} />
+				<Stack.Screen
+					options={options}
+					name={NavigationKeys.PassengerVerification}
+					component={PassengerVerification}
+				/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	);

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface userDataSliceState {
 	userData: any;
+	passengerData: any;
 	isLogin?: boolean;
 	localize?: string;
 	isDarkMode?: boolean;
@@ -10,6 +11,7 @@ interface userDataSliceState {
 
 const initialState: userDataSliceState = {
 	userData: {},
+	passengerData: {},
 	isLogin: false,
 	localize: 'en',
 	isDarkMode: false,
@@ -22,6 +24,10 @@ const userDataSlice = createSlice({
 	reducers: {
 		setUserData: (state, action: PayloadAction<any>) => {
 			state.userData = action.payload;
+		},
+
+		setPassengerData: (state, action: PayloadAction<any>) => {
+			state.passengerData = action.payload;
 		},
 
 		setIsLogin: (state, action: PayloadAction<boolean>) => {
@@ -55,10 +61,31 @@ const userDataSlice = createSlice({
 				},
 			};
 		},
+
+		updatePassengerState: (state, action) => {
+			state.passengerData = {
+				...state.passengerData,
+				data: {
+					...state.passengerData?.data,
+					user: {
+						...state.passengerData?.data?.user,
+						...action?.payload,
+					},
+				},
+			};
+		},
 	},
 });
 
-export const { setUserData, setLocalize, setIsLogin, setIsDarkMode, setIsThemeSystemSetting, logout, updateUserState } =
-	userDataSlice.actions;
+export const {
+	setUserData,
+	setLocalize,
+	setIsLogin,
+	setIsDarkMode,
+	setIsThemeSystemSetting,
+	logout,
+	updateUserState,
+	updatePassengerState,
+} = userDataSlice.actions;
 
 export default userDataSlice.reducer;

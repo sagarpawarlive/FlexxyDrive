@@ -19,27 +19,27 @@ import RNFS from 'react-native-fs';
 import { App_Permission } from '../../../../services/Permissions';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserState } from '../../../../store/reducers/userdataSlice';
-import { AddDocumentsOptions } from '../../../../constants/staticData';
+import { AddDocumentsOptions, AddPassengerOptions } from '../../../../constants/staticData';
 import metrics from '../../../../constants/metrics';
 import { t } from '../../../../i18n';
 import { NavigationKeys } from '../../../../constants/navigationKeys';
 
 const { height } = Dimensions.get('window');
 
-const AddDocuments = props => {
+const PassengerVerification = props => {
 	const { AppColors } = useTheme();
-	const { documents = {}, isVerified } = props?.route?.params?.driverDocuments ?? null;
+	const { documents = {}, isVerified = false } = props?.route?.params?.passengerDocuments ?? {};
 	const dispatch = useDispatch();
-	const userData = useSelector(state => state.userDataSlice.userData.user);
+	const passengerData = useSelector(state => state.userDataSlice.passengerData.user);
 
 	const userDataSlice = useSelector(state => state?.userDataSlice ?? {});
-	const checkData = userDataSlice.userData ?? {};
+	const checkData = userDataSlice?.passengerData ?? {};
 
 	// State to handle selected driving license and captured image
 	const [selectedDrivingLicence, setSelectedDrivingLicence] = useState(
 		{ path: documents?.drivingLicense, isFile: false } ?? null,
 	);
-	const [capturedImage, setCapturedImage] = useState({ path: documents?.driverImage, isFile: false } ?? null);
+	const [capturedImage, setCapturedImage] = useState({ path: documents?.passengerImage, isFile: false } ?? null);
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -74,18 +74,7 @@ const AddDocuments = props => {
 	// Open image picker (camera or gallery)
 	const openImagePicker = useCallback(async (type: 'camera' | 'gallery') => {
 		try {
-			const image =
-				type == 'camera'
-					? // await ImageCropPicker.openCamera({
-					  // 		width: 800,
-					  // 		height: 800,
-					  // 		compressImageMaxWidth: 800,
-					  // 		compressImageMaxHeight: 800,
-					  // 		compressImageQuality: 0.7,
-					  // 		includeBase64: true,
-					  //   })
-					  await selectAndCompressImage()
-					: await selectAndCompressImage();
+			const image = type == 'camera' ? await selectAndCompressImage() : await selectAndCompressImage();
 
 			// Set the selected file to the respective state
 			if (type == 'camera') {
@@ -185,7 +174,7 @@ const AddDocuments = props => {
 				<FlatList
 					style={{ marginTop: metrics.verticalScale(20) }}
 					scrollEnabled={false}
-					data={AddDocumentsOptions}
+					data={AddPassengerOptions}
 					keyExtractor={item => item.id.toString()}
 					renderItem={renderItem}
 					ItemSeparatorComponent={() => <View style={[styles.separator, {}]} />}
@@ -266,4 +255,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default AddDocuments;
+export default PassengerVerification;

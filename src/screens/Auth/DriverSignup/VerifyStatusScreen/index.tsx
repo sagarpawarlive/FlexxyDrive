@@ -25,7 +25,13 @@ const VerifyStatusScreen = (props: any) => {
 	return (
 		<MainContainer>
 			<View style={styles.innerMainContainer}>
-				<AppStatusScreen message={'Yoyoooooo!!'} success onPress={() => alert('yo')} />
+				<AppStatusScreen
+					message={'Your verification was unsuccessful!'}
+					// error={false}
+					success={false}
+					onPress={() => alert('yo')}
+					buttonLabel={'Continue'}
+				/>
 			</View>
 		</MainContainer>
 	);

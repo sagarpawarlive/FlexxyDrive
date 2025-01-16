@@ -27,7 +27,10 @@ export const NavigationKeys = {
 
 	PassangerScreen: 'PassangerScreen',
 	OtherInformation: 'OtherInformation',
+	PassengerVerification: 'PassengerVerification',
 
 	PendingVerification: 'PendingVerification',
 	VerifyStatusScreen: 'VerifyStatusScreen',
+
+	PassengerInformation: 'PassengerInformation',
 };

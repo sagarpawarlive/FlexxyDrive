@@ -14,8 +14,7 @@ interface AppStatusScreenProps {
 	message?: string;
 	error?: boolean;
 	onPress?: () => void;
-	successLabel?: string;
-	errorLabel?: string;
+	buttonLabel?: string;
 }
 
 const AppStatusScreen = React.memo((props: AppStatusScreenProps) => {
@@ -25,11 +24,9 @@ const AppStatusScreen = React.memo((props: AppStatusScreenProps) => {
 	const renderImage = () => {
 		if (props.success) {
 			return <Image style={styles.statusImage} source={Images.imgSuccessResponse} />;
-		}
-		if (props.error) {
+		} else {
 			return <Image style={styles.statusImage} source={Images.imgErrorResponse} />;
 		}
-		return null;
 	};
 
 	return (
@@ -44,12 +41,13 @@ const AppStatusScreen = React.memo((props: AppStatusScreenProps) => {
 						fontFamily={Fonts.BOLD}
 						fontSize={FontSize._24}
 						title={props.message}
+						textAlign={'center'}
 					/>
 				</View>
 				<AppButton
 					width={windowWidth - 40}
 					textColor={AppColors.white}
-					buttonLabel={props.success ? props.successLabel || 'Done' : props.errorLabel || 'Retry'}
+					buttonLabel={props.buttonLabel || 'Retry'}
 					onClick={props.onPress}
 				/>
 			</View>

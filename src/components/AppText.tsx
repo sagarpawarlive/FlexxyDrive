@@ -49,7 +49,9 @@ const createStyles = (AppColors: Theme, props: AppTextProps) => {
 			marginBottom: bottom,
 			fontFamily: fontFamily ?? '',
 			fontSize: fontSize ?? 22,
+			textAlign: props.textAlign,
 			textDecorationLine: props.underLine ? 'underline' : 'none',
+			marginLeft: left ? left : null,
 		},
 
 		labelText: {

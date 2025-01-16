@@ -55,6 +55,7 @@ const FinalUser = (props: any) => {
 
 	const onPressBook = () => {
 		// alert('Book aride');
+		props.navigation.navigate(NavigationKeys.PassengerInformation, {});
 	};
 
 	return (

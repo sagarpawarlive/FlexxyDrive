@@ -57,6 +57,8 @@
 	"carDetails": "Car Details",
 	"documents": "Documents",
 	"pendingVerification": "Pending Verification",
+	"accountVerifyShortly": "Your account will be verified shortly",
+	"passengerInformation": "Passenger Information",
 	"paymentDetails": "Payment Details",
 	"streetIsRequired": "Street is required",
 	"streetNumberIsRequired": "Street number is required",

@@ -1,7 +1,7 @@
 export const lightTheme = {
 	// Background and Text Colors
 	background: 'rgba(255, 255, 255, 1)',
-	text: 'rgba(17, 17, 17,  1)',
+	text: 'rgba(0, 0, 0,  1)',
 	textDark: 'rgba(255, 255, 255, 1)',
 	white: 'rgba(255, 255, 255, 1)',
 
@@ -23,6 +23,7 @@ export const lightTheme = {
 	error: 'rgba(250, 0, 0, 1)',
 	success: 'rgba(92, 184, 92, 1)',
 	warning: 'rgba(249, 200, 50, 1)',
+	warningTrasparent: 'rgba(249, 200, 50, 5)',
 
 	textInputBorderColor: 'rgba(218, 218, 218, 1)',
 	verified: '#00C72E',
@@ -31,7 +32,7 @@ export const lightTheme = {
 export const darkTheme = {
 	// Background and Text Colors
 	background: 'rgba(0, 0, 0, 1)',
-	text: 'rgba(217, 217, 217, 1)',
+	text: 'rgba(255, 255, 255, 1)',
 	textDark: 'rgba(255, 255, 255, 1)',
 	white: 'rgba(255, 255, 255, 1)',
 
@@ -52,6 +53,8 @@ export const darkTheme = {
 	error: 'rgba(250, 0, 0, 1)',
 	success: 'rgba(92, 184, 92, 1)',
 	warning: 'rgba(249, 200, 50, 1)',
+	warningTrasparent: 'rgba(249, 200, 50, .15)',
+
 	modalBackground: '#546A80',
 	verifiedColor: '#90EE90',
 

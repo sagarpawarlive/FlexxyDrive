@@ -26,3 +26,8 @@ export const AddDocumentsOptions = [
 	{ id: 1, icon: Icons.icnLargePicker, name: t('drivingLicence'), description: t('anOfficialDocument') },
 	{ id: 2, icon: Icons.icnCamera, name: t('uploadPhoto'), description: t('captureSelfie') },
 ];
+
+export const AddPassengerOptions = [
+	{ id: 1, icon: Icons.icnLargePicker, name: 'Upload your ID*', description: 'upload government ID' },
+	{ id: 2, icon: Icons.icnCamera, name: 'Selfie*', description: 'Capture a selfie' },
+];

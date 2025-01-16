@@ -28,7 +28,7 @@ import { ENDPOINT } from '../../../../services/API/endpoints';
 import RadioGroup from 'react-native-radio-buttons-group';
 import moment from 'moment';
 import { _showToast } from '../../../../services/UIs/ToastConfig';
-import { updateUserState } from '../../../../store/reducers/userdataSlice';
+import { updatePassengerState, updateUserState } from '../../../../store/reducers/userdataSlice';
 import {
 	cityValidation,
 	firstNameValidation,
@@ -42,10 +42,11 @@ import { t } from '../../../../i18n';
 
 let update = false;
 
-const DriverInformation = (props: any) => {
+const PassengerInformation = (props: any) => {
 	const dispatch = useDispatch();
 	const userDataSlice = useSelector(state => state?.userDataSlice ?? {});
-	const { userData } = userDataSlice ?? {};
+	const { passengerData, userData } = userDataSlice ?? {};
+
 	const {
 		firstName: fName,
 		lastName: lName,
@@ -53,7 +54,7 @@ const DriverInformation = (props: any) => {
 		phoneNumber,
 		email,
 		driverInfo = {},
-	} = userData?.data?.user ?? {};
+	} = passengerData?.data?.user ?? {};
 	const {
 		firstName = fName,
 		lastName = lName,
@@ -86,7 +87,7 @@ const DriverInformation = (props: any) => {
 	const [countryName, setCountryName] = useState(country);
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [driverInfoRes, setDriverInfoRes] = useState<any>(null);
+	const [passengerInfoRes, setPassengerInfoRes] = useState<any>(null);
 
 	const firstNameRef = useRef<any>(null);
 	const lastNameRef = useRef<any>(null);
@@ -132,7 +133,7 @@ const DriverInformation = (props: any) => {
 	);
 	useEffect(() => {
 		// const unsubscribe = props.navigation.addListener('focus', () => {
-		api_getDriverInfo();
+		api_getPassengerInfo();
 		// });
 		// return () => {
 		// 	unsubscribe();
@@ -140,42 +141,42 @@ const DriverInformation = (props: any) => {
 	}, [props.navigation]);
 
 	useEffect(() => {
-		if (driverInfoRes) {
+		if (passengerInfoRes) {
 			setValues({
-				firstName: driverInfoRes?.driverInfo?.firstName ?? fName,
-				lastName: driverInfoRes?.driverInfo?.lastName ?? lName,
-				city: driverInfoRes?.driverInfo?.city ?? '',
-				postCode: driverInfoRes?.driverInfo?.postCode ?? '',
-				street: driverInfoRes?.driverInfo?.street ?? '',
+				firstName: passengerInfoRes?.driverInfo?.firstName ?? fName,
+				lastName: passengerInfoRes?.driverInfo?.lastName ?? lName,
+				city: passengerInfoRes?.driverInfo?.city ?? '',
+				postCode: passengerInfoRes?.driverInfo?.postCode ?? '',
+				street: passengerInfoRes?.driverInfo?.street ?? '',
 
-				dob: driverInfoRes?.driverInfo?.dob ?? '',
+				dob: passengerInfoRes?.driverInfo?.dob ?? '',
 			});
 
-			setDate(driverInfoRes?.driverInfo?.dob ?? '');
-			setCountryName(driverInfoRes?.driverInfo?.country ?? '');
-			setSelectedCountry(driverInfoRes?.driverInfo?.countryCode ?? '');
+			setDate(passengerInfoRes?.driverInfo?.dob ?? '');
+			setCountryName(passengerInfoRes?.driverInfo?.country ?? '');
+			setSelectedCountry(passengerInfoRes?.driverInfo?.countryCode ?? '');
 			setSelectedId(
-				driverInfoRes?.driverInfo?.gender == 'Male'
+				passengerInfoRes?.driverInfo?.gender == 'Male'
 					? '1'
-					: driverInfoRes?.driverInfo?.gender == 'Female'
+					: passengerInfoRes?.driverInfo?.gender == 'Female'
 					? '2'
 					: '',
 			);
 		}
-	}, [driverInfoRes]);
+	}, [passengerInfoRes]);
 
-	const api_getDriverInfo = async () => {
+	const api_getPassengerInfo = async () => {
 		const params = { token: userData?.data?.token };
 		setIsLoading(true);
-		const response = await apiGet(ENDPOINT.GET_PROFILE_INFO, '', params);
-		if (response?.success) {
-			setDriverInfoRes(response.data);
-			dispatch(updateUserState({ ...response?.data }));
-			setIsLoading(false);
-		} else {
-			setIsLoading(false);
-			_showToast(response.message, 'error');
-		}
+		// const response = await apiGet(ENDPOINT.GET_PROFILE_INFO, '', params);
+		// if (response?.success) {
+		// 	setPassengerInfoRes(response.data);
+		// 	dispatch(updatePassengerState({ ...response?.data }));
+		// 	setIsLoading(false);
+		// } else {
+		setIsLoading(false);
+		// 	_showToast(response.message, 'error');
+		// }
 	};
 
 	// Form states using Formik
@@ -199,11 +200,11 @@ const DriverInformation = (props: any) => {
 		}),
 		onSubmit: values => {
 			console.log('Form submitted with:', values);
-			api_AddDriverInfo(values);
+			api_AddPassengerInfo(values);
 		},
 	});
 
-	const api_AddDriverInfo = async (values: any) => {
+	const api_AddPassengerInfo = async (values: any) => {
 		const params = {
 			firstName: values.firstName,
 			lastName: values.lastName,
@@ -218,7 +219,7 @@ const DriverInformation = (props: any) => {
 		};
 
 		setIsLoading(true);
-
+		//passenger info
 		let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params, { token: userData.token });
 		console.log(res, '<== res');
 
@@ -227,7 +228,7 @@ const DriverInformation = (props: any) => {
 		}
 
 		if (res?.success) {
-			dispatch(updateUserState({ driverInfo: { ...res.data } }));
+			dispatch(updatePassengerState({ passengerInfo: { ...res.data } }));
 			if (res?.data?.documents) {
 				if (
 					res?.data?.documents?.drivingLicense?.length > 0 &&
@@ -248,7 +249,7 @@ const DriverInformation = (props: any) => {
 		}
 		setIsLoading(false);
 		_showToast(res?.message, 'success');
-		props.navigation.navigate(NavigationKeys.OtherInformation);
+		props.navigation.navigate(NavigationKeys.PassengerVerification);
 		/*
 				const verifyDocument = {
 
@@ -291,7 +292,11 @@ const DriverInformation = (props: any) => {
 	return (
 		<MainContainer hideTop>
 			<View style={[styles.innerMainContainer, {}]}>
-				<AppHeader top={metrics.verticalScale(30)} onBack={onBackPress} buttonTitle={t('driverInformation')} />
+				<AppHeader
+					top={metrics.verticalScale(30)}
+					onBack={onBackPress}
+					buttonTitle={t('passengerInformation')}
+				/>
 
 				<View style={styles.profileContainer}>
 					<View style={styles.profileSubContainer}>
@@ -561,7 +566,7 @@ const DriverInformation = (props: any) => {
 							<AppDriverButtons
 								onClick={() =>
 									props.navigation.navigate(NavigationKeys.AddDocuments, {
-										driverDocuments: driverInfoRes?.driverInfo ?? {},
+										driverDocuments: passengerInfoRes?.driverInfo ?? {},
 									})
 								}
 								rotate={'0deg'}
@@ -584,7 +589,7 @@ const DriverInformation = (props: any) => {
 							icon={Icons.icnBack}
 							onClick={() => {
 								props.navigation.navigate(NavigationKeys.NextOfKin, {
-									driverInfoRes: guarantor ?? {},
+									passengerInfoRes: guarantor ?? {},
 								});
 							}}
 						/> */}
@@ -611,7 +616,7 @@ const DriverInformation = (props: any) => {
 						<AppDriverButtons
 							onClick={() =>
 								props.navigation.navigate(NavigationKeys.AddEmergencyContacts, {
-									driverInfos: driverInfoRes?.driverInfo,
+									driverInfos: passengerInfoRes?.driverInfo,
 								})
 							}
 							buttonLabel={t('emergencyContacts')}
@@ -637,7 +642,7 @@ const DriverInformation = (props: any) => {
 				data={preferences}
 				onClose={() => {
 					setIsPrefModalVisible(false);
-					// api_getDriverInfo();
+					// api_getPassengerInfo();
 				}}
 				isVisible={isPrefModalVisible}
 				title={t('preferences')}
@@ -715,4 +720,4 @@ const createStyles = (AppColors: Theme) => {
 	});
 };
 
-export default DriverInformation;
+export default PassengerInformation;

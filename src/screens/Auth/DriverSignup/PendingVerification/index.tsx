@@ -5,13 +5,14 @@ import { Fonts, FontSize } from '../../../../assets/fonts';
 import AppHeader from '../../../../components/AppHeader';
 import AppText from '../../../../components/AppText';
 import MainContainer from '../../../../components/MainContainer';
-import { AppMargin, WindowHeight } from '../../../../constants/commonStyle';
+import { AppMargin, borderRadius10, WindowHeight } from '../../../../constants/commonStyle';
 import { t } from '../../../../i18n';
 import { useTheme } from '../../../../theme/ThemeProvider';
 import { Theme } from '../../../../types';
 
 import StepIndicator from 'react-native-step-indicator';
 import { Icons } from '../../../../assets/Icons';
+import metrics from '../../../../constants/metrics';
 
 const PendingVerification = (props: any) => {
 	const dispatch = useDispatch();
@@ -45,7 +46,8 @@ const PendingVerification = (props: any) => {
 		stepIndicatorLabelFinishedColor: AppColors.text,
 		stepIndicatorLabelUnFinishedColor: AppColors.text,
 		labelColor: AppColors.text,
-		labelSize: 13,
+		labelSize: FontSize._16,
+		labelAlign: 'left',
 		// currentStepLabelColor: '#fe7013',
 	};
 
@@ -63,7 +65,19 @@ const PendingVerification = (props: any) => {
 		label: string;
 		currentPosition: number;
 	}) => {
-		return <Text style={{ color: AppColors.text }}>{label}</Text>;
+		return (
+			<View style={{}}>
+				<AppText fontSize={FontSize._16} title={label} fontFamily={Fonts.MEDIUM} />
+				{
+					<AppText
+						fontSize={FontSize._12}
+						title={currentPosition == position ? 'Pending' : 'Submitted'}
+						textColor={currentPosition == position ? AppColors.warning : AppColors.text}
+						fontFamily={Fonts.MEDIUM}
+					/>
+				}
+			</View>
+		);
 	};
 
 	const renderStepIndicator = ({ position, stepStatus }: { position: number; stepStatus: string }) => {
@@ -73,6 +87,9 @@ const PendingVerification = (props: any) => {
 			</View>
 		);
 	};
+
+	const isVerification = true;
+	const verificationMessage = isVerification ? t('accountVerifyShortly') : t('accountVerified');
 
 	return (
 		<MainContainer>
@@ -98,6 +115,21 @@ const PendingVerification = (props: any) => {
 							renderStepIndicator={renderStepIndicator}
 						/>
 					</View>
+
+					<View style={styles.messageContainer}>
+						<Image
+							style={styles.messageContainerChild}
+							tintColor={AppColors.warning}
+							source={Icons.icnError}
+						/>
+						<AppText
+							left={AppMargin._5}
+							fontFamily={Fonts.REGULAR}
+							fontSize={FontSize._12}
+							textColor={AppColors.warning}
+							title={verificationMessage}
+						/>
+					</View>
 				</View>
 			</View>
 		</MainContainer>
@@ -115,6 +147,17 @@ const createStyles = (AppColors: Theme) => {
 			flex: 1,
 			backgroundColor: AppColors.background,
 			paddingHorizontal: 20,
+		},
+		messageContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			padding: AppMargin._20,
+			backgroundColor: AppColors.warningTrasparent,
+			...borderRadius10,
+		},
+		messageContainerChild: {
+			height: metrics.moderateScale(14),
+			width: metrics.moderateScale(14),
 		},
 	});
 };
