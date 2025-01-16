@@ -24,6 +24,8 @@ const OtpScreen = (props: any) => {
 	const { isDarkMode, toggleTheme, AppColors } = useTheme();
 	const otpNumber = props?.route?.params?.phone;
 	const newUser = props?.route?.params?.newUser;
+	const otpType = props?.route?.params?.type;
+	const isForgotPassword = otpType === 'forgot';
 
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 	const [otpValue, setOtpValue] = useState('');
@@ -35,16 +37,31 @@ const OtpScreen = (props: any) => {
 	};
 
 	const api_verifyOtp = async () => {
-		let params = {
-			identifier: otpNumber,
-			otp: otpValue,
-		};
+		let params = isForgotPassword
+			? {
+					phoneNumber: otpNumber,
+					otp: otpValue,
+					newPassword: 'Secure@Password1',
+			  }
+			: {
+					identifier: otpNumber,
+					otp: otpValue,
+			  };
 
 		setIsLoading(true);
-		const response: any = await APIMethods.post(ENDPOINT.VERIFY_OTP, params);
+		const response: any = await APIMethods.post(
+			isForgotPassword ? ENDPOINT.FORGOT_PASSWORD_VERIFY_OTP : ENDPOINT.VERIFY_OTP,
+			params,
+		);
+		//props.navigation.navigate(NavigationKeys.ResetPasswordScreen);
+
 		if (response.statusCode >= 200 && response.statusCode <= 299) {
-			props.navigation.navigate(NavigationKeys.FinalUser);
-			dispatch(setUserData({ data: response }));
+			if (isForgotPassword) {
+				props.navigation.navigate(NavigationKeys.ResetPasswordScreen);
+			} else {
+				props.navigation.navigate(NavigationKeys.FinalUser);
+				dispatch(setUserData({ data: response }));
+			}
 		} else {
 			_showToast(response?.message, 'error');
 		}
@@ -55,7 +72,7 @@ const OtpScreen = (props: any) => {
 		if (enableResend) {
 			setEnableResend(false);
 			const responseOtp: any = await APIMethods.post(
-				ENDPOINT.SEND_SMS_OTP,
+				isForgotPassword ? ENDPOINT?.FORGOT_PASSWORD_SEND_OTP : ENDPOINT.SEND_SMS_OTP,
 				{
 					phoneNumber: otpNumber,
 				},
@@ -63,7 +80,7 @@ const OtpScreen = (props: any) => {
 			);
 
 			if (responseOtp?.message) {
-				_showToast(responseOtp.message, 'info');
+				_showToast(responseOtp.message, 'success');
 			}
 
 			setTimeout(() => {
@@ -78,7 +95,7 @@ const OtpScreen = (props: any) => {
 				<AppHeader top={metrics.verticalScale(20)} onBack={onBackPress} />
 
 				<View style={styles.codeContainer}>
-					<AppText fontFamily={Fonts.MEDIUM} fontSize={FontSize._20} label={t('enterVerificationCode')} />
+					<AppText fontFamily={Fonts.MEDIUM} fontSize={FontSize._26} label={t('enterVerificationCode')} />
 
 					<View style={styles.resendContainer}>
 						<AppText fontFamily={Fonts.REGULAR} label={t('aCodeHasBeenSent')} />
@@ -140,7 +157,7 @@ const createStyles = (AppColors: Theme) => {
 			flexDirection: 'row',
 		},
 		codeContainer: { marginTop: AppMargin._100, alignItems: 'center' },
-		resendContainer: { marginTop: AppMargin._20, flexDirection: 'row' },
+		resendContainer: { marginTop: AppMargin._10, flexDirection: 'row' },
 	});
 };
 

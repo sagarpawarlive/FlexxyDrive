@@ -29,6 +29,7 @@
 	"iAlreadyHaveAnAccount": "I already have an account",
 	"passwordRequired": "Password is required",
 	"passwordLength8": "Password must be at least 8 characters long",
+	"passwordCharacter": "Password must contain alphanumeric characters only.",
 	"passwordMustMatch": "Passwords must match",
 	"confirmPasswordRequired": "Confirm Password is required",
 	"forgotPassword": "Forgot Password?",
@@ -67,7 +68,7 @@
 	"verifyNow": "Verify now",
 	"enterVerificationCode": "Enter verification code",
 	"aCodeHasBeenSent": "A code has been sent to ",
-	"dontReceiveACode": "Don't receive a code?",
+	"dontReceiveACode": "Didn't receive a code?",
 	"resend": "Resend",
 	"addCarDetails": "Add car details",
 	"selectBrand": "Select brand",
@@ -107,5 +108,8 @@
 	"onboardingTitleTwo": "More Rides. More\nEarnings. More Freedom",
 	"onboardingTitleThree": "Schedule your Rides\nAhead of Time",
 	"logoutConfirm": "Are you sure you want to logout?",
-	"dob": "Date Of Birth"
+	"dob": "Date Of Birth",
+	"forgotSubTitle": "Please provide phone number to receive password reset code",
+	"resetPasswordTitle": "Reset Password",
+	"resetPasswordSubTitle": "Please provide your new password"
 }
