@@ -18,11 +18,16 @@ import { generateUniqueFileName, isIOS } from '../../../../constants/constants';
 import RNFS from 'react-native-fs';
 import { App_Permission } from '../../../../services/Permissions';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUserState } from '../../../../store/reducers/userdataSlice';
+import { updatePassengerState, updateUserState } from '../../../../store/reducers/userdataSlice';
 import { AddDocumentsOptions, AddPassengerOptions } from '../../../../constants/staticData';
-import metrics from '../../../../constants/metrics';
+import metrics, { windowHeight } from '../../../../constants/metrics';
 import { t } from '../../../../i18n';
 import { NavigationKeys } from '../../../../constants/navigationKeys';
+import AppYearPicker from '../../../../components/AppYearPicker';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import AppIdPicker from '../../../../components/AppIdPicker';
+import AppTextInput from '../../../../components/AppTextInput';
 
 const { height } = Dimensions.get('window');
 
@@ -114,61 +119,119 @@ const PassengerVerification = props => {
 
 	// Handle save (upload files)
 	const handleSave = async () => {
-		setIsLoading(true);
-		try {
-			if (!checkData?.preferences || !checkData.guarantor || !checkData.carDetails) {
-				setIsLoading(false);
-				props.navigation.navigate(NavigationKeys.PendingVerification);
-				return;
-			}
+		props.navigation.navigate(NavigationKeys.PassengerStatus);
 
-			let updateDocuments = documents;
-
-			if (selectedDrivingLicence && selectedDrivingLicence.isFile) {
-				const license = await s3Upload(selectedDrivingLicence);
-				updateDocuments = {
-					...updateDocuments,
-					drivingLicense: license,
-				};
-
-				console.log('Driving License uploaded:', license);
-			}
-
-			if (capturedImage && capturedImage.isFile) {
-				const selfie = await s3Upload(capturedImage);
-				updateDocuments = {
-					...updateDocuments,
-					driverImage: selfie,
-				};
-
-				console.log('Captured Image uploaded:', selfie);
-			}
-			const params = {
-				documents: updateDocuments,
-			};
-			// API call to save driver information with the uploaded file links
-			await apiPost(ENDPOINT.SET_DRIVER_INFO, params).then(res => {
-				setIsLoading(false);
-				if (res?.success) {
-					onclose();
-					dispatch(
-						updateUserState({
-							driverInfo: { ...res?.data },
-						}),
-					);
-					_showToast('Driver Documents added successfully', 'success');
-				}
-			});
-		} catch (error) {
-			_showToast('Error uploading files:', 'error');
-			setIsLoading(false);
-		}
+		// try {
+		// 	if (!checkData?.preferences || !checkData.guarantor || !checkData.carDetails) {
+		// 		setIsLoading(false);
+		// 		props.navigation.navigate(NavigationKeys.PendingVerification);
+		// 		return;
+		// 	}
+		// 	let updateDocuments = documents;
+		// 	if (selectedDrivingLicence && selectedDrivingLicence.isFile) {
+		// 		const license = await s3Upload(selectedDrivingLicence);
+		// 		updateDocuments = {
+		// 			...updateDocuments,
+		// 			drivingLicense: license,
+		// 		};
+		// 		console.log('Driving License uploaded:', license);
+		// 	}
+		// 	if (capturedImage && capturedImage.isFile) {
+		// 		const selfie = await s3Upload(capturedImage);
+		// 		updateDocuments = {
+		// 			...updateDocuments,
+		// 			driverImage: selfie,
+		// 		};
+		// 		console.log('Captured Image uploaded:', selfie);
+		// 	}
+		// 	const params = {
+		// 		documents: updateDocuments,
+		// 	};
+		// 	// API call to save driver information with the uploaded file links
+		// 	await apiPost(ENDPOINT.SET_DRIVER_INFO, params).then(res => {
+		// 		setIsLoading(false);
+		// 		if (res?.success) {
+		// 			onclose();
+		// 			dispatch(
+		// 				updatePassengerState({
+		// 					passengerInfo: { ...res?.data },
+		// 				}),
+		// 			);
+		// 			_showToast('Driver Documents added successfully', 'success');
+		// 		}
+		// 	});
+		// } catch (error) {
+		// 	_showToast('Error uploading files:', 'error');
+		// 	setIsLoading(false);
+		// }
 	};
+
+	const IdTypesNigeria = [
+		{ key: 'drivingLicense', label: 'Driving License' },
+		{ key: 'passport', label: 'Passport' },
+		{ key: 'nationalID', label: 'National ID' },
+	];
+
+	const IdTypesGermany = [
+		{ key: 'drivingLicense', label: 'Driving License' },
+		{ key: 'passport', label: 'Passport' },
+	];
+
+	// Formik Validation Schema
+	const validationSchema = Yup.object().shape({
+		selectIdType: Yup.string().required(t('selectIdTypeRequired')),
+		IdNnumber: Yup.string().required(t('idNumberRequired')),
+	});
+
+	// Formik Form Management
+	const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
+		initialValues: {
+			selectIdType: '',
+			IdNnumber: '',
+		},
+		validationSchema,
+		onSubmit: handleSave,
+	});
 
 	return (
 		<MainContainer>
 			<View style={[styles.container, { backgroundColor: AppColors.background }]}>
 				<AppHeader buttonTitle={t('addDocuments')} onBack={() => onclose()} />
+
+				<View style={{ marginTop: metrics.verticalScale(20) }}>
+					<AppIdPicker
+						selectedItem={values.selectIdType}
+						setSelectedItem={handleChange('selectIdType')}
+						unselectedText={t('selectIdType')}
+						options={IdTypesGermany}
+					/>
+					{errors.selectIdType && (
+						<View style={styles.errorContainer}>
+							<Image style={[styles.icon, { tintColor: AppColors.error }]} source={Icons.icnError} />
+							<AppText
+								width={'90%'}
+								left={AppMargin._10}
+								textColor={AppColors.error}
+								fontFamily={Fonts.REGULAR}
+								fontSize={FontSize._14}
+								label={errors.selectIdType}
+							/>
+						</View>
+					)}
+
+					{/* Email Field */}
+					<View style={{ marginTop: AppMargin._20 }}>
+						<AppTextInput
+							marginTop={metrics.verticalScale(5)}
+							placeholder={'ID number'}
+							value={values.IdNnumber} // Use Formik's value
+							onChangeText={text => handleChange('IdNnumber')(text)}
+							onBlur={() => handleBlur('IdNnumber')}
+							showError={errors.IdNnumber}
+							autoCaps="none"
+						/>
+					</View>
+				</View>
 
 				{/* List Section */}
 				<FlatList
@@ -181,7 +244,7 @@ const PassengerVerification = props => {
 				/>
 
 				{/* Display Selected Files */}
-				<View style={styles.selectedFilesContainer}>
+				{/* <View style={styles.selectedFilesContainer}>
 					{selectedDrivingLicence && (
 						<View style={styles.selectedFileItem}>
 							<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._14} title={t('drivingLicence')} />
@@ -195,7 +258,7 @@ const PassengerVerification = props => {
 							<Image source={{ uri: capturedImage?.path }} style={styles.selectedFileImage} />
 						</View>
 					)}
-				</View>
+				</View> */}
 
 				{isVerified && (
 					<AppText
@@ -205,15 +268,16 @@ const PassengerVerification = props => {
 						title={t('documentsVerified')}
 					/>
 				)}
+
 				{/* Save Button */}
-				{isVerified && (
+				{!isVerified && (
 					<AppButton
 						top={AppMargin._20}
 						textColor={AppColors.textDark}
 						fontSize={FontSize._16}
 						fontFamily={Fonts.MEDIUM}
 						buttonLabel={'Save'}
-						onClick={handleSave}
+						onClick={handleSubmit}
 					/>
 				)}
 				<AppLoader isLoading={isLoading} />
@@ -252,6 +316,16 @@ const styles = StyleSheet.create({
 		height: metrics.moderateScale(100),
 		marginTop: metrics.horizontalScale(5),
 		borderRadius: 8,
+	},
+	errorContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginTop: 10,
+	},
+	icon: {
+		height: 20,
+		width: 20,
+		marginLeft: 10,
 	},
 });
 

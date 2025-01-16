@@ -32,18 +32,13 @@ const RootNavigation: React.FC = (props: any) => {
 	return (
 		<NavigationContainer ref={navigationRef}>
 			<Stack.Navigator
-				initialRouteName={NavigationKeys.PassengerVerification}
+				initialRouteName={NavigationKeys.SplashScreen}
 				screenOptions={{ headerShown: false, gestureEnabled: false }}>
 				<Stack.Screen name={NavigationKeys.SplashScreen} component={SplashScreen} />
 				<Stack.Screen options={options} name={NavigationKeys.AuthNavigator} component={AuthNavigator} />
 				<Stack.Screen options={options} name={NavigationKeys.BottomTab} component={BottomTabNavigation} />
 				<Stack.Screen options={options} name={NavigationKeys.FinalUser} component={FinalUser} />
 				<Stack.Screen options={options} name={NavigationKeys.PassangerScreen} component={PassangerScreen} />
-				<Stack.Screen
-					options={options}
-					name={NavigationKeys.PassengerVerification}
-					component={PassengerVerification}
-				/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	);

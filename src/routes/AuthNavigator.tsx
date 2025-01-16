@@ -1,27 +1,27 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import SigninScreen from '../screens/Auth/SigninScreen';
 import { NavigationKeys } from '../constants/navigationKeys';
-import IntroScreen from '../screens/Auth/IntroScreen';
-import LocationPermission from '../screens/Auth/LocationPermissionScreen/Index';
-import SignupScreen from '../screens/Auth/SignupScreen';
-import ForgotPasswordScreen from '../screens/Auth/ForgotPasswordScreen';
-import OtpScreen from '../screens/Auth/OtpScreen';
-import ResetPasswordScreen from '../screens/Auth/ResetPasswordScreen';
-import FinalUser from '../screens/Auth/FinalUser';
-import DriverInformation from '../screens/Auth/DriverSignup/DriverInformation';
-import AddCarDetails from '../screens/Auth/DriverSignup/AddCarDetails';
-import AddPayments from '../screens/Auth/DriverSignup/AddPayments';
-import AddEmergencyContacts from '../screens/Auth/DriverSignup/AddEmergencyContacts';
-import NextOfKin from '../screens/Auth/DriverSignup/NextOfKin';
 import AddMobileNumber from '../screens/Auth/AddMobileNumber';
+import AddCarDetails from '../screens/Auth/DriverSignup/AddCarDetails';
 import AddDocuments from '../screens/Auth/DriverSignup/AddDocuments';
-import OnboardingScreen from '../screens/Auth/OnboardingScreen';
+import AddEmergencyContacts from '../screens/Auth/DriverSignup/AddEmergencyContacts';
+import AddPayments from '../screens/Auth/DriverSignup/AddPayments';
+import DriverInformation from '../screens/Auth/DriverSignup/DriverInformation';
+import NextOfKin from '../screens/Auth/DriverSignup/NextOfKin';
 import OtherInformation from '../screens/Auth/DriverSignup/OtherInformation';
 import PendingVerification from '../screens/Auth/DriverSignup/PendingVerification';
 import VerifyStatusScreen from '../screens/Auth/DriverSignup/VerifyStatusScreen';
-import PassengerInformation from '../screens/Auth/PassengerSignup/PassengerInformation';
+import FinalUser from '../screens/Auth/FinalUser';
+import ForgotPasswordScreen from '../screens/Auth/ForgotPasswordScreen';
+import IntroScreen from '../screens/Auth/IntroScreen';
+import LocationPermission from '../screens/Auth/LocationPermissionScreen/Index';
+import OnboardingScreen from '../screens/Auth/OnboardingScreen';
+import OtpScreen from '../screens/Auth/OtpScreen';
 import PassengerVerification from '../screens/Auth/PassengerSignup/PassengerVerification';
+import ResetPasswordScreen from '../screens/Auth/ResetPasswordScreen';
+import SigninScreen from '../screens/Auth/SigninScreen';
+import SignupScreen from '../screens/Auth/SignupScreen';
+import PassengerStatus from '../screens/Auth/PassengerSignup/PassengerStatus';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,8 +51,8 @@ const AuthNavigator: React.FC = () => {
 			<Stack.Screen name={NavigationKeys.VerifyStatusScreen} component={VerifyStatusScreen} />
 
 			{/* Passenger Information */}
-			<Stack.Screen name={NavigationKeys.PassengerInformation} component={PassengerInformation} />
 			<Stack.Screen name={NavigationKeys.PassengerVerification} component={PassengerVerification} />
+			<Stack.Screen name={NavigationKeys.PassengerStatus} component={PassengerStatus} />
 		</Stack.Navigator>
 	);
 };

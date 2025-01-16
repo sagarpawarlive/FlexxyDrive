@@ -50,12 +50,19 @@ const FinalUser = (props: any) => {
 	const onPressOffer = () => {
 		props.navigation.navigate(NavigationKeys.AuthNavigator, {
 			screen: NavigationKeys.DriverInformation,
+			params: {
+				type: 1, // Add the type parameter
+			},
 		});
 	};
 
 	const onPressBook = () => {
-		// alert('Book aride');
-		props.navigation.navigate(NavigationKeys.PassengerInformation, {});
+		props.navigation.navigate(NavigationKeys.AuthNavigator, {
+			screen: NavigationKeys.DriverInformation,
+			params: {
+				type: 2, // Add the type parameter
+			},
+		});
 	};
 
 	return (

@@ -43,6 +43,7 @@ import { t } from '../../../../i18n';
 let update = false;
 
 const DriverInformation = (props: any) => {
+	const userType = props?.route?.params?.type;
 	const dispatch = useDispatch();
 	const userDataSlice = useSelector(state => state?.userDataSlice ?? {});
 	const { userData } = userDataSlice ?? {};
@@ -248,7 +249,7 @@ const DriverInformation = (props: any) => {
 		}
 		setIsLoading(false);
 		_showToast(res?.message, 'success');
-		props.navigation.navigate(NavigationKeys.OtherInformation);
+		userTypeNavigation();
 		/*
 				const verifyDocument = {
 
@@ -288,10 +289,19 @@ const DriverInformation = (props: any) => {
 		console.log('Date selected:', date);
 	};
 
+	const userTitle = userType == 1 ? t('driverInformation') : t('passengerInformation');
+	const userTypeNavigation = () => {
+		if (userType == 1) {
+			props.navigation.navigate(NavigationKeys.OtherInformation);
+		} else {
+			props.navigation.navigate(NavigationKeys.PassengerVerification);
+		}
+	};
+
 	return (
 		<MainContainer hideTop>
 			<View style={[styles.innerMainContainer, {}]}>
-				<AppHeader top={metrics.verticalScale(30)} onBack={onBackPress} buttonTitle={t('driverInformation')} />
+				<AppHeader top={metrics.verticalScale(30)} onBack={onBackPress} buttonTitle={userTitle} />
 
 				<View style={styles.profileContainer}>
 					<View style={styles.profileSubContainer}>

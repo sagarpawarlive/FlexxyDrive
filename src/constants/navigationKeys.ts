@@ -1,3 +1,5 @@
+import PassengerStatus from '../screens/Auth/PassengerSignup/PassengerStatus';
+
 export const NavigationKeys = {
 	SplashScreen: 'SplashScreen',
 	OnboardingScreen: 'OnboardingScreen',
@@ -33,4 +35,5 @@ export const NavigationKeys = {
 	VerifyStatusScreen: 'VerifyStatusScreen',
 
 	PassengerInformation: 'PassengerInformation',
+	PassengerStatus: 'PassengerStatus',
 };

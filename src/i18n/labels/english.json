@@ -113,5 +113,8 @@
 	"dob": "Date Of Birth",
 	"forgotSubTitle": "Please provide phone number to receive password reset code",
 	"resetPasswordTitle": "Reset Password",
-	"resetPasswordSubTitle": "Please provide your new password"
+	"resetPasswordSubTitle": "Please provide your new password",
+	"selectIdType": "Select ID Type",
+	"selectIdTypeRequired": "Select ID Type Required",
+	"idNumberRequired": "ID number required"
 }
