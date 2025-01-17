@@ -4,6 +4,7 @@ import { Icons } from '../assets/Icons';
 import { Fonts, FontSize } from '../assets/fonts';
 import { useTheme } from '../theme/ThemeProvider';
 import { Theme } from '../types';
+import metrics from '../constants/metrics';
 
 interface AppHeaderProps {
 	buttonTitle?: string;
@@ -19,7 +20,12 @@ const AppHeader = (props: AppHeaderProps) => {
 
 	return (
 		<View style={[styles.container, { marginTop: props.top ?? 0, justifyContent: 'space-between' }]}>
-			<TouchableOpacity onPress={props.onBack} style={styles.container}>
+			<TouchableOpacity
+				onPress={props.onBack}
+				style={{
+					justifyContent: 'flex-start',
+					width: metrics.moderateScale(50),
+				}}>
 				<Image
 					style={{ tintColor: props.tintColor ?? AppColors.text }}
 					resizeMode="contain"
@@ -50,7 +56,7 @@ const createStyles = (AppColors: Theme) => {
 		buttonTitle: {
 			includeFontPadding: false,
 			color: AppColors.backButton,
-			marginLeft: -4,
+			marginRight: metrics.horizontalScale(40),
 			fontSize: FontSize._20,
 			fontFamily: Fonts.BOLD,
 		},

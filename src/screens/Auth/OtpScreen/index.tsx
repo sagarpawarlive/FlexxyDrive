@@ -41,7 +41,6 @@ const OtpScreen = (props: any) => {
 			? {
 					phoneNumber: otpNumber,
 					otp: otpValue,
-					newPassword: 'Secure@Password1',
 			  }
 			: {
 					identifier: otpNumber,
@@ -57,7 +56,9 @@ const OtpScreen = (props: any) => {
 
 		if (response.statusCode >= 200 && response.statusCode <= 299) {
 			if (isForgotPassword) {
-				props.navigation.navigate(NavigationKeys.ResetPasswordScreen);
+				props.navigation.navigate(NavigationKeys.ResetPasswordScreen, {
+					response,
+				});
 			} else {
 				props.navigation.navigate(NavigationKeys.FinalUser);
 				dispatch(setUserData({ data: response }));

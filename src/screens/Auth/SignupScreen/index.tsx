@@ -46,10 +46,14 @@ const SignupScreen = (props: any) => {
 	// const germanLocale = locales.find(locale => locale.languageTag === 'de-DE');
 	const dispatch = useDispatch();
 	const { AppColors } = useTheme();
+	const local = locales?.[0];
+	const dialingCode = getPhoneCode(local.countryCode) ?? '91';
+	// setCountryCallingCode(dialingCode);
+	// setSelectedCountry(germanLocale?.countryCode);
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-	const [countryCallingCode, setCountryCallingCode] = useState('91'); // Default to USA country code
-	const [selectedCountry, setSelectedCountry]: any = useState('IN'); // To store selected country
+	const [countryCallingCode, setCountryCallingCode] = useState(dialingCode); // Default to USA country code
+	const [selectedCountry, setSelectedCountry]: any = useState(local.countryCode ?? 'IN'); // To store selected country
 	const [showCountryPicker, setShowCountryPicker] = useState(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [newUser, setNewUser] = useState<any>();
@@ -69,18 +73,18 @@ const SignupScreen = (props: any) => {
 		console.log('[  country ] ----------------------->> ', country);
 	};
 
-	useEffect(() => {
-		const germanLocale = locales.find(locale => locale?.languageTag === 'de-DE');
-		if (germanLocale) {
-			const dialingCode = getPhoneCode(germanLocale.countryCode);
-			setCountryCallingCode(dialingCode);
-			setSelectedCountry(germanLocale?.countryCode);
-		} else {
-			const dialingCode = getPhoneCode(locales?.[0]?.countryCode);
-			setCountryCallingCode(dialingCode);
-			setSelectedCountry(locales?.[0]?.countryCode);
-		}
-	}, [locales]);
+	// useEffect(() => {
+	// 	const germanLocale = locales.find(locale => locale?.languageTag === 'de-DE');
+	// 	if (germanLocale) {
+	// 		const dialingCode = getPhoneCode(germanLocale.countryCode);
+	// 		setCountryCallingCode(dialingCode);
+	// 		setSelectedCountry(germanLocale?.countryCode);
+	// 	} else {
+	// 		const dialingCode = getPhoneCode(locales?.[0]?.countryCode);
+	// 		setCountryCallingCode(dialingCode);
+	// 		setSelectedCountry(locales?.[0]?.countryCode);
+	// 	}
+	// }, [locales]);
 
 	const googleLogin = async () => {
 		try {

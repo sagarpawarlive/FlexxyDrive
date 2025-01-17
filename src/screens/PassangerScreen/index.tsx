@@ -10,12 +10,14 @@ import { AppHeight, AppMargin, AppPadding, WindowHeight } from '../../constants/
 import { useTheme } from '../../theme/ThemeProvider';
 import { Theme } from '../../types';
 import { passengerListing } from './dummyData';
+import metrics from '../../constants/metrics';
+import { NavigationKeys } from '../../constants/navigationKeys';
 
 interface PassangerScreenProps {}
 
 const PassangerScreen = (props: PassangerScreenProps) => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
-	const snapPoints = ['40%', '60%'];
+	const snapPoints = ['20%', '60%'];
 
 	const { AppColors, isDarkMode } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
@@ -33,7 +35,7 @@ const PassangerScreen = (props: PassangerScreenProps) => {
 			return (
 				<View style={styles.passengerContainer}>
 					<View style={styles.avatarContainer}>
-						<Image style={styles.avatarImage} source={Icons.icnUserPlaceholder} />
+						<Image style={styles.avatarImage} source={{ uri: item.image }} />
 					</View>
 					<View style={styles.passengerDetails}>
 						<View style={styles.passengerHeader}>
@@ -86,7 +88,7 @@ const PassangerScreen = (props: PassangerScreenProps) => {
 	return (
 		<MainContainer hideTop>
 			<View style={styles.container}>
-				<AppMapComponent />
+				<AppMapComponent goBack={() => props.navigation.navigate(NavigationKeys.FinalUser)} />
 
 				<BottomSheet
 					ref={bottomSheetRef}
@@ -94,6 +96,7 @@ const PassangerScreen = (props: PassangerScreenProps) => {
 					snapPoints={snapPoints}
 					maxDynamicContentSize={WindowHeight * 0.7}
 					onChange={handleSheetChanges}
+					handleIndicatorStyle={{ backgroundColor: AppColors.primary }}
 					backgroundComponent={(props: any) => <BottomSheetBackground {...props} />}
 					// backdropComponent={({ style }) => (
 					// 	<View style={[style, { backgroundColor: 'rgba(0,0,0,0.3)', flex: 1 }]} />
@@ -133,13 +136,17 @@ const createStyles = (AppColors: Theme) => {
 		passengerContainer: {
 			flexDirection: 'row',
 			alignItems: 'center',
+			// backgroundColor: 'green',
+			// height: metrics.verticalScale(50),
 		},
 		avatarContainer: {
 			justifyContent: 'center',
 		},
 		avatarImage: {
-			height: AppHeight._60,
-			width: AppHeight._60,
+			height: AppHeight._50,
+			width: AppHeight._50,
+			borderRadius: metrics.moderateScale(25),
+			marginLeft: metrics.horizontalScale(10),
 		},
 		passengerDetails: {
 			flex: 1,

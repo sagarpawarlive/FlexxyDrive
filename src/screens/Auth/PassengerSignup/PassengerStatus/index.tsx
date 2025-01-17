@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Fonts, FontSize } from '../../../../assets/fonts';
 import AppHeader from '../../../../components/AppHeader';
 import AppText from '../../../../components/AppText';
@@ -13,6 +13,12 @@ import { Theme } from '../../../../types';
 import StepIndicator from 'react-native-step-indicator';
 import { Icons } from '../../../../assets/Icons';
 import metrics from '../../../../constants/metrics';
+import { getLocales } from 'react-native-localize';
+import { apiPost } from '../../../../services/API/apiServices';
+import { ENDPOINT } from '../../../../services/API/endpoints';
+import { _showToast } from '../../../../services/UIs/ToastConfig';
+import { NavigationKeys } from '../../../../constants/navigationKeys';
+import Spinner from 'react-native-spinkit';
 
 const PassengerStatus = (props: any) => {
 	const dispatch = useDispatch();
@@ -20,7 +26,10 @@ const PassengerStatus = (props: any) => {
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 
 	const [currentPosition, setCurrentPosition] = React.useState(1);
+	const userDataSlice = useSelector(state => state?.userDataSlice ?? {});
+	console.log(userDataSlice, '<=== userDataSlice');
 
+	const checkData = userDataSlice.passengerData?.data?.user?.passengerInfo;
 	const onBackPress = () => {
 		props.navigation.goBack();
 	};
@@ -55,6 +64,36 @@ const PassengerStatus = (props: any) => {
 		setCurrentPosition(position);
 	};
 
+	useEffect(() => {
+		verifyDocument();
+	}, []);
+
+	const verifyDocument = async () => {
+		const locales = getLocales();
+		const countryCode = locales[0].countryCode;
+		const payload = {
+			selfie: checkData?.documents?.passengerImage,
+			idImage: checkData?.documents?.drivingLicense || checkData?.documents?.passport,
+			country: 'DE',
+			idType: checkData?.documents?.drivingLicense ? 'DRIVERS_LICENSE' : 'PASSPORT',
+			userType: 'PASSENGER',
+		};
+
+		await apiPost(ENDPOINT.VERIFY_DOCUMENT, payload).then(res => {
+			if (res?.statusCode >= 200 && res?.statusCode <= 299) {
+				_showToast(res?.message, 'success');
+				props.navigation.navigate(NavigationKeys.VerifyStatusScreen, {
+					success: true,
+				});
+			} else {
+				props.navigation.navigate(NavigationKeys.VerifyStatusScreen, {
+					success: false,
+				});
+				_showToast(res?.message, 'error');
+			}
+		});
+	};
+
 	const renderLabel = ({
 		position,
 		label,
@@ -68,14 +107,25 @@ const PassengerStatus = (props: any) => {
 		return (
 			<View style={{}}>
 				<AppText fontSize={FontSize._16} title={label} fontFamily={Fonts.MEDIUM} />
-				{
+
+				<View style={{ flexDirection: 'row' }}>
 					<AppText
 						fontSize={FontSize._12}
 						title={currentPosition == position ? 'Pending' : 'Submitted'}
 						textColor={currentPosition == position ? AppColors.warning : AppColors.text}
 						fontFamily={Fonts.MEDIUM}
 					/>
-				}
+					<View style={{ marginLeft: 10, bottom: 2 }}>
+						{currentPosition == position && (
+							<Spinner
+								isVisible={true}
+								size={metrics.moderateScale(20)}
+								type="ThreeBounce"
+								color={AppColors.primary}
+							/>
+						)}
+					</View>
+				</View>
 			</View>
 		);
 	};
@@ -94,7 +144,7 @@ const PassengerStatus = (props: any) => {
 	return (
 		<MainContainer>
 			<View style={styles.innerMainContainer}>
-				<AppHeader buttonTitle={''} top={AppMargin._30} onBack={onBackPress} />
+				{/* <AppHeader buttonTitle={''} top={AppMargin._30} onBack={onBackPress} /> */}
 
 				<View style={{ marginTop: AppMargin._30, flex: 1 }}>
 					<AppText

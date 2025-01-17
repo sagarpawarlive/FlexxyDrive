@@ -33,7 +33,7 @@ const AddDocuments = props => {
 	const userData = useSelector(state => state.userDataSlice.userData.user);
 
 	const userDataSlice = useSelector(state => state?.userDataSlice ?? {});
-	const checkData = userDataSlice.userData ?? {};
+	const checkData = userDataSlice.userData?.data?.user?.driverInfo;
 
 	// State to handle selected driving license and captured image
 	const [selectedDrivingLicence, setSelectedDrivingLicence] = useState(
@@ -126,13 +126,9 @@ const AddDocuments = props => {
 	// Handle save (upload files)
 	const handleSave = async () => {
 		setIsLoading(true);
-		try {
-			if (!checkData?.preferences || !checkData.guarantor || !checkData.carDetails) {
-				setIsLoading(false);
-				props.navigation.navigate(NavigationKeys.PendingVerification);
-				return;
-			}
+		console.log(checkData, ',=== checkData');
 
+		try {
 			let updateDocuments = documents;
 
 			if (selectedDrivingLicence && selectedDrivingLicence.isFile) {
@@ -158,15 +154,24 @@ const AddDocuments = props => {
 				documents: updateDocuments,
 			};
 			// API call to save driver information with the uploaded file links
-			await apiPost(ENDPOINT.SET_DRIVER_INFO, params).then(res => {
+			await apiPost(ENDPOINT.SET_DRIVER_INFO, params).then(async res => {
 				setIsLoading(false);
 				if (res?.success) {
-					onclose();
+					// onclose();
+
 					dispatch(
 						updateUserState({
 							driverInfo: { ...res?.data },
 						}),
 					);
+					if (!checkData?.preferences || !checkData.guarantor || !checkData.carDetails) {
+						setIsLoading(false);
+						props.navigation.navigate(NavigationKeys.OtherInformation);
+						return;
+					} else {
+						setIsLoading(false);
+						props.navigation.navigate(NavigationKeys.PendingVerification);
+					}
 					_showToast('Driver Documents added successfully', 'success');
 				}
 			});
@@ -175,6 +180,8 @@ const AddDocuments = props => {
 			setIsLoading(false);
 		}
 	};
+
+	const disabled = !capturedImage?.path || !selectedDrivingLicence?.path;
 
 	return (
 		<MainContainer>
@@ -217,7 +224,7 @@ const AddDocuments = props => {
 					/>
 				)}
 				{/* Save Button */}
-				{isVerified && (
+				{!isVerified && (
 					<AppButton
 						top={AppMargin._20}
 						textColor={AppColors.textDark}
@@ -225,6 +232,7 @@ const AddDocuments = props => {
 						fontFamily={Fonts.MEDIUM}
 						buttonLabel={'Save'}
 						onClick={handleSave}
+						disabled={disabled}
 					/>
 				)}
 				<AppLoader isLoading={isLoading} />

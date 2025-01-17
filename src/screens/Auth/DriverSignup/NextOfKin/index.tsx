@@ -1,5 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, View, Alert, Pressable, Text, Image } from 'react-native';
+import {
+	StyleSheet,
+	View,
+	Alert,
+	Pressable,
+	Text,
+	Image,
+	TouchableWithoutFeedback,
+	TouchableOpacity,
+} from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { Fonts, FontSize } from '../../../../assets/fonts';
@@ -9,7 +18,7 @@ import AppHeader from '../../../../components/AppHeader';
 import AppScrollView from '../../../../components/AppScrollView';
 import AppTextInput from '../../../../components/AppTextInput';
 import MainContainer from '../../../../components/MainContainer';
-import { AppHeight, AppMargin } from '../../../../constants/commonStyle';
+import { AppHeight, AppMargin, borderRadius10 } from '../../../../constants/commonStyle';
 import AppCalender from '../../../../subviews/AppCalender';
 import { useTheme } from '../../../../theme/ThemeProvider';
 import { Theme } from '../../../../types';
@@ -22,12 +31,17 @@ import { _showToast } from '../../../../services/UIs/ToastConfig';
 import { updateUserState } from '../../../../store/reducers/userdataSlice';
 import moment from 'moment';
 import { t } from '../../../../i18n';
+import AppText from '../../../../components/AppText';
+import metrics from '../../../../constants/metrics';
+import AppDriverButtons from '../../../../components/AppDriverButtons';
+import { getLocales } from 'react-native-localize';
 
 const NextOfKin = (props: any) => {
 	const dispatch = useDispatch();
 	const { isDarkMode, toggleTheme, AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
-
+	const locales = getLocales();
+	const countryCode = locales?.[0].countryCode ?? 'IN';
 	const next_Kin = props?.route?.params?.driverInfoRes;
 
 	const userDetails = useSelector((state: any) => state?.userDataSlice.userData.data ?? {});
@@ -36,7 +50,7 @@ const NextOfKin = (props: any) => {
 	const [isCalenderVisible, setIsCalenderVisible] = useState(false);
 	const [date, setDate] = useState('');
 
-	const [selectedCountry, setSelectedCountry] = useState(nextOfKinData?.countryCode ?? 'IN');
+	const [selectedCountry, setSelectedCountry] = useState(nextOfKinData?.countryCode ?? countryCode);
 	const [showCountryPicker, setShowCountryPicker] = useState(false);
 	const [countryName, setCountryName] = useState('India');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -63,7 +77,7 @@ const NextOfKin = (props: any) => {
 
 	useEffect(() => {
 		setDate(nextOfKinData?.dob ?? '');
-		setCountryName(nextOfKinData.country ?? '');
+		setCountryName(nextOfKinData.country ?? countryCode);
 	}, []);
 
 	// Formik setup
@@ -134,13 +148,14 @@ const NextOfKin = (props: any) => {
 	const cityRef = useRef<any>(null);
 	const streetRef = useRef<any>(null);
 	const streetNumberRef = useRef<any>(null);
+	console.log(countryName, '<== countryName');
 
 	return (
 		<MainContainer>
 			<View style={styles.innerMainContainer}>
 				<AppHeader
 					buttonTitle={t('nextOfKin')}
-					tintColor={AppColors.backButton}
+					// tintColor={AppColors.backButton}
 					top={AppMargin._30}
 					onBack={onBackPress}
 				/>
@@ -178,6 +193,14 @@ const NextOfKin = (props: any) => {
 							returnKeyType={'next'}
 						/>
 						<Pressable style={styles.dobContainer} onPress={() => toggleCalenderModal()}>
+							<View
+								style={{ position: 'absolute', zIndex: 99, left: 20, top: metrics.verticalScale(-8) }}>
+								<AppText
+									fontSize={FontSize._14}
+									label={t('dob')}
+									styleProps={{ backgroundColor: AppColors.background, paddingHorizontal: 5 }}
+								/>
+							</View>
 							<Text
 								style={{
 									flex: 1,
@@ -198,15 +221,15 @@ const NextOfKin = (props: any) => {
 						/> */}
 						<AppTextInput
 							editable={false}
+							wholePress={() => setShowCountryPicker(true)}
 							value={countryName}
 							placeholder="Country"
 							texInputProps={{
-								onPress: () => {
-									setShowCountryPicker(true);
-								},
+								style: { width: '80%', color: AppColors.text },
 							}}
 							rightNode={
 								<CountryPicker
+									onClose={() => setShowCountryPicker(false)}
 									visible={showCountryPicker}
 									countryCode={selectedCountry}
 									withFlag={true}
@@ -221,11 +244,12 @@ const NextOfKin = (props: any) => {
 									containerButtonStyle={{}}
 									theme={{
 										backgroundColor: AppColors.background,
-										onBackgroundTextColor: AppColors.white,
+										onBackgroundTextColor: AppColors.text,
 									}}
 								/>
 							}
 						/>
+
 						<AppTextInput
 							placeholder="City"
 							value={values.city}
@@ -299,7 +323,7 @@ const createStyles = (AppColors: Theme) => {
 		},
 		dobContainer: {
 			borderWidth: 1,
-			borderColor: AppColors.white,
+			borderColor: AppColors.textInputBorderColor,
 			borderRadius: 10,
 			padding: 15,
 			height: AppHeight._70,

@@ -18,6 +18,7 @@ export const ENDPOINT = {
 
 	//Drivers
 	SET_DRIVER_INFO: '/api/driver/info', //post
+	SET_PASSENGER_INFO: '/passenger/info', //post
 	GET_DRIVER_INFO: '/api/driver/info', //get
 	GET_PROFILE_INFO: '/auth/profile', //get
 	UPDATE_DRIVER_INFO: '/api/driver/info', //put
@@ -35,4 +36,6 @@ export const ENDPOINT = {
 	//Car details
 	GET_BRAND: '/carsdata/brands', //get
 	GET_MODELS: '/carsdata/models', //get
+
+	UPDATE_RESET_PASSWORD: '/auth/reset-password',
 };

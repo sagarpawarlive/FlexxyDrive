@@ -20,15 +20,20 @@ import { useDispatch } from 'react-redux';
 import { phoneValidation } from '../../../constants/validationSchema';
 import { t } from '../../../i18n';
 import metrics from '../../../constants/metrics';
+import { getLocales } from 'react-native-localize';
+import { getPhoneCode } from '../../../utils/phoneNumberUtils';
 
 const AddMobileNumber = (props: any) => {
 	const { AppColors } = useTheme();
 	const dispatch = useDispatch();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
+	const locales = getLocales();
+	const countryCode = locales?.[0].countryCode ?? 'IN';
+	const dialingCode = getPhoneCode(countryCode) ?? '91';
 	const userId = props?.route?.params?.userId;
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-	const [countryCallingCode, setCountryCallingCode] = useState('91'); // Default to India country code
-	const [selectedCountry, setSelectedCountry] = useState('IN'); // To store selected country
+	const [countryCallingCode, setCountryCallingCode] = useState(dialingCode); // Default to India country code
+	const [selectedCountry, setSelectedCountry] = useState(countryCode); // To store selected country
 	const [showCountryPicker, setShowCountryPicker] = useState(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 

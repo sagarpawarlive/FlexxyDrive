@@ -116,5 +116,10 @@
 	"resetPasswordSubTitle": "Please provide your new password",
 	"selectIdType": "Select ID Type",
 	"selectIdTypeRequired": "Select ID Type Required",
-	"idNumberRequired": "ID number required"
+	"idNumberRequired": "ID number required",
+	"drivingLicense": "Driving License",
+	"passport": "Passport",
+	"uploadDocNote": "**Please use *.jpg or *.png format",
+	"verifySuccess": "Verification Successful!",
+	"verifyFailure": "Your verification was unsuccessful!"
 }

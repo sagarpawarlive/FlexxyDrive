@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Dimensions, Image, FlatList, Pressable, Alert } from 'react-native';
 import { useTheme } from '../../../../theme/ThemeProvider';
 import { Icons } from '../../../../assets/Icons';
@@ -42,7 +42,7 @@ const PassengerVerification = props => {
 
 	// State to handle selected driving license and captured image
 	const [selectedDrivingLicence, setSelectedDrivingLicence] = useState(
-		{ path: documents?.drivingLicense, isFile: false } ?? null,
+		{ path: documents?.drivingLicense ?? '', isFile: false } ?? null,
 	);
 	const [capturedImage, setCapturedImage] = useState({ path: documents?.passengerImage, isFile: false } ?? null);
 
@@ -79,7 +79,18 @@ const PassengerVerification = props => {
 	// Open image picker (camera or gallery)
 	const openImagePicker = useCallback(async (type: 'camera' | 'gallery') => {
 		try {
-			const image = type == 'camera' ? await selectAndCompressImage() : await selectAndCompressImage();
+			const image =
+				type == 'camera'
+					? // await ImageCropPicker.openCamera({
+					  // 		width: 800,
+					  // 		height: 800,
+					  // 		compressImageMaxWidth: 800,
+					  // 		compressImageMaxHeight: 800,
+					  // 		compressImageQuality: 0.7,
+					  // 		includeBase64: true,
+					  //   })
+					  await selectAndCompressImage()
+					: await selectAndCompressImage();
 
 			// Set the selected file to the respective state
 			if (type == 'camera') {
@@ -119,51 +130,48 @@ const PassengerVerification = props => {
 
 	// Handle save (upload files)
 	const handleSave = async () => {
-		props.navigation.navigate(NavigationKeys.PassengerStatus);
+		// props.navigation.navigate(NavigationKeys.PassengerStatus);
+		setIsLoading(true);
 
-		// try {
-		// 	if (!checkData?.preferences || !checkData.guarantor || !checkData.carDetails) {
-		// 		setIsLoading(false);
-		// 		props.navigation.navigate(NavigationKeys.PendingVerification);
-		// 		return;
-		// 	}
-		// 	let updateDocuments = documents;
-		// 	if (selectedDrivingLicence && selectedDrivingLicence.isFile) {
-		// 		const license = await s3Upload(selectedDrivingLicence);
-		// 		updateDocuments = {
-		// 			...updateDocuments,
-		// 			drivingLicense: license,
-		// 		};
-		// 		console.log('Driving License uploaded:', license);
-		// 	}
-		// 	if (capturedImage && capturedImage.isFile) {
-		// 		const selfie = await s3Upload(capturedImage);
-		// 		updateDocuments = {
-		// 			...updateDocuments,
-		// 			driverImage: selfie,
-		// 		};
-		// 		console.log('Captured Image uploaded:', selfie);
-		// 	}
-		// 	const params = {
-		// 		documents: updateDocuments,
-		// 	};
-		// 	// API call to save driver information with the uploaded file links
-		// 	await apiPost(ENDPOINT.SET_DRIVER_INFO, params).then(res => {
-		// 		setIsLoading(false);
-		// 		if (res?.success) {
-		// 			onclose();
-		// 			dispatch(
-		// 				updatePassengerState({
-		// 					passengerInfo: { ...res?.data },
-		// 				}),
-		// 			);
-		// 			_showToast('Driver Documents added successfully', 'success');
-		// 		}
-		// 	});
-		// } catch (error) {
-		// 	_showToast('Error uploading files:', 'error');
-		// 	setIsLoading(false);
-		// }
+		try {
+			let updateDocuments = documents;
+			if (selectedDrivingLicence && selectedDrivingLicence.isFile) {
+				const license = await s3Upload(selectedDrivingLicence);
+				updateDocuments = {
+					...updateDocuments,
+					[values.selectIdType]: license,
+				};
+				console.log('Driving License uploaded:', license);
+			}
+			if (capturedImage && capturedImage.isFile) {
+				const selfie = await s3Upload(capturedImage);
+				updateDocuments = {
+					...updateDocuments,
+					passengerImage: selfie,
+				};
+				console.log('Captured Image uploaded:', selfie);
+			}
+			const params = {
+				documents: updateDocuments,
+			};
+			// API call to save driver information with the uploaded file links
+			await apiPost(ENDPOINT.SET_PASSENGER_INFO, params).then(res => {
+				setIsLoading(false);
+				if (res?.success) {
+					onclose();
+					dispatch(
+						updatePassengerState({
+							passengerInfo: { ...res?.data },
+						}),
+					);
+					_showToast("Passenger's documents added successfully", 'success');
+					props.navigation.navigate(NavigationKeys.PassengerStatus);
+				}
+			});
+		} catch (error) {
+			_showToast('Error uploading files:', 'error');
+			setIsLoading(false);
+		}
 	};
 
 	const IdTypesNigeria = [
@@ -180,18 +188,23 @@ const PassengerVerification = props => {
 	// Formik Validation Schema
 	const validationSchema = Yup.object().shape({
 		selectIdType: Yup.string().required(t('selectIdTypeRequired')),
-		IdNnumber: Yup.string().required(t('idNumberRequired')),
+		// IdNnumber: Yup.string().required(t('idNumberRequired')),
 	});
 
 	// Formik Form Management
 	const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
 		initialValues: {
-			selectIdType: '',
-			IdNnumber: '',
+			selectIdType: 'drivingLicense',
+			// IdNnumber: '',
 		},
 		validationSchema,
-		onSubmit: handleSave,
+		onSubmit: () => handleSave(),
 	});
+
+	useEffect(() => {
+		setSelectedDrivingLicence(null);
+		setCapturedImage(null);
+	}, [values.selectIdType]);
 
 	return (
 		<MainContainer>
@@ -220,7 +233,7 @@ const PassengerVerification = props => {
 					)}
 
 					{/* Email Field */}
-					<View style={{ marginTop: AppMargin._20 }}>
+					{/* <View style={{ marginTop: AppMargin._20 }}>
 						<AppTextInput
 							marginTop={metrics.verticalScale(5)}
 							placeholder={'ID number'}
@@ -230,7 +243,7 @@ const PassengerVerification = props => {
 							showError={errors.IdNnumber}
 							autoCaps="none"
 						/>
-					</View>
+					</View> */}
 				</View>
 
 				{/* List Section */}
@@ -241,13 +254,28 @@ const PassengerVerification = props => {
 					keyExtractor={item => item.id.toString()}
 					renderItem={renderItem}
 					ItemSeparatorComponent={() => <View style={[styles.separator, {}]} />}
+					ListFooterComponent={() => {
+						return (
+							<AppText
+								top={metrics.verticalScale(10)}
+								textColor={AppColors.primary}
+								fontFamily={Fonts.BOLD}
+								fontSize={FontSize._14}
+								title={t('uploadDocNote')}
+							/>
+						);
+					}}
 				/>
 
 				{/* Display Selected Files */}
-				{/* <View style={styles.selectedFilesContainer}>
+				<View style={styles.selectedFilesContainer}>
 					{selectedDrivingLicence && (
 						<View style={styles.selectedFileItem}>
-							<AppText fontFamily={Fonts.REGULAR} fontSize={FontSize._14} title={t('drivingLicence')} />
+							<AppText
+								fontFamily={Fonts.REGULAR}
+								fontSize={FontSize._14}
+								title={t(values.selectIdType)}
+							/>
 							<Image source={{ uri: selectedDrivingLicence?.path }} style={styles.selectedFileImage} />
 						</View>
 					)}
@@ -258,7 +286,7 @@ const PassengerVerification = props => {
 							<Image source={{ uri: capturedImage?.path }} style={styles.selectedFileImage} />
 						</View>
 					)}
-				</View> */}
+				</View>
 
 				{isVerified && (
 					<AppText
@@ -277,7 +305,8 @@ const PassengerVerification = props => {
 						fontSize={FontSize._16}
 						fontFamily={Fonts.MEDIUM}
 						buttonLabel={'Save'}
-						onClick={handleSubmit}
+						onClick={() => handleSubmit()}
+						disabled={!selectedDrivingLicence?.path || !capturedImage?.path}
 					/>
 				)}
 				<AppLoader isLoading={isLoading} />

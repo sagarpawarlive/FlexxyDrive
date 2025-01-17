@@ -109,8 +109,8 @@ const createStyles = (AppColors: Theme) => {
 		container: {
 			flexDirection: 'row',
 			paddingTop: metrics.verticalScale(20),
+			left: metrics.horizontalScale(5),
 		},
-
 		textInput: {
 			width: metrics.moderateScale(50),
 			height: metrics.moderateScale(50),

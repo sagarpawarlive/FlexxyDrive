@@ -64,6 +64,8 @@ const AppCustomPicker = ({
 
 			{showSearch && isPickerOpen && (
 				<AppTextInput
+					showSearch={showSearch}
+					width="89%"
 					placeholder={t('search')}
 					value={searchText}
 					marginHorizontal={20}
@@ -71,6 +73,7 @@ const AppCustomPicker = ({
 						setSearchText(text);
 						onSearchPress(searchText);
 					}}
+
 					// rightNode={
 					// 	<TouchableOpacity onPress={() => onSearchPress(searchText)}>
 					// 		<AppText

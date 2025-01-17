@@ -1,9 +1,9 @@
 import { uploadData } from 'aws-amplify/storage';
 import { useFormik } from 'formik';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Image, Keyboard, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { FontSize, Fonts } from '../../../assets/fonts';
 import { Icons } from '../../../assets/Icons';
@@ -17,16 +17,24 @@ import { ENDPOINT } from '../../../services/API/endpoints';
 import { _showToast } from '../../../services/UIs/ToastConfig';
 import { useTheme } from '../../../theme/ThemeProvider';
 import { Theme } from '../../../types';
-import { logout } from '../../../store/reducers/userdataSlice';
+import { logout, updateUserState } from '../../../store/reducers/userdataSlice';
 import { Images } from '../../../assets/images';
 import { nativeAlertwithAction } from '../../../constants/constants';
 import metrics from '../../../constants/metrics';
 import { t } from '../../../i18n';
+import { apiGet } from '../../../services/API/apiServices';
+import AppLoader from '../../../components/AppLoader';
 
 const FinalUser = (props: any) => {
 	const dispatch = useDispatch();
 	const { AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
+	const userDataSlice = useSelector(state => state?.userDataSlice ?? {});
+	const { userData } = userDataSlice ?? {};
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+
+	const { driverInfo = {}, passengerInfo = {} } = userData?.data?.user ?? {};
+	const { isVerified } = driverInfo ?? {};
 
 	const handleLogout = () => {
 		dispatch(logout());
@@ -41,6 +49,23 @@ const FinalUser = (props: any) => {
 		});
 	};
 
+	const api_getDriverInfo = async () => {
+		const params = { token: userData?.data?.token };
+		setIsLoading(true);
+		const response = await apiGet(ENDPOINT.GET_PROFILE_INFO, '', params);
+		if (response?.success) {
+			dispatch(updateUserState({ ...response?.data }));
+			setIsLoading(false);
+		} else {
+			setIsLoading(false);
+			_showToast(response.message, 'error');
+		}
+	};
+
+	useEffect(() => {
+		api_getDriverInfo();
+	}, [props.navigation]);
+
 	// onClick={() => {
 	// 	props.navigation.navigate(NavigationKeys.AuthNavigator, {
 	// 		screen: NavigationKeys.DriverInformation,
@@ -48,21 +73,29 @@ const FinalUser = (props: any) => {
 	// }}
 
 	const onPressOffer = () => {
-		props.navigation.navigate(NavigationKeys.AuthNavigator, {
-			screen: NavigationKeys.DriverInformation,
-			params: {
-				type: 1, // Add the type parameter
-			},
-		});
+		if (isVerified) {
+			props.navigation.navigate(NavigationKeys.PassangerScreen);
+		} else {
+			props.navigation.navigate(NavigationKeys.AuthNavigator, {
+				screen: NavigationKeys.DriverInformation,
+				params: {
+					type: 1, // Add the type parameter
+				},
+			});
+		}
 	};
 
 	const onPressBook = () => {
-		props.navigation.navigate(NavigationKeys.AuthNavigator, {
-			screen: NavigationKeys.DriverInformation,
-			params: {
-				type: 2, // Add the type parameter
-			},
-		});
+		if (passengerInfo?.isVerified) {
+			props.navigation.navigate(NavigationKeys.PassangerScreen);
+		} else {
+			props.navigation.navigate(NavigationKeys.AuthNavigator, {
+				screen: NavigationKeys.DriverInformation,
+				params: {
+					type: 2, // Add the type parameter
+				},
+			});
+		}
 	};
 
 	return (
@@ -115,6 +148,7 @@ const FinalUser = (props: any) => {
 					</TouchableOpacity>
 				</AppScrollView>
 			</View>
+			<AppLoader isLoading={isLoading} />
 		</MainContainer>
 	);
 };

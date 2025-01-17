@@ -32,6 +32,7 @@ import DriverPrefs from '../../../../subviews/DriverPrefs';
 import ImagePicker from '../../../../subviews/imagePicker';
 import { useTheme } from '../../../../theme/ThemeProvider';
 import { Theme } from '../../../../types';
+import { getLocales } from 'react-native-localize';
 
 let update = false;
 
@@ -100,60 +101,54 @@ const OtherInformation = (props: any) => {
 		}
 	};
 
-	const api_AddDriverInfo = async (values: any) => {
-		const params = {
-			firstName: values.firstName,
-			lastName: values.lastName,
-			dob: date ?? '',
-			gender: selectedId == '1' ? 'Male' : selectedId == '2' ? 'Female' : '',
-			country: countryName,
-			city: values.city,
-			postCode: values.postCode,
-			street: values.street,
-			streetNumber: values.streetNumber,
-			countryCode: selectedCountry,
-		};
+	console.log(userDataSlice, '<=== userDataSlice other');
 
-		setIsLoading(true);
+	// const api_AddDriverInfo = async (values: any) => {
+	// 	const params = {
+	// 		firstName: values.firstName,
+	// 		lastName: values.lastName,
+	// 		dob: date ?? '',
+	// 		gender: selectedId == '1' ? 'Male' : selectedId == '2' ? 'Female' : '',
+	// 		country: countryName,
+	// 		city: values.city,
+	// 		postCode: values.postCode,
+	// 		street: values.street,
+	// 		streetNumber: values.streetNumber,
+	// 		countryCode: selectedCountry,
+	// 	};
 
-		let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params, { token: userData.token });
-		console.log(res, '<== res');
+	// 	setIsLoading(true);
 
-		if (res?.error) {
-			_showToast(res?.message, 'error');
-		}
+	// 	let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params, { token: userData.token });
+	// 	console.log(res, '<== res');
 
-		if (res?.success) {
-			dispatch(updateUserState({ driverInfo: { ...res.data } }));
-			if (res?.data?.documents) {
-				if (
-					res?.data?.documents?.drivingLicense?.length > 0 &&
-					res?.data?.documents?.driverImage?.length > 0 &&
-					!isVerified
-				) {
-					const verifyDocumentParams = {
-						selfie: res?.data?.documents?.driverImage,
-						idImage: res?.data?.documents?.drivingLicense,
-						// country: res?.data?.countryCode,
-						country: 'DE',
-						idType: 'DRIVERS_LICENSE',
-					};
-					const verifyResponse = await apiPost(ENDPOINT.VERIFY_DOCUMENT, verifyDocumentParams);
-					console.log(verifyResponse, '<==== verifyResponse');
-				}
-			}
-		}
-		setIsLoading(false);
-		_showToast(res?.message, 'success');
+	// 	if (res?.error) {
+	// 		_showToast(res?.message, 'error');
+	// 	}
 
-		/*
-				const verifyDocument = {
-
-				}
-				await apiPost(ENDPOINT.VERIFY_DOCUMENT, verifyDocument).then(res => { })
-
-		*/
-	};
+	// 	if (res?.success) {
+	// 		dispatch(updateUserState({ driverInfo: { ...res.data } }));
+	// 		if (res?.data?.documents) {
+	// 			if (
+	// 				res?.data?.documents?.drivingLicense?.length > 0 &&
+	// 				res?.data?.documents?.driverImage?.length > 0 &&
+	// 				!isVerified
+	// 			) {
+	// 				const verifyDocumentParams = {
+	// 					selfie: res?.data?.documents?.driverImage,
+	// 					idImage: res?.data?.documents?.drivingLicense,
+	// 					// country: res?.data?.countryCode,
+	// 					country: 'DE',
+	// 					idType: 'DRIVERS_LICENSE',
+	// 				};
+	// 				const verifyResponse = await apiPost(ENDPOINT.VERIFY_DOCUMENT, verifyDocumentParams);
+	// 				console.log(verifyResponse, '<==== verifyResponse');
+	// 			}
+	// 		}
+	// 	}
+	// 	setIsLoading(false);
+	// 	_showToast(res?.message, 'success');
+	// };
 
 	const toggleImageModal = () => {
 		setIsImagePickerVisible(!isImagePickerVisible);
@@ -176,6 +171,41 @@ const OtherInformation = (props: any) => {
 	const handleDateSelect = (date: string) => {
 		setDate(date); // Store the selected date
 		console.log('Date selected:', date);
+	};
+
+	const disabled = !driverInfo?.documents || !driverInfo?.guarantor || !driverInfo?.carDetails || !preferences;
+
+	// const verifyDocument = async () => {
+	// 	const locales = getLocales();
+	// 	const countryCode = locales[0].countryCode;
+	// 	setIsLoading(true);
+
+	// 	const payload = {
+	// 		selfie: driverInfo?.documents?.driverImage,
+	// 		idImage: driverInfo?.documents?.drivingLicense,
+	// 		country: 'DE',
+	// 		idType: 'DRIVERS_LICENSE',
+	// 		userType: 'DRIVER',
+	// 	};
+	// 	await apiPost(ENDPOINT.VERIFY_DOCUMENT, payload).then(res => {
+	// 		if (res?.statusCode >= 200 && res?.statusCode <= 299) {
+	// 			setIsLoading(false);
+	// 			_showToast(res?.message, 'success');
+
+	// 			props.navigation.navigate(NavigationKeys.PendingVerification);
+	// 		} else {
+	// 			_showToast(res?.message, 'error');
+	// 			setIsLoading(false);
+	// 		}
+	// 	});
+	// 	setIsLoading(false);
+	// };
+	const handleVerify = () => {
+		if (isVerified) {
+			props.navigation.navigate(NavigationKeys.PassangerScreen);
+		} else {
+			props.navigation.navigate(NavigationKeys.PendingVerification);
+		}
 	};
 
 	return (
@@ -213,14 +243,13 @@ const OtherInformation = (props: any) => {
 
 							<AppDriverButtons
 								buttonLabel={t('nextOfKin')}
-								iconTint={AppColors.white}
 								icon={Icons.icnBack}
 								onClick={() => {
 									props.navigation.navigate(NavigationKeys.NextOfKin, {
 										driverInfoRes: guarantor ?? {},
 									});
 								}}
-								isVerify={guarantor}
+								isVerify={guarantor ?? false}
 							/>
 
 							<AppDriverButtons
@@ -261,9 +290,10 @@ const OtherInformation = (props: any) => {
 						position="end"
 						buttonLabel={'Verify'}
 						onClick={() => {
-							props.navigation.navigate(NavigationKeys.VerifyStatusScreen);
+							handleVerify();
+							// props.navigation.navigate(NavigationKeys.VerifyStatusScreen);
 						}}
-						disabled={false}
+						disabled={disabled}
 					/>
 					{/* </View> */}
 				</AppScrollView>

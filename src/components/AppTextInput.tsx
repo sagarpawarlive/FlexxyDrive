@@ -52,6 +52,7 @@ interface AppTextInputProps {
 	wholePress?: () => void;
 	marginHorizontal?: number;
 	width?: any;
+	showSearch?: boolean;
 }
 
 const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
@@ -86,6 +87,7 @@ const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
 			wholePress,
 			marginHorizontal,
 			width,
+			showSearch = false,
 		},
 		ref,
 	) => {
@@ -106,7 +108,13 @@ const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
 			<View>
 				<TouchableOpacity style={{ marginTop: marginTop }} disabled={!wholePress} onPress={wholePress}>
 					{value && (
-						<View style={{ position: 'absolute', zIndex: 99, left: 20, top: metrics.verticalScale(-8) }}>
+						<View
+							style={{
+								position: 'absolute',
+								zIndex: 99,
+								left: showSearch ? 40 : 20,
+								top: metrics.verticalScale(-8),
+							}}>
 							<AppText
 								fontSize={FontSize._14}
 								label={placeholder}

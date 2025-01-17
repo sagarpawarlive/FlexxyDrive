@@ -14,11 +14,16 @@ import AppTextInput from '../../../components/AppTextInput';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'; // For form validation
 import { t } from '../../../i18n';
+import { apiPost } from '../../../services/API/apiServices';
+import { ENDPOINT } from '../../../services/API/endpoints';
+import { _showToast } from '../../../services/UIs/ToastConfig';
+import { NavigationKeys } from '../../../constants/navigationKeys';
 
 const ResetPasswordScreen = (props: any) => {
 	const dispatch = useDispatch();
 	const { AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
+	const token = props?.route?.params?.response?.token ?? '';
 
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
@@ -39,6 +44,8 @@ const ResetPasswordScreen = (props: any) => {
 				.oneOf([Yup.ref('password'), null], t('passwordMustMatch')),
 		}),
 		onSubmit: values => {
+			resetPassword();
+
 			// Handle the form submission logic here
 			// alert(`Password reset successful for: ${values.password}`);
 		},
@@ -48,10 +55,24 @@ const ResetPasswordScreen = (props: any) => {
 		props.navigation.goBack();
 	};
 
+	const resetPassword = async () => {
+		const params = {
+			newPassword: formik.values.password,
+		};
+		const response = await apiPost(ENDPOINT.UPDATE_RESET_PASSWORD, params, {
+			Authorization: `Bearer ${token}`,
+		});
+
+		if (response?.statusCode >= 200 && response?.statusCode <= 299) {
+			_showToast(response?.message, 'success');
+			props.navigation.navigate(NavigationKeys.SigninScreen);
+		}
+	};
+
 	return (
 		<MainContainer>
 			<View style={styles.innerMainContainer}>
-				<AppHeader tintColor={AppColors.backButton} top={AppMargin._30} onBack={onBackPress} />
+				<AppHeader top={AppMargin._30} onBack={onBackPress} />
 
 				<View style={{ marginTop: AppMargin._100, alignItems: 'center' }}>
 					<AppText

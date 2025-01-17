@@ -10,12 +10,15 @@ import { Images } from '../../../../assets/images';
 import AppText from '../../../../components/AppText';
 import { Fonts, FontSize } from '../../../../assets/fonts';
 import AppStatusScreen from '../../../../components/AppStatusScreen';
+import { t } from '../../../../i18n';
+import { NavigationKeys } from '../../../../constants/navigationKeys';
+import metrics from '../../../../constants/metrics';
 
 const VerifyStatusScreen = (props: any) => {
 	const dispatch = useDispatch();
 	const { isDarkMode, toggleTheme, AppColors } = useTheme();
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
-
+	const isSuccess = props?.route?.params?.success;
 	const [currentPosition, setCurrentPosition] = React.useState(3);
 
 	const onBackPress = () => {
@@ -26,10 +29,14 @@ const VerifyStatusScreen = (props: any) => {
 		<MainContainer>
 			<View style={styles.innerMainContainer}>
 				<AppStatusScreen
-					message={'Your verification was unsuccessful!'}
+					message={isSuccess ? t('verifySuccess') : t('verifyFailure')}
 					// error={false}
-					success={false}
-					onPress={() => alert('yo')}
+					success={isSuccess}
+					onPress={() => {
+						props.navigation.navigate(
+							isSuccess ? NavigationKeys.PassangerScreen : NavigationKeys.FinalUser,
+						);
+					}}
 					buttonLabel={'Continue'}
 				/>
 			</View>
@@ -44,6 +51,7 @@ const createStyles = (AppColors: Theme) => {
 			backgroundColor: AppColors.background,
 			paddingHorizontal: 20,
 			alignItems: 'center',
+			paddingBottom: metrics.verticalScale(20),
 		},
 	});
 };

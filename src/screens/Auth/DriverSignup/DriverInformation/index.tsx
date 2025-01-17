@@ -72,15 +72,48 @@ const DriverInformation = (props: any) => {
 		preferences,
 		isVerified,
 	} = driverInfo ?? {};
-
 	const { AppColors } = useTheme();
+
+	const radioDesigns = {
+		borderColor: AppColors.primary,
+		color: AppColors.primary,
+		labelStyle: { color: AppColors.text },
+	};
+
+	const radioButtons = [
+		{
+			id: '1', // acts as primary key, should be unique and non-empty string
+			label: 'Male',
+			value: 'Male',
+			...radioDesigns,
+		},
+		{
+			id: '2',
+			label: 'Female',
+			value: 'Female',
+			...radioDesigns,
+		},
+		{
+			id: '3',
+			label: 'Non-Binary',
+			value: 'NonBinary',
+			...radioDesigns,
+		},
+		{
+			id: '4',
+			label: 'Prefer not to say',
+			value: 'PreferNotToSay',
+			...radioDesigns,
+		},
+	];
+
 	const styles = useMemo(() => createStyles(AppColors), [AppColors]);
 	const [date, setDate] = useState(dob);
 	const [isCalenderVisible, setIsCalenderVisible] = useState(false);
 	const [isPrefModalVisible, setIsPrefModalVisible] = useState(false);
 	const [isImagePickerVisible, setIsImagePickerVisible] = useState(false);
 	const [isDocumentModalVisible, setIsDocumentModalVisible] = useState(false);
-	const [selectedId, setSelectedId] = useState<any>(gender == 'Male' ? '1' : gender == 'Female' ? '2' : '');
+	const [selectedId, setSelectedId] = useState<any>(radioButtons.filter(item => item.value === gender)?.[0]?.id);
 
 	const [selectedCountry, setSelectedCountry] = useState(countryCode);
 	const [showCountryPicker, setShowCountryPicker] = useState(false);
@@ -96,41 +129,6 @@ const DriverInformation = (props: any) => {
 	const streetRef = useRef<any>(null);
 	const streetNumberRef = useRef<any>(null);
 
-	const radioDesigns = {
-		borderColor: AppColors.primary,
-		color: AppColors.primary,
-		labelStyle: { color: AppColors.text },
-	};
-
-	const radioButtons = useMemo(
-		() => [
-			{
-				id: '1', // acts as primary key, should be unique and non-empty string
-				label: 'Male',
-				value: 'male',
-				...radioDesigns,
-			},
-			{
-				id: '2',
-				label: 'Female',
-				value: 'female',
-				...radioDesigns,
-			},
-			{
-				id: '3',
-				label: 'Non-Binary',
-				value: 'nonbinary',
-				...radioDesigns,
-			},
-			{
-				id: '4',
-				label: 'Prefer not to say',
-				value: 'prefernottosay',
-				...radioDesigns,
-			},
-		],
-		[],
-	);
 	useEffect(() => {
 		// const unsubscribe = props.navigation.addListener('focus', () => {
 		api_getDriverInfo();
@@ -155,13 +153,7 @@ const DriverInformation = (props: any) => {
 			setDate(driverInfoRes?.driverInfo?.dob ?? '');
 			setCountryName(driverInfoRes?.driverInfo?.country ?? '');
 			setSelectedCountry(driverInfoRes?.driverInfo?.countryCode ?? '');
-			setSelectedId(
-				driverInfoRes?.driverInfo?.gender == 'Male'
-					? '1'
-					: driverInfoRes?.driverInfo?.gender == 'Female'
-					? '2'
-					: '',
-			);
+			setSelectedId(radioButtons.filter(item => item.value == driverInfoRes?.driverInfo?.gender)?.[0]?.id);
 		}
 	}, [driverInfoRes]);
 
@@ -209,7 +201,7 @@ const DriverInformation = (props: any) => {
 			firstName: values.firstName,
 			lastName: values.lastName,
 			dob: date ?? '',
-			gender: selectedId == '1' ? 'Male' : selectedId == '2' ? 'Female' : '',
+			gender: radioButtons.filter(item => item.id === selectedId)?.[0].value,
 			country: countryName,
 			city: values.city,
 			postCode: values.postCode,
@@ -218,17 +210,30 @@ const DriverInformation = (props: any) => {
 			countryCode: selectedCountry,
 		};
 
+		if (!date) {
+			_showToast('Please select Date of birth', 'error');
+			return;
+		}
+
+		if (!countryName) {
+			_showToast('Please select country', 'error');
+			return;
+		}
+
 		setIsLoading(true);
 
 		let res = await apiPost(ENDPOINT.SET_DRIVER_INFO, params, { token: userData.token });
 		console.log(res, '<== res');
 
-		if (res?.error) {
-			_showToast(res?.message, 'error');
-		}
+		// if (res?.error) {
+		// 	_showToast(res?.message, 'error');
+		// }
+		setIsLoading(false);
 
-		if (res?.success) {
+		if (res?.statusCode >= 200 && res?.statusCode <= 299) {
 			dispatch(updateUserState({ driverInfo: { ...res.data } }));
+			userTypeNavigation();
+			_showToast(res?.message, 'success');
 			if (res?.data?.documents) {
 				if (
 					res?.data?.documents?.drivingLicense?.length > 0 &&
@@ -246,10 +251,11 @@ const DriverInformation = (props: any) => {
 					console.log(verifyResponse, '<==== verifyResponse');
 				}
 			}
+		} else {
+			_showToast(res?.message, 'error');
 		}
-		setIsLoading(false);
-		_showToast(res?.message, 'success');
-		userTypeNavigation();
+		// setIsLoading(false);
+		// _showToast(res?.message, 'success');
 		/*
 				const verifyDocument = {
 

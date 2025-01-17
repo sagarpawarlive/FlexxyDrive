@@ -22,8 +22,8 @@ export const lightTheme = {
 	// Status Colors
 	error: 'rgba(250, 0, 0, 1)',
 	success: 'rgba(92, 184, 92, 1)',
-	warning: 'rgba(249, 200, 50, 1)',
-	warningTrasparent: 'rgba(249, 200, 50, 5)',
+	warning: 'rgba(246, 182, 22, 1)',
+	warningTrasparent: 'rgba(249, 200, 50, 0.3)',
 
 	textInputBorderColor: 'rgba(218, 218, 218, 1)',
 	verified: '#00C72E',

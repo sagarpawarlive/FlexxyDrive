@@ -245,8 +245,8 @@ const AddCarDetails = (props: any) => {
 				<AppScrollView bounces={false} extraHeight={AppHeight._350}>
 					<View style={{ marginTop: metrics.verticalScale(35) }}>
 						<AppCustomPicker
-							brandModalLoading={brandModalLoading}
 							showSearch
+							brandModalLoading={brandModalLoading}
 							onSearchPress={searchBrand}
 							selectedItem={selectedCarOption}
 							setSelectedItem={item => {
@@ -466,10 +466,11 @@ const createStyles = (AppColors: Theme) => {
 			width: '90%',
 		},
 		uploadImage: {
-			marginHorizontal: AppMargin._20,
-			height: metrics.verticalScale(50),
-			width: metrics.verticalScale(50),
+			// marginHorizontal: AppMargin._20,
+			height: metrics.moderateScale(40),
+			width: metrics.moderateScale(40),
 			borderRadius: 25,
+			left: metrics.horizontalScale(10),
 		},
 	});
 };
