@@ -1,6 +1,6 @@
 import BottomSheet, { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { FlatList, Image, StyleSheet, View } from 'react-native';
+import { FlatList, Image, StyleSheet, View, BackHandler } from 'react-native';
 import { Fonts, FontSize } from '../../assets/fonts';
 import { Icons } from '../../assets/Icons';
 import AppMapComponent from '../../components/AppMapComponent';
@@ -28,6 +28,17 @@ const PassangerScreen = (props: PassangerScreenProps) => {
 
 	useEffect(() => {
 		bottomSheetRef.current?.expand();
+	}, []);
+
+	useEffect(() => {
+		const handleBackPress = () => {
+			props?.navigation.navigate(NavigationKeys.FinalUser);
+			return true; // Prevent default back button behavior
+		};
+
+		BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+		return () => BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
 	}, []);
 
 	const renderPassanger = useCallback(
