@@ -47,18 +47,18 @@
 		2D7A33A8F4EB07B8C70742B8 /* Pods-FlexxyDrive-FlexxyDriveTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlexxyDrive-FlexxyDriveTests.release.xcconfig"; path = "Target Support Files/Pods-FlexxyDrive-FlexxyDriveTests/Pods-FlexxyDrive-FlexxyDriveTests.release.xcconfig"; sourceTree = "<group>"; };
 		2E0401B13B14054CA983502C /* Pods-FlexxyDrive-FlexxyDriveTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlexxyDrive-FlexxyDriveTests.debug.xcconfig"; path = "Target Support Files/Pods-FlexxyDrive-FlexxyDriveTests/Pods-FlexxyDrive-FlexxyDriveTests.debug.xcconfig"; sourceTree = "<group>"; };
 		433E6E39BC7DFB12B5DE7BE3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = FlexxyDrive/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		51644D09876B4E87AEB40D43 /* Onest-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Onest-Regular.ttf"; path = "../src/assets/fonts/Onest-Regular.ttf"; sourceTree = "<group>"; };
+		51644D09876B4E87AEB40D43 /* Onest-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Onest-Regular.ttf"; path = "../src/assets/fonts/Onest-Regular.ttf"; sourceTree = "<group>"; };
 		745F4D1AF98ED590711AFF75 /* Pods_FlexxyDrive_FlexxyDriveTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlexxyDrive_FlexxyDriveTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8008B24959972E3F444B2F0F /* Pods_FlexxyDrive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlexxyDrive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8086CAF4B00A6D6B59CBD1CF /* Pods-FlexxyDrive.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlexxyDrive.debug.xcconfig"; path = "Target Support Files/Pods-FlexxyDrive/Pods-FlexxyDrive.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = FlexxyDrive/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8AFA61C0C7284D9E8B65D6CF /* Onest-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Onest-Medium.ttf"; path = "../src/assets/fonts/Onest-Medium.ttf"; sourceTree = "<group>"; };
+		8AFA61C0C7284D9E8B65D6CF /* Onest-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Onest-Medium.ttf"; path = "../src/assets/fonts/Onest-Medium.ttf"; sourceTree = "<group>"; };
 		9737EA4F2D101CAE00CF6A74 /* FlexxyDriveDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FlexxyDriveDebug.entitlements; path = FlexxyDrive/FlexxyDriveDebug.entitlements; sourceTree = "<group>"; };
 		97A83D7B2D2442FB00812BC3 /* FlexxyDrive.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FlexxyDrive.entitlements; path = FlexxyDrive/FlexxyDrive.entitlements; sourceTree = "<group>"; };
-		CA04E947D686419289F4C34B /* index.ts */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = index.ts; path = ../src/assets/fonts/index.ts; sourceTree = "<group>"; };
+		CA04E947D686419289F4C34B /* index.ts */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = index.ts; path = ../src/assets/fonts/index.ts; sourceTree = "<group>"; };
 		CA99BDB6DF093C2DCD5132CB /* Pods-FlexxyDrive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlexxyDrive.release.xcconfig"; path = "Target Support Files/Pods-FlexxyDrive/Pods-FlexxyDrive.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F36DDCD8F0944841B3FFBA59 /* Onest-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Onest-Bold.ttf"; path = "../src/assets/fonts/Onest-Bold.ttf"; sourceTree = "<group>"; };
+		F36DDCD8F0944841B3FFBA59 /* Onest-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Onest-Bold.ttf"; path = "../src/assets/fonts/Onest-Bold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -518,7 +518,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FlexxyDrive/FlexxyDriveDebug.entitlements;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = F8XHYY2DM7;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = FlexxyDrive/Info.plist;
@@ -549,7 +549,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FlexxyDrive/FlexxyDrive.entitlements;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = F8XHYY2DM7;
 				INFOPLIST_FILE = FlexxyDrive/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = FlexxyDrive;
@@ -655,10 +655,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -742,10 +739,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
